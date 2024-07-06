@@ -15,9 +15,4 @@ class Menu extends Model
     {
         return $this->belongsTo(Application::class);
     }
-
-    public function roleMenu(): BelongsTo
-    {
-        return $this->belongsTo(RoleMenu::class);
-    }
 }

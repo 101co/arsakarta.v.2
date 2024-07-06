@@ -2,28 +2,33 @@
 
 namespace App\Filament\Resources\SystemManager\Setting;
 
+use Filament\Forms;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\TextInput;
+use App\Models\SystemManager\Master\Menu;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\CheckboxList;
+use App\Models\SystemManager\Setting\RoleMenu;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\Pages;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers;
-use App\Models\SystemManager\Master\Menu;
-use App\Models\SystemManager\Setting\RoleMenu;
-use Filament\Forms;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers\RoleMenuDetailsRelationManager;
+use Filament\Tables\Columns\TextColumn;
 
 class RoleMenuResource extends Resource
 {
     protected static ?string $model = RoleMenu::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationGroup = 'System Manager';
+    protected static ?string $navigationLabel = 'Role Menu';
+    protected static ?int $navigationSort = 6;
 
     public static function canViewAny(): bool
     {
@@ -35,11 +40,14 @@ class RoleMenuResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('role_id')
-                    ->searchable()
-                    ->relationship('role', 'role')
-                    ->required()
-                    ->columnSpanFull()
+                Section::make()
+                    ->schema([
+                        Select::make('role_id')
+                            ->searchable()
+                            ->relationship('role', 'role')
+                            ->required()
+                    ])
+                    ->columns(3)
             ]);
     }
 
@@ -47,7 +55,7 @@ class RoleMenuResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('role.role')
             ])
             ->filters([
                 //
@@ -65,7 +73,7 @@ class RoleMenuResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RoleMenuDetailsRelationManager::class
         ];
     }
 

@@ -9,6 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
+    protected static ?string $title = 'Add User';
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {

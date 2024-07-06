@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\SystemManager\Master\ModuleResource\Pages;
 
-use App\Filament\Resources\SystemManager\Master\ModuleResource;
 use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\SystemManager\Master\ModuleResource;
 
 class CreateModule extends CreateRecord
 {

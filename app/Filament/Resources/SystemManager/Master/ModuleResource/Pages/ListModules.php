@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\SystemManager\Master\ModuleResource\Pages;
 
-use App\Filament\Resources\SystemManager\Master\ModuleResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\SystemManager\Master\ModuleResource;
 
 class ListModules extends ListRecords
 {

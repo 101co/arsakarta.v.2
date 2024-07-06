@@ -20,8 +20,10 @@ class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-c-shield-check';
     protected static ?string $navigationGroup = 'System Manager';
+    protected static ?string $navigationLabel = 'Role';
+    protected static ?int $navigationSort = 4;
 
     public static function canViewAny(): bool
     {
@@ -67,7 +69,6 @@ class RoleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 

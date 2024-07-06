@@ -6,10 +6,13 @@ use App\Filament\Resources\SystemManager\Master\UserResource\Pages;
 use App\Filament\Resources\SystemManager\Master\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,8 +22,10 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationGroup = 'System Manager';
+    protected static ?string $navigationLabel = 'User';
+    protected static ?int $navigationSort = 5;
 
     public static function canViewAny(): bool
     {
@@ -32,16 +37,25 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required(),
-                TextInput::make('username')
-                    ->unique(ignoreRecord: true)
-                    ->required(),
-                TextInput::make('email')
-                    ->email()
-                    ->required(),
-                TextInput::make('password')
-                    ->password()
+                Section::make()
+                    ->schema([
+                        TextInput::make('name')
+                            ->required()
+                            ->columns(2),
+                        TextInput::make('username')
+                            ->unique(ignoreRecord: true)
+                            ->required(),
+                        TextInput::make('email')
+                            ->email()
+                            ->required(),
+                        TextInput::make('password')
+                            ->password()
+                    ])
+                    ->columns(2),
+                Section::make()
+                    ->schema([
+                        FileUpload::make('avatar')
+                    ])
             ]);
     }
 
@@ -49,7 +63,13 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('avatar')
+                    ->circular()
+                    ->defaultImageUrl(url('images/placeholder.png'))
+                    ->label(''),
                 TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('username')
                     ->searchable(),
                 TextColumn::make('email')
                     ->searchable()

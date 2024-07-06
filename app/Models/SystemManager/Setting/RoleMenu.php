@@ -19,7 +19,7 @@ class RoleMenu extends Model
         return $this->belongsTo(Role::class);
     }
     
-    public function roleMenuDetail(): HasMany
+    public function roleMenuDetails(): HasMany
     {
         return $this->hasMany(RoleMenuDetail::class);
     }
