@@ -28,7 +28,7 @@ class RoleMenuResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'Setting Role Menu User';
+    protected static ?string $navigationLabel = 'Setting Role Menu Usersss';
     protected static ?int $navigationSort = 6;
 
     public static function canViewAny(): bool
