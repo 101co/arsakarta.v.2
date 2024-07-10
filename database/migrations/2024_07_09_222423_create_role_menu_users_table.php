@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('patients', function (Blueprint $table) {
+        Schema::create('role_menu_users', function (Blueprint $table) {
             $table->id();
-            $table->date('date_of_birth');
-            $table->string('name');
-            $table->foreignId('owner_id')->constrained('owners')->cascadeOnDelete();
-            $table->string('type');
+            $table->foreignId('role_menu_id')->constrained('role_menus')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('created_by', length: 50);
+            $table->string('updated_by', length: 50);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('patients');
+        Schema::dropIfExists('role_menu_users');
     }
 };

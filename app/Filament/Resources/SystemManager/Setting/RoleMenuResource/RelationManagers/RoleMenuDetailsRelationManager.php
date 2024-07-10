@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers;
 
+use App\Models\SystemManager\Master\Menu;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class RoleMenuDetailsRelationManager extends RelationManager
 {
     protected static string $relationship = 'roleMenuDetails';
+    protected static ?string $title = 'Menu';
 
     public function form(Form $form): Form
     {
@@ -21,8 +23,9 @@ class RoleMenuDetailsRelationManager extends RelationManager
             ->schema([
                 Select::make('menu_id')
                     ->relationship('menu', 'code', ignoreRecord: true)
+                    ->getOptionLabelFromRecordUsing(fn (Menu $record) => "{$record->code} - {$record->description}")
                     ->searchable()
-                    ->unique()
+                    ->preload()
             ]);
     }
 

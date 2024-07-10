@@ -10,6 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Models\SystemManager\Master\Menu;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,8 +19,8 @@ use App\Models\SystemManager\Setting\RoleMenu;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\Pages;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers;
+use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers\RoleMenuUsersRelationManager;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers\RoleMenuDetailsRelationManager;
-use Filament\Tables\Columns\TextColumn;
 
 class RoleMenuResource extends Resource
 {
@@ -27,7 +28,7 @@ class RoleMenuResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'Role Menu';
+    protected static ?string $navigationLabel = 'Setting Role Menu User';
     protected static ?int $navigationSort = 6;
 
     public static function canViewAny(): bool
@@ -73,7 +74,8 @@ class RoleMenuResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RoleMenuDetailsRelationManager::class
+            RoleMenuDetailsRelationManager::class,
+            RoleMenuUsersRelationManager::class
         ];
     }
 

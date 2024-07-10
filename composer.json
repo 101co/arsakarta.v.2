@@ -10,7 +10,8 @@
         "flowframe/laravel-trend": "^0.2.0",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.5"
+        "livewire/livewire": "^3.5",
+        "ext-intl": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

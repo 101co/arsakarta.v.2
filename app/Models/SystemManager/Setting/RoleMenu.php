@@ -2,13 +2,16 @@
 
 namespace App\Models\SystemManager\Setting;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\SystemManager\Master\Menu;
 use App\Models\SystemManager\Master\Role;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\SystemManager\Setting\RoleMenuUser;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\SystemManager\Setting\RoleMenuDetail;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class RoleMenu extends Model
 {
@@ -22,5 +25,10 @@ class RoleMenu extends Model
     public function roleMenuDetails(): HasMany
     {
         return $this->hasMany(RoleMenuDetail::class);
+    }
+
+    public function roleMenuUsers()
+    {
+        return $this->hasMany(RoleMenuUser::class);
     }
 }
