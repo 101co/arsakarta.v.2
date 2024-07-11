@@ -11,7 +11,9 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Models\SystemManager\Master\Role;
+use Filament\Pages\SubNavigationPosition;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Clusters\SystemManager\Master;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\RoleResource\Pages;
 use App\Filament\Resources\SystemManager\Master\RoleResource\RelationManagers;
@@ -20,10 +22,19 @@ class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
+    protected static ?string $cluster = Master::class;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-c-shield-check';
-    protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'Role';
     protected static ?int $navigationSort = 4;
+    
+    // protected static ?string $navigationParentItem = 'System Manager';
+    // protected static ?string $navigationGroup = 'Master';
+
+    // protected static ?string $navigationIcon = 'heroicon-c-shield-check';
+    // protected static ?string $navigationGroup = 'System Manager';
+    // protected static ?string $navigationParentItem = 'Master';
+    // protected static ?string $navigationLabel = 'Role';
+    // protected static ?int $navigationSort = 3;
 
     public static function canViewAny(): bool
     {

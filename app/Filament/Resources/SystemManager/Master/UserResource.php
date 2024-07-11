@@ -2,30 +2,41 @@
 
 namespace App\Filament\Resources\SystemManager\Master;
 
+use Filament\Forms;
+use App\Models\User;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Pages\SubNavigationPosition;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Clusters\SystemManager\Master;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\UserResource\Pages;
 use App\Filament\Resources\SystemManager\Master\UserResource\RelationManagers;
-use App\Models\User;
-use Filament\Forms;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
+    protected static ?string $cluster = Master::class;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'User';
     protected static ?int $navigationSort = 5;
+    
+    // protected static ?string $navigationParentItem = 'System Manager';
+    // protected static ?string $navigationGroup = 'Master';
+
+    // protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    // protected static ?string $navigationGroup = 'System Manager';
+    // protected static ?string $navigationParentItem = 'Master';
+    // protected static ?string $navigationLabel = 'User';
+    // protected static ?int $navigationSort = 4;
 
     public static function canViewAny(): bool
     {

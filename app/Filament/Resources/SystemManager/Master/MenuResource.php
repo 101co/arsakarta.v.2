@@ -12,8 +12,10 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Models\SystemManager\Master\Menu;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Clusters\SystemManager\Master;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\MenuResource\Pages;
 use App\Filament\Resources\SystemManager\Master\MenuResource\RelationManagers;
@@ -22,10 +24,19 @@ class MenuResource extends Resource
 {
     protected static ?string $model = Menu::class;
 
+    protected static ?string $cluster = Master::class;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
-    protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'Menu';
     protected static ?int $navigationSort = 3;
+
+    // protected static ?string $navigationParentItem = 'System Manager';
+    // protected static ?string $navigationGroup = 'Master';
+
+    // protected static ?string $navigationIcon = 'heroicon-o-wallet';
+    // protected static ?string $navigationGroup = 'System Manager';
+    // protected static ?string $navigationParentItem = 'Master';
+    // protected static ?string $navigationLabel = 'Menu';
+    // protected static ?int $navigationSort = 2;
 
     public static function canViewAny(): bool
     {

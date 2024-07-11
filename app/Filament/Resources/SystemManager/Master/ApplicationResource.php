@@ -2,28 +2,39 @@
 
 namespace App\Filament\Resources\SystemManager\Master;
 
+use Filament\Forms;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Pages\SubNavigationPosition;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Clusters\SystemManager\Master;
+use App\Models\SystemManager\Master\Application;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\ApplicationResource\Pages;
 use App\Filament\Resources\SystemManager\Master\ApplicationResource\RelationManagers;
-use App\Models\SystemManager\Master\Application;
-use Filament\Forms;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;
 
+    protected static ?string $cluster = Master::class;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
-    protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'Application';
     protected static ?int $navigationSort = 2;
+    
+    // protected static ?string $navigationParentItem = 'System Manager';
+    // protected static ?string $navigationGroup = 'Master';
+
+    // protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
+    // protected static ?string $navigationGroup = 'System Manager';
+    // protected static ?string $navigationParentItem = 'Master';
+    // protected static ?string $navigationLabel = 'Application';
+    // protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool
     {

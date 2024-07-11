@@ -9,9 +9,11 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Pages\SubNavigationPosition;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\SystemManager\Master\Module;
 use Filament\Forms\Components\Actions\Action;
+use App\Filament\Clusters\SystemManager\Master;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\ModuleResource\Pages;
 use App\Filament\Resources\SystemManager\Master\ModuleResource\RelationManagers;
@@ -19,11 +21,17 @@ use App\Filament\Resources\SystemManager\Master\ModuleResource\RelationManagers;
 class ModuleResource extends Resource
 {
     protected static ?string $model = Module::class;
-   
+
+    protected static ?string $cluster = Master::class;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-    protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'Module';
     protected static ?int $navigationSort = 1;
+   
+    // protected static ?string $navigationParentItem = 'Master';
+    // protected static ?string $navigationGroup = 'System Manager';
+    // protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    // protected static ?string $navigationLabel = 'Module';
+    // protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool
     {

@@ -13,9 +13,11 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Models\SystemManager\Master\Menu;
+use Filament\Pages\SubNavigationPosition;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
 use App\Models\SystemManager\Setting\RoleMenu;
+use App\Filament\Clusters\SystemManager\Setting;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\Pages;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers;
@@ -26,10 +28,19 @@ class RoleMenuResource extends Resource
 {
     protected static ?string $model = RoleMenu::class;
 
+    protected static ?string $cluster = Setting::class;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
-    protected static ?string $navigationGroup = 'System Manager';
-    protected static ?string $navigationLabel = 'Setting Role Menu Users';
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 1;
+    
+    // protected static ?string $navigationParentItem = 'System Manager';
+    // protected static ?string $navigationGroup = 'Master';
+
+    // protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    // protected static ?string $navigationGroup = 'System Manager';
+    // protected static ?string $navigationParentItem = 'Setting';
+    // protected static ?string $navigationLabel = 'Setting Role Menu Users';
+    // protected static ?int $navigationSort = 5;
 
     public static function canViewAny(): bool
     {
