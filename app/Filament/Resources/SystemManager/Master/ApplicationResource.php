@@ -23,23 +23,15 @@ class ApplicationResource extends Resource
     protected static ?string $model = Application::class;
 
     protected static ?string $cluster = Master::class;
+    protected static ?string $slug = 'application';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
     protected static ?int $navigationSort = 2;
-    
-    // protected static ?string $navigationParentItem = 'System Manager';
-    // protected static ?string $navigationGroup = 'Master';
-
-    // protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
-    // protected static ?string $navigationGroup = 'System Manager';
-    // protected static ?string $navigationParentItem = 'Master';
-    // protected static ?string $navigationLabel = 'Application';
-    // protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool
     {
         $menuCode = 'ARSKM002';
-        return auth()->user()->id==1;
+        return authUserMenu($menuCode, auth()->user()->id);
     }
 
     public static function form(Form $form): Form

@@ -25,23 +25,15 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $cluster = Master::class;
+    protected static ?string $slug = 'user';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?int $navigationSort = 5;
-    
-    // protected static ?string $navigationParentItem = 'System Manager';
-    // protected static ?string $navigationGroup = 'Master';
-
-    // protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    // protected static ?string $navigationGroup = 'System Manager';
-    // protected static ?string $navigationParentItem = 'Master';
-    // protected static ?string $navigationLabel = 'User';
-    // protected static ?int $navigationSort = 4;
 
     public static function canViewAny(): bool
     {
         $menuCode = 'ARSKM005';
-        return auth()->user()->id==1;
+        return authUserMenu($menuCode, auth()->user()->id);
     }
 
     public static function form(Form $form): Form

@@ -1,36 +1,33 @@
 <?php
 
-namespace App\Filament\Resources\SystemManager\Master;
+namespace App\Filament\Resources\DigitalInvitation\Master;
 
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\SystemManager\Master\Module;
-use Filament\Forms\Components\Actions\Action;
-use App\Filament\Clusters\SystemManager\Master;
+use App\Models\DigitalInvitation\Master\Layout;
+use App\Filament\Clusters\DigitalInvitation\Master;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SystemManager\Master\ModuleResource\Pages;
-use App\Filament\Resources\SystemManager\Master\ModuleResource\RelationManagers;
+use App\Filament\Resources\DigitalInvitation\Master\LayoutResource\Pages;
+use App\Filament\Resources\DigitalInvitation\Master\LayoutResource\RelationManagers;
 
-class ModuleResource extends Resource
+class LayoutResource extends Resource
 {
-    protected static ?string $model = Module::class;
+    protected static ?string $model = Layout::class;
 
     protected static ?string $cluster = Master::class;
-    protected static ?string $slug = 'module';
+    protected static ?string $slug = 'layout';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
     protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool
     {
-        $menuCode = 'ARSKM001';
+        $menuCode = 'INVTM001';
         return authUserMenu($menuCode, auth()->user()->id);
     }
 
@@ -38,9 +35,7 @@ class ModuleResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('description')
-                    ->required()
-                    ->maxLength(255)
+                //
             ]);
     }
 
@@ -48,13 +43,14 @@ class ModuleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('description')
+                //
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -63,19 +59,10 @@ class ModuleResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListModules::route('/'),
-            'create' => Pages\CreateModule::route('/create'),
-            'edit' => Pages\EditModule::route('/{record}/edit'),
+            'index' => Pages\ManageLayouts::route('/'),
         ];
     }
 }

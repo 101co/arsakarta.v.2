@@ -29,23 +29,15 @@ class RoleMenuResource extends Resource
     protected static ?string $model = RoleMenu::class;
 
     protected static ?string $cluster = Setting::class;
+    protected static ?string $slug = 'role-menu-user';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?int $navigationSort = 1;
-    
-    // protected static ?string $navigationParentItem = 'System Manager';
-    // protected static ?string $navigationGroup = 'Master';
-
-    // protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
-    // protected static ?string $navigationGroup = 'System Manager';
-    // protected static ?string $navigationParentItem = 'Setting';
-    // protected static ?string $navigationLabel = 'Setting Role Menu Users';
-    // protected static ?int $navigationSort = 5;
 
     public static function canViewAny(): bool
     {
         $menuCode = 'ARSKX001';
-        return auth()->user()->id==1;
+        return authUserMenu($menuCode, auth()->user()->id);
     }
 
     public static function form(Form $form): Form

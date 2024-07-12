@@ -25,23 +25,15 @@ class MenuResource extends Resource
     protected static ?string $model = Menu::class;
 
     protected static ?string $cluster = Master::class;
+    protected static ?string $slug = 'menu';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
     protected static ?int $navigationSort = 3;
 
-    // protected static ?string $navigationParentItem = 'System Manager';
-    // protected static ?string $navigationGroup = 'Master';
-
-    // protected static ?string $navigationIcon = 'heroicon-o-wallet';
-    // protected static ?string $navigationGroup = 'System Manager';
-    // protected static ?string $navigationParentItem = 'Master';
-    // protected static ?string $navigationLabel = 'Menu';
-    // protected static ?int $navigationSort = 2;
-
     public static function canViewAny(): bool
     {
         $menuCode = 'ARSKM003';
-        return auth()->user()->id==1;
+        return authUserMenu($menuCode, auth()->user()->id);
     }
 
     public static function form(Form $form): Form

@@ -23,23 +23,15 @@ class RoleResource extends Resource
     protected static ?string $model = Role::class;
 
     protected static ?string $cluster = Master::class;
+    protected static ?string $slug = 'role';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-c-shield-check';
     protected static ?int $navigationSort = 4;
-    
-    // protected static ?string $navigationParentItem = 'System Manager';
-    // protected static ?string $navigationGroup = 'Master';
-
-    // protected static ?string $navigationIcon = 'heroicon-c-shield-check';
-    // protected static ?string $navigationGroup = 'System Manager';
-    // protected static ?string $navigationParentItem = 'Master';
-    // protected static ?string $navigationLabel = 'Role';
-    // protected static ?int $navigationSort = 3;
 
     public static function canViewAny(): bool
     {
         $menuCode = 'ARSKM004';
-        return auth()->user()->id==1;
+        return authUserMenu($menuCode, auth()->user()->id);
     }
 
     public static function form(Form $form): Form
