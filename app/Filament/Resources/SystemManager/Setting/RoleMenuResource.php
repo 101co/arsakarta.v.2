@@ -2,27 +2,26 @@
 
 namespace App\Filament\Resources\SystemManager\Setting;
 
-use Filament\Forms;
+use App\Enums\Icons;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Checkbox;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use App\Models\SystemManager\Master\Menu;
 use Filament\Pages\SubNavigationPosition;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\CheckboxList;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\SystemManager\Setting\RoleMenu;
 use App\Filament\Clusters\SystemManager\Setting;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\Pages;
-use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers\RoleMenuUsersRelationManager;
 use App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers\RoleMenuDetailsRelationManager;
+use Filament\Forms\Components\Split;
 
 class RoleMenuResource extends Resource
 {
@@ -44,14 +43,16 @@ class RoleMenuResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
-                    ->schema([
-                        Select::make('role_id')
-                            ->searchable()
-                            ->relationship('role', 'role')
-                            ->required()
-                    ])
-                    ->columns(3)
+                Split::make([
+                    Section::make()
+                        ->schema([
+                            Select::make('role_id')
+                                ->searchable()
+                                ->relationship('role', 'role')
+                                ->required()
+                                ->preload()
+                        ])
+                ])
             ]);
     }
 
@@ -60,18 +61,37 @@ class RoleMenuResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('role.role')
+                    ->searchable()
+                    ->sortable()
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+                EditAction::make()
+                    ->tooltip('edit')
+                    ->hiddenLabel()
+                    ->icon(Icons::EDIT->value),
+                DeleteAction::make()
+                    ->tooltip('delete')
+                    ->hiddenLabel(),
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                DeleteBulkAction::make()
+            ])
+            ->headerActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon(Icons::ADD->value)
+            ])
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon(Icons::ADD->value)
+
+            ])
+            ->defaultPaginationPageOption(10)
+            ->striped()
+            ->heading('Setting Role Menu User')
+            ->deferLoading();
     }
 
     public static function getRelations(): array
