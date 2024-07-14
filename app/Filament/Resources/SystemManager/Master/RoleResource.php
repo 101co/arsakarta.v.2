@@ -2,21 +2,23 @@
 
 namespace App\Filament\Resources\SystemManager\Master;
 
-use Filament\Forms;
-use Filament\Tables;
+use App\Enums\Icons;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Filters\Filter;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Models\SystemManager\Master\Role;
 use Filament\Pages\SubNavigationPosition;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Clusters\SystemManager\Master;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\RoleResource\Pages;
-use App\Filament\Resources\SystemManager\Master\RoleResource\RelationManagers;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Split;
 
 class RoleResource extends Resource
 {
@@ -38,11 +40,16 @@ class RoleResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('role')
-                    ->required()
-                    ->maxLength(100),
-                TextInput::make('description')
-                    ->maxLength(255)
+                Split::make([
+                    Section::make([
+                        TextInput::make('role')
+                            ->required()
+                            ->maxLength(100),
+                        TextInput::make('description')
+                            ->maxLength(255)
+                            ->required()
+                    ])
+                ])
             ]);
     }
 
@@ -51,28 +58,44 @@ class RoleResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('role')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('description')
                     ->searchable()
-                    ->toggleable()
             ])
-            ->filters([
-                Filter::make('role'),
-            ])
+            ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+                EditAction::make()
+                    ->tooltip('edit')
+                    ->hiddenLabel()
+                    ->icon(Icons::EDIT->value),
+                DeleteAction::make()
+                    ->tooltip('delete')
+                    ->hiddenLabel(),
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                DeleteBulkAction::make()
+            ])
+            ->headerActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon(Icons::ADD->value)
+            ])
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon(Icons::ADD->value)
+
+            ])
+            ->defaultPaginationPageOption(10)
+            ->striped()
+            ->heading('Role')
+            ->deferLoading();
     }
 
     public static function getRelations(): array
     {
-        return [
-        ];
+        return [];
     }
 
     public static function getPages(): array
