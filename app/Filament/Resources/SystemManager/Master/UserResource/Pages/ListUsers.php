@@ -2,19 +2,21 @@
 
 namespace App\Filament\Resources\SystemManager\Master\UserResource\Pages;
 
-use App\Filament\Resources\SystemManager\Master\UserResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
+use App\Filament\Resources\SystemManager\Master\UserResource;
 
 class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
-    protected static ?string $title = 'User';
+
+    public function getTitle(): string | Htmlable
+    {
+        return __('');
+    }
 
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        return [];
     }
 }

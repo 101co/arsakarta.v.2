@@ -57,11 +57,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->renderHook(
-                // PanelsRenderHook::BODY_END,
-                PanelsRenderHook::FOOTER,
-                fn() => view('layout/admin/footer')
-            );
+            ]);
+            // ->renderHook(
+            //     // PanelsRenderHook::BODY_END,
+            //     PanelsRenderHook::FOOTER,
+            //     fn() => view('layout/admin/footer')
+            // );
     }
 }
