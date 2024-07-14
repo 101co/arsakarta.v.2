@@ -16,6 +16,7 @@ class RoleMenuDetailsRelationManager extends RelationManager
 {
     protected static string $relationship = 'roleMenuDetails';
     protected static ?string $title = 'Menu';
+    protected static ?string $icon = 'heroicon-o-user-group';
 
     public function form(Form $form): Form
     {
@@ -47,7 +48,9 @@ class RoleMenuDetailsRelationManager extends RelationManager
                         $data['created_by'] = auth()->user()->name;
                         $data['updated_by'] = auth()->user()->name;
                         return $data;
-                    })),
+                    }))
+                    ->label('Add')
+                    ->icon('heroicon-c-plus-circle'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -57,6 +60,7 @@ class RoleMenuDetailsRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->striped();
     }
 }

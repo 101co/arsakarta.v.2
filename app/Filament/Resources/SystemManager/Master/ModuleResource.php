@@ -7,16 +7,21 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Split;
+use Filament\Forms\Components\Section;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Enums\ActionsPosition;
 use App\Models\SystemManager\Master\Module;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Clusters\SystemManager\Master;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\ModuleResource\Pages;
-use App\Filament\Resources\SystemManager\Master\ModuleResource\RelationManagers;
 
 class ModuleResource extends Resource
 {
@@ -38,36 +43,57 @@ class ModuleResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('description')
-                    ->required()
-                    ->maxLength(255)
+                Split::make([
+                    Section::make()
+                        ->schema([
+                            TextInput::make('description')
+                                ->required()
+                                ->maxLength(255)
+                        ])
+                ])
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->heading('Module')
+            ->deferLoading()
             ->columns([
                 TextColumn::make('description')
+                    ->label('Module')
+                    ->searchable()
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+                EditAction::make()
+                    ->tooltip('edit')
+                    ->hiddenLabel()
+                    ->icon('heroicon-c-pencil-square'),
+                DeleteAction::make()
+                    ->tooltip('delete')
+                    ->hiddenLabel(),
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                DeleteBulkAction::make()
+            ])
+            ->headerActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon('heroicon-c-plus-circle')
+            ])
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon('heroicon-c-plus-circle')
+
+            ])
+            ->recordUrl(null);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

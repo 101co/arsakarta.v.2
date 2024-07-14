@@ -8,6 +8,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Actions\CreateAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\DigitalInvitation\Master\Layout;
 use App\Filament\Clusters\DigitalInvitation\Master;
@@ -56,6 +57,12 @@ class LayoutResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Create')
+                    ->icon('heroicon-c-plus-circle')
+
             ]);
     }
 
