@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Cast\String_;
 class CreateModule extends CreateRecord
 {
     protected static string $resource = ModuleResource::class;
+    protected static ?string $title = 'Add Module';
 
     protected function getRedirectUrl(): string
     {

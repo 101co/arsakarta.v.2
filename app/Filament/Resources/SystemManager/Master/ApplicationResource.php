@@ -3,20 +3,30 @@
 namespace App\Filament\Resources\SystemManager\Master;
 
 use Filament\Forms;
+use App\Enums\Icons;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Clusters\SystemManager\Master;
 use App\Models\SystemManager\Master\Application;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\ApplicationResource\Pages;
 use App\Filament\Resources\SystemManager\Master\ApplicationResource\RelationManagers;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Split;
 
 class ApplicationResource extends Resource
 {
@@ -38,13 +48,18 @@ class ApplicationResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required(),
-                TextInput::make('description')
-                    ->required(),
-                Select::make('module_id')
-                    ->relationship('module', 'description')
-                    ->required()
+                Split::make([
+                    Section::make([
+                        TextInput::make('name')
+                            ->required(),
+                        TextInput::make('description'),
+                        Select::make('module_id')
+                            ->relationship('module', 'description')
+                            ->required()
+                            ->searchable()
+                            ->preload()
+                    ])
+                ])
             ]);
     }
 
@@ -52,27 +67,47 @@ class ApplicationResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->label('Application Name')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('description')
+                    ->searchable(),
+                TextColumn::make('module.description')
+                    ->searchable()
+                    ->sortable()
             ])
             ->filters([
-                //
+                SelectFilter::make('module_id')
+                    ->label('Module')
+                    ->relationship('module', 'description')
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+                EditAction::make()
+                    ->tooltip('edit')
+                    ->hiddenLabel()
+                    ->icon(Icons::EDIT->value),
+                DeleteAction::make()
+                    ->tooltip('delete')
+                    ->hiddenLabel(),
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                DeleteBulkAction::make()
+            ])
+            ->headerActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon(Icons::ADD->value)
+            ])
+            ->heading('Application')
+            ->deferLoading()
+            ->defaultPaginationPageOption(10)
+            ->striped();
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

@@ -2,8 +2,7 @@
 
 namespace App\Filament\Resources\SystemManager\Master;
 
-use Filament\Forms;
-use Filament\Tables;
+use App\Enums\Icons;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -17,8 +16,6 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Enums\ActionsPosition;
 use App\Models\SystemManager\Master\Module;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Clusters\SystemManager\Master;
 use App\Filament\Resources\SystemManager\Master\ModuleResource\Pages;
@@ -69,7 +66,7 @@ class ModuleResource extends Resource
                 EditAction::make()
                     ->tooltip('edit')
                     ->hiddenLabel()
-                    ->icon('heroicon-c-pencil-square'),
+                    ->icon(Icons::EDIT->value),
                 DeleteAction::make()
                     ->tooltip('delete')
                     ->hiddenLabel(),
@@ -80,15 +77,16 @@ class ModuleResource extends Resource
             ->headerActions([
                 CreateAction::make()
                     ->label('Add')
-                    ->icon('heroicon-c-plus-circle')
+                    ->icon(Icons::ADD->value)
             ])
             ->emptyStateActions([
                 CreateAction::make()
                     ->label('Add')
-                    ->icon('heroicon-c-plus-circle')
+                    ->icon(Icons::ADD->value)
 
             ])
-            ->recordUrl(null);
+            ->defaultPaginationPageOption(10)
+            ->striped();
     }
 
     public static function getRelations(): array
