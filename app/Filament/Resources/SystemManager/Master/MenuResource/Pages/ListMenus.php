@@ -2,18 +2,21 @@
 
 namespace App\Filament\Resources\SystemManager\Master\MenuResource\Pages;
 
-use App\Filament\Resources\SystemManager\Master\MenuResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
+use App\Filament\Resources\SystemManager\Master\MenuResource;
 
 class ListMenus extends ListRecords
 {
     protected static string $resource = MenuResource::class;
 
+    public function getTitle(): string | Htmlable
+    {
+        return __('');
+    }
+
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        return [];
     }
 }

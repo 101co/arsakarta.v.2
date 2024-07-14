@@ -20,7 +20,7 @@ class EditModule extends EditRecord
     {
         return 
         [
-            getCustomCreateFormAction('Update', Icons::CHECK),
+            getCustomSaveFormAction('Update', Icons::CHECK),
             getCustomCancelFormAction('Cancel', Icons::CROSS, Js::from($this->previousUrl ?? static::getResource()::getUrl()))
         ];
     }

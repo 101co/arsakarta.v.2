@@ -2,25 +2,38 @@
 
 namespace App\Filament\Resources\SystemManager\Master\MenuResource\Pages;
 
-use App\Filament\Resources\SystemManager\Master\MenuResource;
+use App\Enums\Icons;
 use Filament\Actions;
+use Illuminate\Support\Js;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\SystemManager\Master\MenuResource;
 
 class EditMenu extends EditRecord
 {
     protected static string $resource = MenuResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getFormActions(): array
+    {
+        return 
+        [
+            getCustomSaveFormAction('Update', Icons::CHECK),
+            getCustomCancelFormAction('Cancel', Icons::CROSS, Js::from($this->previousUrl ?? static::getResource()::getUrl()))
+        ];
+    }
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['updated_by'] = auth()->user()->name;
-    
         return $data;
     }
 
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\DeleteAction::make(),
-        ];
+        return [];
     }
 }

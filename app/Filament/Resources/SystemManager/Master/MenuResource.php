@@ -2,23 +2,25 @@
 
 namespace App\Filament\Resources\SystemManager\Master;
 
-use Filament\Forms;
-use Filament\Tables;
+use App\Enums\Icons;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Models\SystemManager\Master\Menu;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Clusters\SystemManager\Master;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\MenuResource\Pages;
-use App\Filament\Resources\SystemManager\Master\MenuResource\RelationManagers;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Split;
 
 class MenuResource extends Resource
 {
@@ -40,15 +42,21 @@ class MenuResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('code')
-                    ->required()
-                    ->maxLength(10),
-                TextInput::make('description')
-                    ->required()
-                    ->maxLength(255),
-                Select::make('application_id')
-                    ->relationship('application', 'name')
-                    ->required()
+                Split::make([
+                    Section::make([
+                        TextInput::make('code')
+                            ->required()
+                            ->label('Menu Code')
+                            ->maxLength(10),
+                        TextInput::make('description')
+                            ->maxLength(255),
+                        Select::make('application_id')
+                            ->relationship('application', 'name')
+                            ->required()
+                            ->searchable()
+                            ->preload()
+                    ])
+                ])
             ]);
     }
 
@@ -57,12 +65,13 @@ class MenuResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('code')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Menu Code')
+                    ->sortable(),
                 TextColumn::make('description')
                     ->searchable(),
                 TextColumn::make('application.name')
                     ->sortable()
-                    ->toggleable()
                     ->searchable()
             ])
             ->filters([
@@ -71,13 +80,32 @@ class MenuResource extends Resource
                     ->relationship('application', 'name')
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make()
+                    ->tooltip('edit')
+                    ->hiddenLabel()
+                    ->icon(Icons::EDIT->value),
+                DeleteAction::make()
+                    ->tooltip('delete')
+                    ->hiddenLabel(),
+            ], position: ActionsPosition::BeforeColumns)
+            ->headerActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon(Icons::ADD->value)
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                DeleteBulkAction::make()
+            ])
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Add')
+                    ->icon(Icons::ADD->value)
+
+            ])
+            ->defaultPaginationPageOption(10)
+            ->heading('Menu')
+            ->striped()
+            ->deferLoading();
     }
 
     public static function getRelations(): array

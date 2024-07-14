@@ -31,6 +31,18 @@ if (! function_exists('getCustomCreateFormAction'))
   }
 }
 
+if (! function_exists('getCustomSaveFormAction')) 
+{
+  function getCustomSaveFormAction($label, $icon)
+  {
+    return Action::make('save')
+      ->label($label ? $label : 'Save')
+      ->icon($icon ? $icon->value : 'heroicon-c-check')
+      ->submit('save')
+      ->keyBindings(['mod+s']);
+  }
+}
+
 if (! function_exists('getCustomCreateAnotherFormAction')) 
 {
   function getCustomCreateAnotherFormAction($label, $icon)

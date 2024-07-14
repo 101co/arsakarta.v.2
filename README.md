@@ -76,7 +76,7 @@ php artisan make:filament-cluster ../../YourCluster
     {
         return 
         [
-            getCustomCreateFormAction('Save', Icons::CHECK),
+            getCustomSaveFormAction('Save', Icons::CHECK),
             getCustomCancelFormAction('Cancel', Icons::CROSS, Js::from($this->previousUrl ?? static::getResource()::getUrl()))
         ];
     }
