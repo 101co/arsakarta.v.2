@@ -13,7 +13,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 
 class RoleMenuUsersRelationManager extends RelationManager
 {
-    protected static string $relationship = 'RoleMenuUsers';
+    protected static string $relationship = 'roleMenuUsers';
     protected static ?string $title = 'User';
 
     public function form(Form $form): Form
@@ -21,14 +21,14 @@ class RoleMenuUsersRelationManager extends RelationManager
         return $form
             ->schema([
                 Select::make('user_id')
-                    ->relationship('user', 'name', ignoreRecord: true)
+                    ->relationship('user', 'name')
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('name')
+            ->recordTitleAttribute('user_id')
             ->columns([
                 Tables\Columns\TextColumn::make('user.name'),
             ])
