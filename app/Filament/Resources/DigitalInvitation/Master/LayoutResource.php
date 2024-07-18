@@ -2,19 +2,23 @@
 
 namespace App\Filament\Resources\DigitalInvitation\Master;
 
-use Filament\Forms;
+use App\Enums\Icons;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Split;
+use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Actions\CreateAction;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Enums\ActionsPosition;
 use App\Models\DigitalInvitation\Master\Layout;
 use App\Filament\Clusters\DigitalInvitation\Master;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DigitalInvitation\Master\LayoutResource\Pages;
-use App\Filament\Resources\DigitalInvitation\Master\LayoutResource\RelationManagers;
+use Filament\Tables\Columns\ToggleColumn;
 
 class LayoutResource extends Resource
 {
@@ -36,7 +40,11 @@ class LayoutResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('layout_name')
+                    ->label('Layout Name')
+                    ->required()
+                    ->maxLength(100)
+                    ->columnSpanFull()
             ]);
     }
 
@@ -44,26 +52,31 @@ class LayoutResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('layout_name')
+                    ->label('Layout Name')
+                    ->searchable()
+                    ->sortable(),
+                ToggleColumn::make('is_active')
+                    ->label('Is Active')
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
+                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Layout', null, null, null)
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
+            ])
+            ->headerActions([
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
             ->emptyStateActions([
-                CreateAction::make()
-                    ->label('Create')
-                    ->icon('heroicon-c-plus-circle')
-
-            ]);
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+            ])
+            ->defaultPaginationPageOption(10)
+            ->heading('Module')
+            ->deferLoading()
+            ->striped();
     }
 
     public static function getPages(): array

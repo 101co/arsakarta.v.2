@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('layouts', function (Blueprint $table) {
-            $table->id();
-            $table->string('layout_name', length:255);
-            $table->integer('sequence');
+        Schema::table('layouts', function (Blueprint $table) {
+            $table->dropColumn('sequence');
             $table->boolean('is_active')->default(true);
-            $table->string('created_by', length:50);
-            $table->string('updated_by', length:50);
-            $table->timestamps();
         });
     }
 
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('layouts');
+        //
     }
 };
