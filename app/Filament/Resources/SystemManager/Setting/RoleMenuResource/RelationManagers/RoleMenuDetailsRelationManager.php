@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\SystemManager\Setting\RoleMenuResource\RelationManagers;
 
+use App\Enums\ActionType;
 use App\Enums\Icons;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -14,12 +16,13 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Support\Enums\IconSize;
 
 class RoleMenuDetailsRelationManager extends RelationManager
 {
     protected static string $relationship = 'roleMenuDetails';
     protected static ?string $title = 'Menu';
-    protected static ?string $icon = 'heroicon-o-user-group';
+    protected static ?string $icon = 'heroicon-m-list-bullet';
 
     public function form(Form $form): Form
     {
@@ -31,6 +34,7 @@ class RoleMenuDetailsRelationManager extends RelationManager
                     ->searchable()
                     ->preload()
                     ->unique('role_menu_details',null,null,true)
+                    ->columnSpanFull()
             ]);
     }
 
@@ -40,9 +44,11 @@ class RoleMenuDetailsRelationManager extends RelationManager
             ->recordTitleAttribute('menu_id')
             ->columns([
                 TextColumn::make('menu.code')
+                    ->label('Menu Code')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('menu.description')
+                    ->label('Description')
                     ->searchable(),
                 TextColumn::make('menu.application.name')
                     ->searchable()
@@ -50,27 +56,14 @@ class RoleMenuDetailsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                CreateAction::make()
-                    ->mutateFormDataUsing((function (array $data): array {
-                        $data['created_by'] = auth()->user()->name;
-                        $data['updated_by'] = auth()->user()->name;
-                        return $data;
-                    }))
-                    ->label('Add')
-                    ->icon(Icons::ADD->value),
+                getCustomTableAction(ActionType::CREATE, 'Add', 'Choose Menu', Icons::ADD, false, false)
             ])
             ->actions([
-                EditAction::make()
-                    ->tooltip('edit')
-                    ->hiddenLabel()
-                    ->icon(Icons::EDIT->value)
-                    ->modalHeading('Choose Menu'),
-                DeleteAction::make()
-                    ->tooltip('delete')
-                    ->hiddenLabel(),
+                getCustomTableAction(ActionType::EDIT, 'Update', 'Choose Menu', Icons::EDIT, null, false),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Menu', null, null, null)
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                DeleteBulkAction::make()
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])
             ->striped();
     }

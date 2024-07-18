@@ -4,21 +4,18 @@ namespace App\Filament\Resources\SystemManager\Master;
 
 use App\Enums\Icons;
 use Filament\Forms\Form;
+use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\EditAction;
+use Filament\Forms\Components\Split;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Models\SystemManager\Master\Role;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Enums\ActionsPosition;
-use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Clusters\SystemManager\Master;
 use App\Filament\Resources\SystemManager\Master\RoleResource\Pages;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Split;
 
 class RoleResource extends Resource
 {
@@ -65,27 +62,17 @@ class RoleResource extends Resource
             ])
             ->filters([])
             ->actions([
-                EditAction::make()
-                    ->tooltip('edit')
-                    ->hiddenLabel()
-                    ->icon(Icons::EDIT->value),
-                DeleteAction::make()
-                    ->tooltip('delete')
-                    ->hiddenLabel(),
+                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Role', null, null, null)
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                DeleteBulkAction::make()
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])
             ->headerActions([
-                CreateAction::make()
-                    ->label('Add')
-                    ->icon(Icons::ADD->value)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
             ->emptyStateActions([
-                CreateAction::make()
-                    ->label('Add')
-                    ->icon(Icons::ADD->value)
-
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
             ->defaultPaginationPageOption(10)
             ->striped()

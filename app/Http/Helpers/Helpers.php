@@ -1,7 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
+use App\Enums\ActionType;
 use Filament\Actions\Action;
+use Illuminate\Support\Facades\DB;
+use Filament\Support\Enums\IconSize;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 
 if (! function_exists('authUserMenu')) 
 {
@@ -27,7 +34,8 @@ if (! function_exists('getCustomCreateFormAction'))
             ->label($label ? $label : 'Save')
             ->icon($icon ? $icon->value : 'heroicon-c-check')
             ->submit('create')
-            ->keyBindings(['mod+s']);
+            ->keyBindings(['mod+s'])
+            ->iconSize(IconSize::Small);
   }
 }
 
@@ -39,7 +47,8 @@ if (! function_exists('getCustomSaveFormAction'))
       ->label($label ? $label : 'Save')
       ->icon($icon ? $icon->value : 'heroicon-c-check')
       ->submit('save')
-      ->keyBindings(['mod+s']);
+      ->keyBindings(['mod+s'])
+      ->iconSize(IconSize::Small);
   }
 }
 
@@ -54,7 +63,8 @@ if (! function_exists('getCustomCreateAnotherFormAction'))
           ->icon($icon ? $icon->value : 'heroicon-c-check')
           ->action('createAnother')
           ->keyBindings(['mod+shift+s'])
-          ->color('gray');
+          ->color('gray')
+          ->iconSize(IconSize::Small);
     }
     return [];
   }
@@ -70,8 +80,64 @@ if (! function_exists('getCustomCancelFormAction'))
           ->label($label ? $label : '')
           ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . $url . ')')
           ->icon($icon ? $icon->value : '')
-          ->color('gray');
+          ->color('gray')
+          ->iconSize(IconSize::Small);
     }
     return [];
+  }
+}
+
+if (! function_exists('getCustomTableAction'))
+{
+  function getCustomTableAction($type, $label, $modalLabel, $icon, $enableAnother, $disableCancel)
+  {
+    if ($type == ActionType::CREATE)
+    {
+      return CreateAction::make()
+        ->mutateFormDataUsing((function (array $data): array {
+            $data['created_by'] = auth()->user()->name;
+            $data['updated_by'] = auth()->user()->name;
+            return $data;
+        }))
+        ->label($label)
+        ->icon($icon ? $icon->value : '')
+        ->iconSize(IconSize::Small)
+        ->modalHeading($modalLabel ? $modalLabel : '')
+        ->modalWidth(MaxWidth::Medium)
+        ->modalSubmitActionLabel($label)
+        ->createAnother($enableAnother ? $enableAnother : false)
+        ->modalCancelAction($disableCancel ? false : null);
+    }
+    else if ($type == ActionType::EDIT)
+    {
+      return EditAction::make()
+        ->mutateFormDataUsing((function (array $data): array {
+            $data['created_by'] = auth()->user()->name;
+            $data['updated_by'] = auth()->user()->name;
+            return $data;
+        }))
+        ->label($label)
+        ->icon($icon ? $icon->value : '')
+        ->iconSize(IconSize::Small)
+        ->hiddenLabel()
+        ->tooltip('edit')
+        ->modalHeading($modalLabel)
+        ->modalWidth(MaxWidth::Medium)
+        ->modalSubmitActionLabel($label)
+        ->modalCancelAction($disableCancel ? false : null);
+    }
+    else if ($type == ActionType::DELETE)
+    {
+      return DeleteAction::make()
+        ->tooltip('delete')
+        ->modalHeading($modalLabel)
+        ->hiddenLabel();
+    }
+    else if ($type == ActionType::BULK_DELETE)
+    {
+      return DeleteBulkAction::make()
+        ->label($label)
+        ->iconSize(IconSize::Small);
+    }
   }
 }

@@ -2,14 +2,14 @@
 
 namespace App\Filament\Resources\SystemManager\Master;
 
-use Filament\Forms;
 use App\Enums\Icons;
-use Filament\Tables;
 use Filament\Forms\Form;
+use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -17,16 +17,11 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Clusters\SystemManager\Master;
 use App\Models\SystemManager\Master\Application;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\SystemManager\Master\ApplicationResource\Pages;
-use App\Filament\Resources\SystemManager\Master\ApplicationResource\RelationManagers;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Split;
 
 class ApplicationResource extends Resource
 {
@@ -83,21 +78,17 @@ class ApplicationResource extends Resource
                     ->relationship('module', 'description')
             ])
             ->actions([
-                EditAction::make()
-                    ->tooltip('edit')
-                    ->hiddenLabel()
-                    ->icon(Icons::EDIT->value),
-                DeleteAction::make()
-                    ->tooltip('delete')
-                    ->hiddenLabel(),
+                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Application', null, null, null)
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                DeleteBulkAction::make()
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])
             ->headerActions([
-                CreateAction::make()
-                    ->label('Add')
-                    ->icon(Icons::ADD->value)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+            ])
+            ->emptyStateActions([
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
             ->heading('Application')
             ->deferLoading()
