@@ -10,6 +10,10 @@ class RoleMenuUser extends Model
 {
     use HasFactory;
 
+    // protected $casts = [
+    //     'user_id' => 'array',
+    // ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

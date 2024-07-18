@@ -28,10 +28,11 @@ class RoleMenuUsersRelationManager extends RelationManager
         return $form
             ->schema([
                 Select::make('user_id')
+                    ->searchable()
                     ->relationship('user', 'name')
                     ->getOptionLabelFromRecordUsing(fn (User $record) => "{$record->name}")
-                    ->searchable()
                     ->preload()
+                    ->live()
                     ->unique('role_menu_users',null,null,true)
                     ->columnSpanFull()
             ]);
