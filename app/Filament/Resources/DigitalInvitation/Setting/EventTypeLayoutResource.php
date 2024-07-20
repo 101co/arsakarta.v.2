@@ -8,14 +8,16 @@ use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Split;
-use Filament\Tables\Columns\Layout\Split as TableSplit;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rules\Unique;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Columns\ToggleColumn;
 use App\Filament\Clusters\DigitalInvitation\Setting;
+use Filament\Tables\Columns\Layout\Split as TableSplit;
 use App\Models\DigitalInvitation\Setting\EventTypeLayout;
 use App\Filament\Resources\DigitalInvitation\Setting\EventTypeLayoutResource\Pages;
 
@@ -44,6 +46,16 @@ class EventTypeLayoutResource extends Resource
                         Select::make('event_type_id')
                             ->relationship('eventType', 'event_type')
                             ->preload()
+                            ->unique(EventTypeLayout::class, 'id', null, $ignoreRecord = true, $modifyRuleUsing = function (Unique $rule, string $context, ?Model $record) {
+                                if ($record)
+                                {
+                                    return $rule
+                                        ->where('event_type_id', $record->event_type_id)
+                                        ->whereNot('id', $record->id);
+                                }
+    
+                                return null;
+                            })
                             ->searchable(),
                         Repeater::make('layouts')
                             ->schema([
