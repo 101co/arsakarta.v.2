@@ -33,7 +33,6 @@ class RoleMenuDetailsRelationManager extends RelationManager
                     ->getOptionLabelFromRecordUsing(fn (Menu $record) => "{$record->code} - {$record->description}")
                     ->searchable()
                     ->preload()
-                    ->unique('role_menu_details',null,null,true)
                     ->columnSpanFull()
             ]);
     }

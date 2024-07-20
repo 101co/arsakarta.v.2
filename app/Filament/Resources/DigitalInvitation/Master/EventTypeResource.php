@@ -10,25 +10,25 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Tables\Enums\ActionsPosition;
-use App\Models\DigitalInvitation\Master\Layout;
-use App\Filament\Clusters\DigitalInvitation\Master;
-use App\Filament\Resources\DigitalInvitation\Master\LayoutResource\Pages;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Enums\ActionsPosition;
+use App\Models\DigitalInvitation\Master\EventType;
+use App\Filament\Clusters\DigitalInvitation\Master;
+use App\Filament\Resources\DigitalInvitation\Master\EventTypeResource\Pages;
 
-class LayoutResource extends Resource
+class EventTypeResource extends Resource
 {
-    protected static ?string $model = Layout::class;
+    protected static ?string $model = EventType::class;
 
     protected static ?string $cluster = Master::class;
-    protected static ?string $slug = 'layout';
+    protected static ?string $slug = 'event-type';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function canViewAny(): bool
     {
-        $menuCode = 'INVTM001';
+        $menuCode = 'INVTM002';
         return authUserMenu($menuCode, auth()->user()->id);
     }
 
@@ -36,8 +36,8 @@ class LayoutResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('layout_name')
-                    ->label('Layout Name')
+                TextInput::make('event_type')
+                    ->label('Event Type')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(100)
@@ -49,8 +49,8 @@ class LayoutResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('layout_name')
-                    ->label('Layout Name')
+                TextColumn::make('event_type')
+                    ->label('Event Type')
                     ->searchable()
                     ->sortable(),
                 ToggleColumn::make('is_active')
@@ -58,20 +58,20 @@ class LayoutResource extends Resource
             ])
             ->filters([])
             ->actions([
-                getCustomTableAction(ActionType::EDIT, 'Update', 'Update Layout', Icons::EDIT, null, false),
-                getCustomTableAction(ActionType::DELETE, null, 'Delete Layout', null, null, null)
+                getCustomTableAction(ActionType::EDIT, 'Update', 'Update Event Type', Icons::EDIT, null, false),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Event Type', null, null, null)
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', 'Add Layout', Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', 'Add Event Type', Icons::ADD, false, false)
             ])
             ->emptyStateActions([
                 getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
             ->defaultPaginationPageOption(10)
-            ->heading('Module')
+            ->heading('Event Type')
             ->deferLoading()
             ->striped();
     }
@@ -79,7 +79,7 @@ class LayoutResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageLayouts::route('/'),
+            'index' => Pages\ManageEventTypes::route('/'),
         ];
     }
 }

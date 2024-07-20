@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\DigitalInvitation\Master\LayoutResource\Pages;
+namespace App\Filament\Resources\DigitalInvitation\Master\FeatureResource\Pages;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Filament\Resources\Pages\ManageRecords;
-use App\Filament\Resources\DigitalInvitation\Master\LayoutResource;
+use App\Filament\Resources\DigitalInvitation\Master\FeatureResource;
 
-class ManageLayouts extends ManageRecords
+class ManageFeatures extends ManageRecords
 {
-    protected static string $resource = LayoutResource::class;
+    protected static string $resource = FeatureResource::class;
 
     public function getTitle(): string | Htmlable
     {

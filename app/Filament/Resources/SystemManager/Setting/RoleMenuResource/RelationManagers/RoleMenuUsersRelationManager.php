@@ -8,13 +8,9 @@ use Filament\Forms\Form;
 use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Select;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Enums\ActionsPosition;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class RoleMenuUsersRelationManager extends RelationManager
@@ -33,7 +29,6 @@ class RoleMenuUsersRelationManager extends RelationManager
                     ->getOptionLabelFromRecordUsing(fn (User $record) => "{$record->name}")
                     ->preload()
                     ->live()
-                    ->unique('role_menu_users',null,null,true)
                     ->columnSpanFull()
             ]);
     }

@@ -95,8 +95,8 @@ if (! function_exists('getCustomTableAction'))
     {
       return CreateAction::make()
         ->mutateFormDataUsing((function (array $data): array {
-            $data['created_by'] = auth()->user()->name;
-            $data['updated_by'] = auth()->user()->name;
+            $data['created_by'] = auth()->user()->username;
+            $data['updated_by'] = auth()->user()->username;
             return $data;
         }))
         ->label($label)
@@ -112,8 +112,7 @@ if (! function_exists('getCustomTableAction'))
     {
       return EditAction::make()
         ->mutateFormDataUsing((function (array $data): array {
-            $data['created_by'] = auth()->user()->name;
-            $data['updated_by'] = auth()->user()->name;
+            $data['updated_by'] = auth()->user()->username;
             return $data;
         }))
         ->label($label)
