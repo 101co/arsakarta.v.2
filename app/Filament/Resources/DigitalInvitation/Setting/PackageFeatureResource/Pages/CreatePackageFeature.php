@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\DigitalInvitation\Setting\EventTypeLayoutResource\Pages;
+namespace App\Filament\Resources\DigitalInvitation\Setting\PackageFeatureResource\Pages;
 
 use App\Enums\Icons;
 use Illuminate\Support\Js;
 use Filament\Resources\Pages\CreateRecord;
-use App\Filament\Resources\DigitalInvitation\Setting\EventTypeLayoutResource;
+use App\Filament\Resources\DigitalInvitation\Setting\PackageFeatureResource;
 
-class CreateEventTypeLayout extends CreateRecord
+class CreatePackageFeature extends CreateRecord
 {
-    protected static string $resource = EventTypeLayoutResource::class;
+    protected static string $resource = PackageFeatureResource::class;
     protected static ?string $title = 'Setting Event Type Layout';
 
     protected function getRedirectUrl(): string
