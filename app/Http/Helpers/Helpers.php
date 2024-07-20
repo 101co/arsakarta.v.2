@@ -2,6 +2,7 @@
 
 use App\Enums\ActionType;
 use Filament\Actions\Action;
+use Filament\Support\Enums\ActionSize;
 use Illuminate\Support\Facades\DB;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Enums\MaxWidth;
@@ -48,7 +49,8 @@ if (! function_exists('getCustomSaveFormAction'))
       ->icon($icon ? $icon->value : 'heroicon-c-check')
       ->submit('save')
       ->keyBindings(['mod+s'])
-      ->iconSize(IconSize::Small);
+      ->iconSize(IconSize::Small)
+      ->size(ActionSize::Small);
   }
 }
 
@@ -64,7 +66,8 @@ if (! function_exists('getCustomCreateAnotherFormAction'))
           ->action('createAnother')
           ->keyBindings(['mod+shift+s'])
           ->color('gray')
-          ->iconSize(IconSize::Small);
+          ->iconSize(IconSize::Small)
+          ->size(ActionSize::Small);
     }
     return [];
   }
@@ -81,7 +84,8 @@ if (! function_exists('getCustomCancelFormAction'))
           ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . $url . ')')
           ->icon($icon ? $icon->value : '')
           ->color('gray')
-          ->iconSize(IconSize::Small);
+          ->iconSize(IconSize::Small)
+          ->size(ActionSize::Small);
     }
     return [];
   }
@@ -106,7 +110,8 @@ if (! function_exists('getCustomTableAction'))
         ->modalWidth(MaxWidth::Medium)
         ->modalSubmitActionLabel($label)
         ->createAnother($enableAnother ? $enableAnother : false)
-        ->modalCancelAction($disableCancel ? false : null);
+        ->modalCancelAction($disableCancel ? false : null)
+        ->size(ActionSize::Small);
     }
     else if ($type == ActionType::EDIT)
     {
@@ -123,20 +128,23 @@ if (! function_exists('getCustomTableAction'))
         ->modalHeading($modalLabel)
         ->modalWidth(MaxWidth::Medium)
         ->modalSubmitActionLabel($label)
-        ->modalCancelAction($disableCancel ? false : null);
+        ->modalCancelAction($disableCancel ? false : null)
+        ->size(ActionSize::Small);
     }
     else if ($type == ActionType::DELETE)
     {
       return DeleteAction::make()
         ->tooltip('delete')
         ->modalHeading($modalLabel)
-        ->hiddenLabel();
+        ->hiddenLabel()
+        ->size(ActionSize::Small);
     }
     else if ($type == ActionType::BULK_DELETE)
     {
       return DeleteBulkAction::make()
         ->label($label)
-        ->iconSize(IconSize::Small);
+        ->iconSize(IconSize::Small)
+        ->size(ActionSize::Small);
     }
   }
 }

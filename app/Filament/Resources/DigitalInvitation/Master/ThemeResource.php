@@ -19,6 +19,8 @@ use App\Models\DigitalInvitation\Master\Theme;
 use App\Filament\Clusters\DigitalInvitation\Master;
 use App\Filament\Resources\DigitalInvitation\Master\Themes\Pages\ManageThemes;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 
 class ThemeResource extends Resource
 {
@@ -61,6 +63,7 @@ class ThemeResource extends Resource
                     ->columnSpanFull()
                     ->reorderable()
                     ->maxFiles(4)
+                    ->panelLayout('grid')
             ]);
     }
 
@@ -68,22 +71,32 @@ class ThemeResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('theme_name')
-                    ->label('Theme Name')
-                    ->searchable()
-                    ->sortable(),
-                ImageColumn::make('images')
-                    ->label('Images')
-                    ->circular()
-                    ->stacked(),
-                ToggleColumn::make('is_active')
-                    ->label('Is Active')
+                Split::make([
+                    Stack::make([
+                        TextColumn::make('theme_name')
+                            ->label('Theme Name')
+                            ->searchable()
+                            ->sortable(),
+                        ImageColumn::make('images')
+                            ->label('Images')
+                            ->circular()
+                            ->stacked()
+                            ->extraImgAttributes(['loading' => 'lazy']),
+                    ]),
+                    ToggleColumn::make('is_active')
+                        ->label('Is Active')
+                        ->alignEnd()
+                ])
             ])
             ->filters([])
+            ->contentGrid([
+                'sm' => 1,
+                'xl' => 3,
+            ])
             ->actions([
                 getCustomTableAction(ActionType::EDIT, 'Update', 'Update Theme', Icons::EDIT, null, false),
                 getCustomTableAction(ActionType::DELETE, null, 'Delete Theme', null, null, null)
-            ], position: ActionsPosition::BeforeColumns)
+            ])
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])

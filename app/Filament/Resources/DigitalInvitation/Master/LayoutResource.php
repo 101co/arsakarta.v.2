@@ -10,10 +10,10 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Tables\Enums\ActionsPosition;
 use App\Models\DigitalInvitation\Master\Layout;
 use App\Filament\Clusters\DigitalInvitation\Master;
 use App\Filament\Resources\DigitalInvitation\Master\LayoutResource\Pages;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\ToggleColumn;
 
 class LayoutResource extends Resource
@@ -49,18 +49,25 @@ class LayoutResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('layout_name')
-                    ->label('Layout Name')
-                    ->searchable()
-                    ->sortable(),
-                ToggleColumn::make('is_active')
-                    ->label('Is Active')
+                Split::make([
+                    TextColumn::make('layout_name')
+                        ->label('Layout Name')
+                        ->searchable()
+                        ->sortable(),
+                    ToggleColumn::make('is_active')
+                        ->label('Is Active')
+                        ->alignEnd()
+                ])
             ])
             ->filters([])
+            ->contentGrid([
+                'sm' => 1,
+                'xl' => 1,
+            ])
             ->actions([
                 getCustomTableAction(ActionType::EDIT, 'Update', 'Update Layout', Icons::EDIT, null, false),
                 getCustomTableAction(ActionType::DELETE, null, 'Delete Layout', null, null, null)
-            ], position: ActionsPosition::BeforeColumns)
+            ])
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])

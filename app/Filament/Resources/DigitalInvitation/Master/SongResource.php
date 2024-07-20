@@ -66,6 +66,7 @@ class SongResource extends Resource
                     ->label('Cover Image')
                     ->image()
                     ->columnSpanFull()
+                    ->panelLayout('grid')
             ]);
     }
 
@@ -74,20 +75,16 @@ class SongResource extends Resource
         return $table
             ->columns([
                 Split::make([
-                    Stack::make([
                     ImageColumn::make('song_image')
                         ->label('Images')
                         ->circular()
                         ->visibleFrom('md')
-
-                    ])
-                    ->grow(false),
+                        ->grow(false),
                     Stack::make([
                         TextColumn::make('song_title')
                             ->label('Title')
                             ->searchable()
-                            ->sortable()
-                            ->grow(false),
+                            ->sortable(),
                         TextColumn::make('song_by_user')
                             ->label('Uploaded By')
                             ->badge()
@@ -100,23 +97,22 @@ class SongResource extends Resource
                             {   
                                 true => 'success',
                                 false => 'warning'
-                            }),
-                        ]),
-                    Stack::make([
-                        ToggleColumn::make('is_active')
-                            ->label('Is Active')
-                    ])
+                            })
+                    ]),
+                    ToggleColumn::make('is_active')
+                        ->label('Is Active')
+                        ->alignEnd()
                 ])
             ])
             ->filters([])
             ->contentGrid([
                 'sm' => 1,
-                'xl' => 2
+                'xl' => 2,
             ])
             ->actions([
                     getCustomTableAction(ActionType::EDIT, 'Update', 'Update Theme', Icons::EDIT, null, false),
                     getCustomTableAction(ActionType::DELETE, null, 'Delete Theme', null, null, null)
-                ], ActionsPosition::BeforeCells)
+            ])
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])

@@ -10,8 +10,8 @@ use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Enums\ActionsPosition;
 use App\Models\DigitalInvitation\Master\EventType;
 use App\Filament\Clusters\DigitalInvitation\Master;
 use App\Filament\Resources\DigitalInvitation\Master\EventTypeResource\Pages;
@@ -49,18 +49,25 @@ class EventTypeResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('event_type')
-                    ->label('Event Type')
-                    ->searchable()
-                    ->sortable(),
-                ToggleColumn::make('is_active')
-                    ->label('Is Active')
+                Split::make([
+                    TextColumn::make('event_type')
+                        ->label('Event Type')
+                        ->searchable()
+                        ->sortable(),
+                    ToggleColumn::make('is_active')
+                        ->label('Is Active')
+                        ->alignEnd()
+                ])
             ])
             ->filters([])
+            ->contentGrid([
+                'sm' => 1,
+                'xl' => 1,
+            ])
             ->actions([
                 getCustomTableAction(ActionType::EDIT, 'Update', 'Update Event Type', Icons::EDIT, null, false),
                 getCustomTableAction(ActionType::DELETE, null, 'Delete Event Type', null, null, null)
-            ], position: ActionsPosition::BeforeColumns)
+            ])
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])
