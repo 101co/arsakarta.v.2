@@ -78,7 +78,6 @@ class SongResource extends Resource
                     ImageColumn::make('song_image')
                         ->label('Images')
                         ->circular()
-                        ->visibleFrom('md')
                         ->grow(false),
                     Stack::make([
                         TextColumn::make('song_title')

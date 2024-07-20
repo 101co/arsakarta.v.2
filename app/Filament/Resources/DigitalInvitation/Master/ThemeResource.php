@@ -11,16 +11,17 @@ use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Filters\SelectFilter;
 use App\Models\DigitalInvitation\Master\Theme;
 use App\Filament\Clusters\DigitalInvitation\Master;
 use App\Filament\Resources\DigitalInvitation\Master\Themes\Pages\ManageThemes;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
+use Filament\Support\Enums\VerticalAlignment;
 
 class ThemeResource extends Resource
 {
@@ -73,6 +74,9 @@ class ThemeResource extends Resource
             ->columns([
                 Split::make([
                     Stack::make([
+                        TextColumn::make('themeCategory.theme_category_name')
+                            ->badge()
+                            ->color('success'),
                         TextColumn::make('theme_name')
                             ->label('Theme Name')
                             ->searchable()
@@ -81,17 +85,21 @@ class ThemeResource extends Resource
                             ->label('Images')
                             ->circular()
                             ->stacked()
-                            ->extraImgAttributes(['loading' => 'lazy']),
-                    ]),
+                            ->extraImgAttributes(['loading' => 'lazy'])
+                    ], VerticalAlignment::Center),
                     ToggleColumn::make('is_active')
                         ->label('Is Active')
                         ->alignEnd()
                 ])
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('theme_category_id')
+                    ->label('Category')
+                    ->relationship('themeCategory', 'theme_category_name')
+            ])
             ->contentGrid([
                 'sm' => 1,
-                'xl' => 3,
+                'xl' => 2,
             ])
             ->actions([
                 getCustomTableAction(ActionType::EDIT, 'Update', 'Update Theme', Icons::EDIT, null, false),
