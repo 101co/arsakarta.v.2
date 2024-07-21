@@ -4,6 +4,7 @@ namespace App\Models\DigitalInvitation\Setting;
 
 use App\Models\DigitalInvitation\Master\EventType;
 use App\Models\DigitalInvitation\Master\Layout;
+use App\Models\DigitalInvitation\Master\Package;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

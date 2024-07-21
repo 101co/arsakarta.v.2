@@ -27,6 +27,19 @@ if (! function_exists('authUserMenu'))
   }
 }
 
+if (! function_exists('getAllPackageActive')) 
+{
+  function getAllPackageActive($isActive) 
+  {
+    $arrayData = DB::table('packages')
+                  ->where('is_active', '=', $isActive)
+                  ->pluck('package_name', 'package_name')
+                  ->toArray();
+
+    return $arrayData;
+  }
+}
+
 if (! function_exists('getCustomCreateFormAction')) 
 {
   function getCustomCreateFormAction($label, $icon)

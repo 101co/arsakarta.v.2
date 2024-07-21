@@ -14,12 +14,17 @@ use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
+use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\CheckboxList;
+use App\Models\DigitalInvitation\Master\Package;
 use App\Filament\Clusters\DigitalInvitation\Setting;
 use Filament\Tables\Columns\Layout\Split as TableSplit;
 use App\Models\DigitalInvitation\Setting\EventTypeLayout;
 use App\Filament\Resources\DigitalInvitation\Setting\EventTypeLayoutResource\Pages;
+use Filament\Forms\Components\Fieldset;
 
 class EventTypeLayoutResource extends Resource
 {
@@ -65,7 +70,14 @@ class EventTypeLayoutResource extends Resource
                                     ->preload()
                                     ->searchable()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                    ->required(),
+                                CheckboxList::make('packages')
+                                    ->options(getAllPackageActive(true))
                                     ->required()
+                                    ->bulkToggleable()
+                                    ->gridDirection('row')
+                                    ->columns(3)
+                                    ->columnSpanFull(),
                             ])
                             ->label('Arrange Layout')
                             ->addActionLabel('Add More Layout')

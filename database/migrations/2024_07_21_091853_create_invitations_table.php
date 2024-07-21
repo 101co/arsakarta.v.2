@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::table('package_features', function (Blueprint $table) {
-        //     $table->foreignId('event_type_id')->constrained('event_types')->cascadeOnDelete();
-        //     $table->integer('price');
-        // });
+        Schema::create('invitations', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('invitations');
     }
 };
