@@ -2,6 +2,7 @@
 
 namespace App\Models\DigitalInvitation\Setting;
 
+use App\Models\DigitalInvitation\Master\EventType;
 use App\Models\DigitalInvitation\Master\Feature;
 use App\Models\DigitalInvitation\Master\Package;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,11 @@ class PackageFeature extends Model
     public function package()
     {
         return $this->belongsTo(Package::class);
+    }
+
+    public function eventType()
+    {
+        return $this->belongsTo(EventType::class);
     }
 
     public function feature()

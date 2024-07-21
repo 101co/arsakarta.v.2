@@ -20,6 +20,9 @@ use App\Filament\Clusters\DigitalInvitation\Setting;
 use Filament\Tables\Columns\Layout\Split as TableSplit;
 use App\Models\DigitalInvitation\Setting\PackageFeature;
 use App\Filament\Resources\DigitalInvitation\Setting\PackageFeatureResource\Pages;
+use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\FontWeight;
+use Filament\Tables\Columns\Layout\Stack;
 
 class PackageFeatureResource extends Resource
 {
@@ -43,32 +46,58 @@ class PackageFeatureResource extends Resource
         ->schema([
             Split::make([
                 Section::make([
-                    Select::make('package_id')
-                        ->relationship('package', 'package_name')
-                        ->preload()
-                        ->unique(PackageFeature::class, 'id', null, $ignoreRecord = true, $modifyRuleUsing = function (Unique $rule, string $context, ?Model $record) {
-                            if ($record)
-                            {
-                                return $rule
-                                    ->where('package_id', $record->package_id)
-                                    ->whereNot('id', $record->id);
-                            }
-
-                            return null;
-                        })
-                        ->searchable(),
-                    Repeater::make('features')
+                    Section::make('Layout')
                         ->schema([
-                            Select::make('feature_id')
-                                ->relationship('feature', 'feature_name')
-                                ->label('Feature')
-                                ->preload()
-                                ->searchable()
-                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                            Select::make('event_type_id')
                                 ->required()
+                                ->relationship('eventType', 'event_type')
+                                ->preload()
+                                ->unique(PackageFeature::class, 'id', null, $ignoreRecord = true, $modifyRuleUsing = function (Unique $rule, string $context, ?Model $record) {
+                                    if ($record)
+                                    {
+                                        return $rule
+                                            ->where('event_type_id', $record->event_type_id)
+                                            ->whereNot('id', $record->id);
+                                    }
+        
+                                    return false;
+                                })
+                                ->searchable(),
+                            Select::make('package_id')
+                                ->relationship('package', 'package_name')
+                                ->preload()
+                                ->unique(PackageFeature::class, 'id', null, $ignoreRecord = true, $modifyRuleUsing = function (Unique $rule, string $context, ?Model $record) {
+                                    if ($record)
+                                    {
+                                        return $rule
+                                            ->where('package_id', $record->package_id)
+                                            ->whereNot('id', $record->id);
+                                    }
+        
+                                    return null;
+                                })
+                                ->searchable(),
+                            TextInput::make('price')
+                                ->required()
+                                ->prefix('IDR'),
+                        ]),
+                    Section::make('Features')
+                        ->schema([
+                            Repeater::make('features')
+                                ->schema([
+                                    Select::make('feature_id')
+                                        ->relationship('feature', 'feature_name')
+                                        ->label('Feature')
+                                        ->preload()
+                                        ->searchable()
+                                        ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                        ->required(),
+                                    TextInput::make('value')
+                                        ->required()
+                                ])
+                                ->label('Arrange Feature')
+                                ->addActionLabel('Add More Feature')
                         ])
-                        ->label('Arrange Feature')
-                        ->addActionLabel('Add More Feature')
                 ])
             ])
         ]);
@@ -79,14 +108,35 @@ class PackageFeatureResource extends Resource
         return $table
             ->columns([
                 TableSplit::make([
-                    TextColumn::make('package.package_name')
-                        ->label('Package Name')
-                        ->searchable()
-                        ->sortable(),
+                    Stack::make([
+                        TableSplit::make([
+                            TextColumn::make('eventType.event_type')
+                                ->label('Event Type')
+                                ->badge()
+                                ->color('success'),
+                            TextColumn::make('package.package_name')
+                                ->label('Package Name')
+                                ->badge()
+                                ->color('primary')
+                                ->searchable()
+                                ->sortable(),
+                        ]),
+                        TableSplit::make([
+                            TextColumn::make('price')
+                                ->label('Price')
+                                ->weight(FontWeight::ExtraBold)
+                                ->money('IDR')
+                                ->searchable()
+                                ->sortable()
+                        ])
+                    ]),
                     ToggleColumn::make('is_active')
                         ->label('Is Active')
                         ->alignEnd()
                 ])
+            ])
+            ->groups([
+                'eventType.event_type'
             ])
             ->filters([])
             ->contentGrid([
