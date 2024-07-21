@@ -23,7 +23,7 @@ class LayoutResource extends Resource
     protected static ?string $cluster = Master::class;
     protected static ?string $slug = 'layout';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static ?string $navigationIcon = Icons::DEFAULT->value;
     protected static ?int $navigationSort = 1;
 
     public static function canViewAny(): bool

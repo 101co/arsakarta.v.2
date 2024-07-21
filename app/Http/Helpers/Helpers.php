@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\ActionType;
+use App\Enums\Icons;
 use Filament\Actions\Action;
 use Filament\Support\Enums\ActionSize;
 use Illuminate\Support\Facades\DB;

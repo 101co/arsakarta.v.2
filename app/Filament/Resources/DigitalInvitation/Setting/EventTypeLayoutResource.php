@@ -24,6 +24,7 @@ use App\Filament\Clusters\DigitalInvitation\Setting;
 use Filament\Tables\Columns\Layout\Split as TableSplit;
 use App\Models\DigitalInvitation\Setting\EventTypeLayout;
 use App\Filament\Resources\DigitalInvitation\Setting\EventTypeLayoutResource\Pages;
+use App\Models\DigitalInvitation\Master\Layout;
 use Filament\Forms\Components\Fieldset;
 
 class EventTypeLayoutResource extends Resource
@@ -81,6 +82,9 @@ class EventTypeLayoutResource extends Resource
                             ])
                             ->label('Arrange Layout')
                             ->addActionLabel('Add More Layout')
+                            ->collapsible()
+                            ->collapsed()
+                            ->itemLabel(fn (array $state): ?string => $state['layout_id'] ? Layout::where('id', '=', $state['layout_id'])->pluck('layout_name')->first()  : null)
                     ])
                 ])
             ]);
