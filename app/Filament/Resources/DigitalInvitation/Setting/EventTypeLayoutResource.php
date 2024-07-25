@@ -26,6 +26,7 @@ use App\Models\DigitalInvitation\Setting\EventTypeLayout;
 use App\Filament\Resources\DigitalInvitation\Setting\EventTypeLayoutResource\Pages;
 use App\Models\DigitalInvitation\Master\Layout;
 use Filament\Forms\Components\Fieldset;
+use Filament\Tables\Columns\CheckboxColumn;
 
 class EventTypeLayoutResource extends Resource
 {
@@ -104,6 +105,7 @@ class EventTypeLayoutResource extends Resource
                         ->alignEnd()
                 ])
             ])
+            ->recordUrl(null)
             ->filters([])
             ->contentGrid([
                 'sm' => 1,
@@ -123,9 +125,9 @@ class EventTypeLayoutResource extends Resource
                 getCustomTableAction(ActionType::CREATE, 'Add', 'Choose Menu', Icons::ADD, false, false)
             ])
             ->defaultPaginationPageOption(10)
-            ->striped()
             ->heading('Setting Event Type Layout')
-            ->deferLoading();
+            ->deferLoading()
+            ->striped();
     }
 
     public static function getRelations(): array

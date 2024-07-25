@@ -135,6 +135,7 @@ class PackageFeatureResource extends Resource
                         ->alignEnd()
                 ])
             ])
+            ->recordUrl(null)
             ->groups([
                 'eventType.event_type'
             ])

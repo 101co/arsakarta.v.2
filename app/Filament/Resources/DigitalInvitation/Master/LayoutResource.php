@@ -78,7 +78,7 @@ class LayoutResource extends Resource
                 getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
             ->defaultPaginationPageOption(10)
-            ->heading('Module')
+            ->heading('Layout')
             ->deferLoading()
             ->striped();
     }
