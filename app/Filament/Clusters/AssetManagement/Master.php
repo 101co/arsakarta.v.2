@@ -7,7 +7,7 @@ use Filament\Clusters\Cluster;
 
 class Master extends Cluster
 {
-    protected static ?string $slug = 'asset-management-master';
+    protected static ?string $slug = 'astmm';
     protected static ?string $navigationGroup = 'Asset Management';
     protected static ?string $navigationIcon = Icons::MASTER->value;
 }
