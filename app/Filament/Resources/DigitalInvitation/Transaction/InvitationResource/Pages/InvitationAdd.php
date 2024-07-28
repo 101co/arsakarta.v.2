@@ -131,6 +131,7 @@ class InvitationAdd extends Page implements HasForms
                                         ->icon(Icons::MUSIC->value)
                                         ->iconSize(IconSize::Small)
                                 ])
+                                ->from('md')
                             ]),
                         Tab::make('Design')
                             ->icon(Icons::BRUSH->value)
