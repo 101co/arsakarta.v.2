@@ -74,8 +74,7 @@ class InvitationAdd extends Page implements HasForms
                                                 ->live()
                                                 ->placeholder('Slug')
                                                 ->disabled(fn (Get $get): bool => !filled($get('event_name')))
-                                                ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
-                                                ->url(),
+                                                ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug')),
                                             Select::make('selected_event_type_id')
                                                 ->required()
                                                 ->placeholder('Choose Event Type')
