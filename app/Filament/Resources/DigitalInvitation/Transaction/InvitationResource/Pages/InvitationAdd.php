@@ -8,7 +8,9 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Illuminate\Support\Js;
 use Illuminate\Support\Str;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\Page;
+use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Tabs;
 use Illuminate\Support\Facades\Log;
 use Filament\Forms\Components\Split;
@@ -69,9 +71,11 @@ class InvitationAdd extends Page implements HasForms
                                             TextInput::make('slug')
                                                 ->required()
                                                 ->hiddenLabel()
+                                                ->live()
                                                 ->placeholder('Slug')
                                                 ->disabled(fn (Get $get): bool => !filled($get('event_name')))
-                                                ->prefix('https://arsakarta.com/'),
+                                                ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
+                                                ->url(),
                                             Select::make('selected_event_type_id')
                                                 ->required()
                                                 ->placeholder('Choose Event Type')
@@ -169,7 +173,9 @@ class InvitationAdd extends Page implements HasForms
         return 
         [
             getCustomCreateFormAction('Save', Icons::CHECK) /* this button will call create method below */, 
-            getCustomCancelFormAction('Cancel', Icons::CROSS, Js::from($this->previousUrl ?? static::getResource()::getUrl()))
+            Action::make('cancel')
+                ->extraAttributes(['onclick' => new HtmlString("return confirm('Are you sure you want to save?')")])
+            // getCustomCancelFormAction('Cancel', Icons::CROSS, Js::from($this->previousUrl ?? static::getResource()::getUrl()))
         ];
     }
 
