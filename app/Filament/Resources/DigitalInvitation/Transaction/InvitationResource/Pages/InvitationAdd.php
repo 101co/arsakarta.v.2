@@ -178,6 +178,11 @@ class InvitationAdd extends Page implements HasForms
     {
         $this->dispatch('open-modal', id:'test-modal');
     }
+
+    public function chooseTestModal() 
+    {
+        $this->dispatch('close-modal', id:'test-modal');
+    }
     
 
     public function getFormActions(): array
