@@ -6,13 +6,11 @@ use App\Enums\Icons;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
-use Illuminate\Support\Js;
 use Illuminate\Support\Str;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Tabs;
-use Illuminate\Support\Facades\Log;
 use Filament\Forms\Components\Split;
 use Filament\Support\Enums\IconSize;
 use Filament\Forms\Components\Select;
@@ -22,7 +20,6 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
-use Filament\Support\Enums\IconPosition;
 use Illuminate\Contracts\Support\Htmlable;
 use App\Models\DigitalInvitation\Master\Song;
 use App\Models\DigitalInvitation\Master\Theme;
@@ -31,14 +28,15 @@ use App\Models\DigitalInvitation\Master\EventType;
 use App\Models\DigitalInvitation\Setting\PackageFeature;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use Filament\Forms\Components\Actions\Action as FormAction;
-use Filament\Forms\Components\Actions\Action as ActionsAction;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
+use Filament\Support\Enums\ActionSize;
 
 class InvitationAdd extends Page implements HasForms
 {
     use InteractsWithForms;
 
     public ?array $data = [];
+    public $dataku = 'test';
 
     protected static string $resource = InvitationResource::class;
 
@@ -105,12 +103,19 @@ class InvitationAdd extends Page implements HasForms
                                         ->schema([
                                             Actions::make([
                                                 FormAction::make('open_modal')
-                                                    ->label('Open Modal')
+                                                    ->label('Choose Song')
+                                                    ->icon(Icons::MUSIC->value)
+                                                    ->iconSize(IconSize::Small)
                                                     ->action('test')
-                                            //     Action::make('Generate excerpt')
-                                            //         // ->action(function (Forms\Get $get, Forms\Set $set) {
-                                            //         //     $set('excerpt', str($get('content'))->words(45, end: ''));
-                                            //         // })
+                                                    ->outlined()
+                                                    ->size(ActionSize::ExtraSmall),
+                                                FormAction::make('open_modal')
+                                                    ->label('Choose Theme')
+                                                    ->icon(Icons::GENERAL->value)
+                                                    ->iconSize(IconSize::Small)
+                                                    ->action('test')
+                                                    ->outlined()
+                                                    ->size(ActionSize::ExtraSmall)
                                             ]),
                                             Select::make('selected_song_id')
                                                 ->required()
@@ -178,6 +183,17 @@ class InvitationAdd extends Page implements HasForms
     {
         $this->dispatch('open-modal', id:'test-modal');
     }
+
+    // public function getDataku()
+    // {
+    //     $songs = Song::where('is_active', true)->get();
+    //     return $songs;
+    // }
+
+    // public function chooseSong()
+    // {
+    //     dd('SONG CHOOSEN');
+    // }
 
     public function chooseTestModal() 
     {

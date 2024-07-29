@@ -78,6 +78,7 @@ class InvitationResource extends Resource
             ])
             ->defaultPaginationPageOption(10)
             ->heading('Invitation')
+            ->recordUrl(null)
             ->deferLoading()
             ->striped();
     }
