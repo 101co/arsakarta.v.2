@@ -4,4 +4,7 @@
 
     <x-filament-panels::form.actions :actions="$this->getFormActions()"/>
   </x-filament-panels::form>
+  <x-filament::modal id="test-modal" slide-over>
+    <h1>HELLO</h1>
+  </x-filament::modal>
 </x-filament-panels::page>

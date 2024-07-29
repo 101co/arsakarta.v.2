@@ -17,6 +17,7 @@ use Filament\Forms\Components\Split;
 use Filament\Support\Enums\IconSize;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Tabs\Tab;
@@ -29,6 +30,8 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use App\Models\DigitalInvitation\Master\EventType;
 use App\Models\DigitalInvitation\Setting\PackageFeature;
 use App\Models\DigitalInvitation\Transaction\Invitation;
+use Filament\Forms\Components\Actions\Action as FormAction;
+use Filament\Forms\Components\Actions\Action as ActionsAction;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
 
 class InvitationAdd extends Page implements HasForms
@@ -57,7 +60,6 @@ class InvitationAdd extends Page implements HasForms
                     ->tabs([
                         Tab::make('General')
                             ->icon(Icons::GEAR->value)
-                            ->iconPosition(IconPosition::After)
                             ->schema([
                                 Split::make([
                                     Section::make('Event Settings')
@@ -101,6 +103,15 @@ class InvitationAdd extends Page implements HasForms
                                         ->iconSize(IconSize::Small),
                                     Section::make('Media Settings')
                                         ->schema([
+                                            Actions::make([
+                                                FormAction::make('open_modal')
+                                                    ->label('Open Modal')
+                                                    ->action('test')
+                                            //     Action::make('Generate excerpt')
+                                            //         // ->action(function (Forms\Get $get, Forms\Set $set) {
+                                            //         //     $set('excerpt', str($get('content'))->words(45, end: ''));
+                                            //         // })
+                                            ]),
                                             Select::make('selected_song_id')
                                                 ->required()
                                                 ->placeholder('Choose Song')
@@ -138,20 +149,17 @@ class InvitationAdd extends Page implements HasForms
                             ]),
                         Tab::make('Design')
                             ->icon(Icons::BRUSH->value)
-                            ->iconPosition(IconPosition::After)
                             ->schema([
                                 // ...
                             ]),
                         Tab::make('Guest')
                             ->icon(Icons::TWO_PEOPLE->value)
-                            ->iconPosition(IconPosition::After)
                             ->badge(5)
                             ->schema([
                                 // ...
                             ]),
                         Tab::make('Greetings')
                             ->icon(Icons::CHAT->value)
-                            ->iconPosition(IconPosition::After)
                             ->badge(2)
                             ->schema([
                                 // ...
@@ -164,6 +172,11 @@ class InvitationAdd extends Page implements HasForms
     public function mount(): void
     {
         $this->form->fill();
+    }
+
+    public function test()
+    {
+        $this->dispatch('open-modal', id:'test-modal');
     }
     
 

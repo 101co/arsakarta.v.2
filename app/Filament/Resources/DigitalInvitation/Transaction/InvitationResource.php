@@ -24,6 +24,7 @@ class InvitationResource extends Resource
 
     protected static ?string $cluster = Transaction::class;
     protected static ?string $slug = 'invitation';
+    protected static ?string $navigationLabel = 'Undanganmu';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = Icons::DEFAULT->value;
     protected static ?int $navigationSort = 1;
