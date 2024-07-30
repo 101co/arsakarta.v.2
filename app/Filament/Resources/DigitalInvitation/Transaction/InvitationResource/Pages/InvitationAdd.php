@@ -29,6 +29,7 @@ use App\Models\DigitalInvitation\Setting\PackageFeature;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use Filament\Forms\Components\Actions\Action as FormAction;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Support\Enums\ActionSize;
 
 class InvitationAdd extends Page implements HasForms
@@ -106,14 +107,15 @@ class InvitationAdd extends Page implements HasForms
                                                     ->label('Choose Song')
                                                     ->icon(Icons::MUSIC->value)
                                                     ->iconSize(IconSize::Small)
-                                                    ->action('test')
                                                     ->outlined()
-                                                    ->size(ActionSize::ExtraSmall),
+                                                    ->size(ActionSize::ExtraSmall)
+                                                    ->action('openChooseSong')
+                                                    ,
                                                 FormAction::make('open_modal')
                                                     ->label('Choose Theme')
                                                     ->icon(Icons::GENERAL->value)
                                                     ->iconSize(IconSize::Small)
-                                                    ->action('test')
+                                                    ->action('openChooseTheme')
                                                     ->outlined()
                                                     ->size(ActionSize::ExtraSmall)
                                             ]),
@@ -179,21 +181,26 @@ class InvitationAdd extends Page implements HasForms
         $this->form->fill();
     }
 
-    public function test()
+    public function openChooseSong()
     {
         $this->dispatch('open-modal', id:'test-modal');
     }
 
-    // public function getDataku()
-    // {
-    //     $songs = Song::where('is_active', true)->get();
-    //     return $songs;
-    // }
+    public function openChooseTheme()
+    {
+        $this->dispatch('open-modal', id:'test-modal');
+    }
 
-    // public function chooseSong()
-    // {
-    //     dd('SONG CHOOSEN');
-    // }
+    public function getDataku()
+    {
+        $songs = Song::where('is_active', true)->get();
+        return $songs;
+    }
+
+    public function chooseSong($id)
+    {
+        dd('SONG CHOOSEN'.$id);
+    }
 
     public function chooseTestModal() 
     {
