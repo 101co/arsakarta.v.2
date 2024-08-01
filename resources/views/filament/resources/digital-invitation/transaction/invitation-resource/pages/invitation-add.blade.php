@@ -14,9 +14,7 @@
         @foreach ($this->getDataku() as $item)
           <li class="mb-3">
             <div class="mx-auto mb-3 flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg">
-              <div class="shrink-0">
-                <img class="max-w-full h-auto rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="image" />
-              </div>
+                <img class="block mx-auto h-24 rounded-full sm:mx-0 sm:shrink-0" src="{{ url('storage/'.$item->song_image) }}" alt="Woman's Face" />
               <div class="w-full">
                 <div class="text-sm font-medium text-black">{{ $item->song_title }}</div>
                 <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
