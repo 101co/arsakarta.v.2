@@ -8,6 +8,7 @@
 
         @vite('resources/css/app.css')
     </head>
-    <body class="font-sans antialiased dark:bg-black dark:text-white/50">
+    <body>
+        {{ $slot }}
     </body>
 </html>
