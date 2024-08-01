@@ -16,6 +16,7 @@
               <img class="h-10 w-10 rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="" />
               <div class="ml-5 overflow-hidden">
                   <p class="text-sm font-medium text-slate-900">{{ $item->song_title }}</p>
+                  <audio hidden id="file-audio-{{ $item->id }}" src="{{ $item->song_filename }}"></audio>
               </div>
                 <div>
                     <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic({{ $item->id }})" >
@@ -26,43 +27,12 @@
             </li>
           @endforeach
       </ul>
-
-<!--     <ul>
-        @foreach ($this->getDataku() as $item)
-        <li class="mb-3">
-            <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-                <div class="md:flex">
-                    <div class="md:shrink-0">
-                      <img class="h-48 w-full object-cover md:h-full md:w-48" src="{{ url('storage/'.$item->song_image) }}" alt="Modern building architecture">
-                    </div>
-                    <div class="p-8">
-                      <p class="mt-2 text-slate-500">{{ $item->song_title }}</p>
-                    </div>
-                        <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic({{ $item->id }})" >
-                            <x-filament::icon-button id="play-audio-button-{{ $item->id }}" icon="heroicon-o-play-circle" href="#" tag="a" label="Filament"/>
-                            <x-filament::icon-button id="stop-audio-button-{{ $item->id }}" class="hidden" icon="heroicon-o-stop-circle" href="#" tag="a" label="Filament"/>
-                        </button>
-                </div>
-            </div>
-        </li>
-        @endforeach
-    </ul> -->
                             
       <div>
         <button class="rounded-full bg-blue-500 px-4 py-1 text-sm font-medium text-white duration-100 ease-in-out hover:bg-blue-700 active:scale-95" >
           Choose
         </button>
       </div>
-    {{-- url('storage/'.$item->song_filename) --}}
-<!--     <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
-      <div class="shrink-0">
-        {{-- <img class="size-12 w-2" src="{{ url('storage/'.$item->song_image) }}" alt="ChitChat Logo"> --}}
-      </div>
-      <div>
-        <div class="text-xl font-thin text-blue-600">ChitChat</div>
-        <p class="text-slate-500">You have a new message!</p>
-      </div>
-    </div> -->
 
     <x-filament::button wire:click="chooseTestModal">
       Choose
