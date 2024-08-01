@@ -15,7 +15,7 @@
           <li class="mb-3">
             <div class="mx-auto mb-3 flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg">
               <div class="size-px ">
-                <img class="size-px rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="image" />
+                <img class="max-w-full h-auto rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="image" />
               </div>
               <div class="w-full">
                 <div class="text-sm font-medium text-black">{{ $item->song_title }}</div>
