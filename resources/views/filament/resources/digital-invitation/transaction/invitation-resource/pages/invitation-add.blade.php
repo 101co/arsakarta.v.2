@@ -10,7 +10,19 @@
       Choose Song
     </x-slot>
 
-    <ul>
+      <ul role="list" class="p-6 divide-y divide-slate-200">
+          @foreach ($this->getDataku() as $item)
+            <li class="flex py-4 first:pt-0 last:pb-0">
+              <img class="h-10 w-10 rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="" />
+              <div class="ml-3 overflow-hidden">
+                <p class="text-sm font-medium text-slate-900">{{ $item->song_title }}</p>
+                <p class="text-sm text-slate-500 truncate">{{ $item->song_title }}</p>
+              </div>
+            </li>
+          @endforeach
+      </ul>
+
+<!--     <ul>
         @foreach ($this->getDataku() as $item)
         <li class="mb-3">
             <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
@@ -22,14 +34,14 @@
                       <p class="mt-2 text-slate-500">{{ $item->song_title }}</p>
                     </div>
                         <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic({{ $item->id }})" >
-<!--                             <x-filament::icon-button id="play-audio-button-{{ $item->id }}" icon="heroicon-o-play-circle" href="#" tag="a" label="Filament"/> -->
-<!--                             <x-filament::icon-button id="stop-audio-button-{{ $item->id }}" class="hidden" icon="heroicon-o-stop-circle" href="#" tag="a" label="Filament"/> -->
+                            <x-filament::icon-button id="play-audio-button-{{ $item->id }}" icon="heroicon-o-play-circle" href="#" tag="a" label="Filament"/>
+                            <x-filament::icon-button id="stop-audio-button-{{ $item->id }}" class="hidden" icon="heroicon-o-stop-circle" href="#" tag="a" label="Filament"/>
                         </button>
                 </div>
             </div>
         </li>
         @endforeach
-    </ul>
+    </ul> -->
                             
       <div>
         <button class="rounded-full bg-blue-500 px-4 py-1 text-sm font-medium text-white duration-100 ease-in-out hover:bg-blue-700 active:scale-95" >
