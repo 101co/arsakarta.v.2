@@ -20,9 +20,10 @@
     </head>
  
     <body class="antialiased">
-        <h1 class="text-blue-500">Test</h1>
-        {{-- {{ $slot }} --}}
- 
+        <div class="bg-slate-700 w-full p-4">
+            <h1 class="text-3xl font-light">Comming Soon, dab!</h1> 
+        </div>
+        
         @filamentScripts
     </body>
 </html>

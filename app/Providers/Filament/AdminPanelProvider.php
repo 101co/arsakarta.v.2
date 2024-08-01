@@ -63,10 +63,5 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->viteTheme('resources/css/app.css');
-            // ->renderHook(
-            //     // PanelsRenderHook::BODY_END,
-            //     PanelsRenderHook::FOOTER,
-            //     fn() => view('layout/admin/footer')
-            // );
     }
 }

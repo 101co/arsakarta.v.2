@@ -18,6 +18,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Support\Enums\ActionSize;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Contracts\Support\Htmlable;
@@ -29,8 +31,6 @@ use App\Models\DigitalInvitation\Setting\PackageFeature;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use Filament\Forms\Components\Actions\Action as FormAction;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
-use Filament\Forms\Components\ToggleButtons;
-use Filament\Support\Enums\ActionSize;
 
 class InvitationAdd extends Page implements HasForms
 {
@@ -119,6 +119,12 @@ class InvitationAdd extends Page implements HasForms
                                                     ->outlined()
                                                     ->size(ActionSize::ExtraSmall)
                                             ]),
+                                            KeyValue::make('meta')
+                                                ->addable(false)
+                                                ->deletable(false)
+                                                ->editableValues(false)
+                                                ->editableKeys(false)
+                                                ->hiddenLabel(),
                                             Select::make('selected_song_id')
                                                 ->required()
                                                 ->placeholder('Choose Song')
@@ -199,7 +205,7 @@ class InvitationAdd extends Page implements HasForms
 
     public function chooseSong($id)
     {
-        dd('SONG CHOOSEN'.$id);
+        $this->dispatch('close-modal', id:'test-modal');
     }
 
     public function chooseTestModal() 
@@ -252,6 +258,15 @@ class InvitationAdd extends Page implements HasForms
     {
         dd('here');
     }
+
+    // public function render(): View
+    // {
+    //     return view('filament.resources.digital-invitation.transaction.invitation-resource.pages.invitation-add'
+    //     // , [
+    //     //     'users' => User::query()->paginate($this->perPage),
+    //     // ]
+    // );
+    // }
 
     protected static string $view = 'filament.resources.digital-invitation.transaction.invitation-resource.pages.invitation-add';
 }
