@@ -60,4 +60,64 @@
       Choose
     </x-filament::button>
   </x-filament::modal>
+
+    <script>
+      function playMusic(id) 
+      {
+        // get current audio, play button, dan stop button
+        var currentAudio = document.getElementById("file-audio-"+id);
+        var currentPlayButton = document.getElementById('play-audio-button-'+id);
+        var currentStopButton = document.getElementById('stop-audio-button-'+id);
+
+        // cek apakah ada audio lain yang sedang diplay
+        var othersAudio = document.querySelectorAll('[id*="file-audio-"]');
+        for (var i=0; i<othersAudio.length; i++)
+        {
+          if(othersAudio[i].id != "file-audio-"+id && !othersAudio[i].paused) 
+          {
+            var otherAudion = document.getElementById(othersAudio[i].id);
+            otherAudion.currentTime = 0;
+            otherAudion.pause();
+          }
+        }
+
+        // reset other play button
+        var othersPlayButton = document.querySelectorAll('[id*="play-audio-button"]');
+        for(var i=0;i<othersPlayButton.length;i++)
+        {
+          var otherPlayButton = document.getElementById(othersPlayButton[i].id);
+          if(othersPlayButton[i].id != "play-audio-button-"+id)
+          {
+            otherPlayButton.classList.remove('hidden');
+          }
+        }
+
+        // reset other stop button
+        var othersStopButton = document.querySelectorAll('[id*="stop-audio-button"]');  
+        for(var i=0;i<othersStopButton.length;i++)
+        {
+            var otherStopButton = document.getElementById(othersStopButton[i].id);
+            if(othersStopButton[i].id != "stop-audio-button-"+id)
+            {
+              otherStopButton.classList.add('hidden');
+            }
+        }
+
+        // play atau stop current audio
+        // set icon untuk play / stop current button
+        if (currentAudio.paused) 
+        {
+          currentPlayButton.classList.add('hidden');
+          currentStopButton.classList.remove('hidden');
+          return currentAudio.play();
+        }
+        else
+        {
+          currentPlayButton.classList.remove('hidden');
+          currentStopButton.classList.add('hidden');
+          currentAudio.currentTime = 0;
+          return currentAudio.pause();
+        }
+      }
+    </script>
 </x-filament-panels::page>
