@@ -16,7 +16,7 @@
               <img class="h-10 w-10 rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="" />
               <div class="ml-5 overflow-hidden">
                   <p class="text-sm font-medium text-slate-900">{{ $item->song_title }}</p>
-                  <audio hidden id="file-audio-{{ $item->id }}" src="{{ $item->song_filename }}"></audio>
+                  <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
               </div>
                 <div>
                     <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic({{ $item->id }})" >
