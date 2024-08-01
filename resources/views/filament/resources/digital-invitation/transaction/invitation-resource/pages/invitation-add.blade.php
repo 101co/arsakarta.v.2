@@ -13,11 +13,11 @@
       <ul role="list" class="p-6 divide-y divide-slate-200">
           @foreach ($this->getDataku() as $item)
             <li class="flex py-4 first:pt-0 last:pb-0">
-              <img class="h-10 w-10 rounded-full mr-2" src="{{ url('storage/'.$item->song_image) }}" alt="" />
-              <div class="ml-5 overflow-hidden place-items-center w-full">
+              <img class="h-10 w-10 rounded-full object-none mr-2" src="{{ url('storage/'.$item->song_image) }}" alt="" />
+              <div class="ml-5 overflow-hidden w-full">
                   <p class="text-sm font-medium text-slate-900">{{ $item->song_title }}</p>
-                  <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
               </div>
+                  <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
                 <div>
                     <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic({{ $item->id }})" >
                         <x-filament::icon-button id="play-audio-button-{{ $item->id }}" icon="heroicon-o-play-circle" href="#" tag="a" label="Filament"/>
