@@ -16,13 +16,13 @@
         </style>
  
         @filamentStyles
-        @vite('resources/css/app.css')
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
  
     <body class="antialiased">
+        <h1 class="text-blue-500">Test</h1>
         {{-- {{ $slot }} --}}
  
         @filamentScripts
-        @vite('resources/js/app.js')
     </body>
 </html>
