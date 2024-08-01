@@ -19,19 +19,20 @@
               </div>
               <div class="w-full">
                 <div class="text-xl font-medium text-black">{{ $item->song_title }}</div>
-                <p class="text-slate-500">{{ $item->song_artist }}</p>
+                <p class="text-slate-500">{{ $item->song_title }}</p>
                 <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
               </div>
               <div>
                 <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic(1)" >
-                  <svg id="play-audio-button-{{ $item->id }}" type="button" class="size-9 stroke-gray-500 hover:fill-slate-100 active:fill-slate-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <x-heroicon-o-play-circle />
+<!--                   <svg id="play-audio-button-{{ $item->id }}" type="button" class="size-9 stroke-gray-500 hover:fill-slate-100 active:fill-slate-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
                   </svg> 
                   <svg id="stop-audio-button-{{ $item->id }}" type="button" class="hidden animate-pulse size-9 stroke-gray-500 hover:fill-slate-100 active:fill-slate-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z" />
-                  </svg>                
+                  </svg>                 -->
                 </button>
               </div>
               <div>
