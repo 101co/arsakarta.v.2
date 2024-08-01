@@ -22,7 +22,7 @@
                 <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
               </div>
               <div>
-                <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic(1)" >
+                <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic({{ $item->id }})" >
                     <x-filament::icon-button id="play-audio-button-{{ $item->id }}" icon="heroicon-o-play-circle" href="#" tag="a" label="Filament"/>
                     <x-filament::icon-button id="stop-audio-button-{{ $item->id }}" class="hidden" icon="heroicon-o-stop-circle" href="#" tag="a" label="Filament"/>
                         
