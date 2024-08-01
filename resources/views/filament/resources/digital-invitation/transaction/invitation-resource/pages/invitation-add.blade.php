@@ -15,16 +15,17 @@
           <li>
             <div class="mx-auto mb-3 flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg">
               <div class="shrink-0">
-                <img class="size-2 rounded-full" src="" alt="ChitChat Logo" />
+                <img class="size-2 rounded-full" src="" alt="image" />
               </div>
               <div class="w-full">
-                <div class="text-xl font-medium text-black">{{ $item->song_title }}</div>
-                <p class="text-slate-500">{{ $item->song_title }}</p>
+                <div class="text-sm font-medium text-black">{{ $item->song_title }}</div>
                 <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
               </div>
               <div>
                 <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic(1)" >
-                    <x-filament::icon-button icon="heroicon-o-play-circle" href="#" tag="a" label="Filament"/>
+                    <x-filament::icon-button id="play-audio-button-{{ $item->id }}" icon="heroicon-o-play-circle" href="#" tag="a" label="Filament"/>
+                    <x-filament::icon-button id="stop-audio-button-{{ $item->id }}" class="hidden" icon="heroicon-o-stop-circle" href="#" tag="a" label="Filament"/>
+                        
 <!--                   <svg id="play-audio-button-{{ $item->id }}" type="button" class="size-9 stroke-gray-500 hover:fill-slate-100 active:fill-slate-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
