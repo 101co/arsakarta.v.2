@@ -15,7 +15,7 @@
           <li>
             <div class="mx-auto mb-3 flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg">
               <div class="shrink-0">
-                <img class="size-2 rounded-full" src="" alt="image" />
+                <img class="size-px rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="image" />
               </div>
               <div class="w-full">
                 <div class="text-sm font-medium text-black">{{ $item->song_title }}</div>
