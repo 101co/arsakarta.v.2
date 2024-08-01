@@ -10,9 +10,41 @@
       Choose Song
     </x-slot>
 
-    @foreach ($this->getDataku() as $item)
+    <ul>
+        @foreach ($this->getDataku() as $item)
+          <li>
+            <div class="mx-auto mb-3 flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg">
+              <div class="shrink-0">
+                <img class="size-14 rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="ChitChat Logo" />
+              </div>
+              <div class="w-full">
+                <div class="text-xl font-medium text-black">{{ $item->song_title }}</div>
+                <p class="text-slate-500">{{ $item->song_artist }}</p>
+                <audio hidden id="file-audio-{{ $item->id }}" src="{{ url('storage/'.$item->song_filename) }}"></audio>
+              </div>
+              <div>
+                <button class="duration-100 ease-in-out active:scale-95" onclick="playMusic(1)" >
+                  <svg id="play-audio-button-{{ $item->id }}" type="button" class="size-9 stroke-gray-500 hover:fill-slate-100 active:fill-slate-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
+                  </svg> 
+                  <svg id="stop-audio-button-{{ $item->id }}" type="button" class="hidden animate-pulse size-9 stroke-gray-500 hover:fill-slate-100 active:fill-slate-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z" />
+                  </svg>                
+                </button>
+              </div>
+              <div>
+                <button class="rounded-full bg-blue-500 px-4 py-1 text-sm font-medium text-white duration-100 ease-in-out hover:bg-blue-700 active:scale-95" >
+                  Choose
+                </button>
+              </div>
+            </div>
+          </li>
+        @endforeach
+    </ul>
     {{-- url('storage/'.$item->song_filename) --}}
-    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
+<!--     <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
       <div class="shrink-0">
         {{-- <img class="size-12 w-2" src="{{ url('storage/'.$item->song_image) }}" alt="ChitChat Logo"> --}}
       </div>
@@ -20,8 +52,7 @@
         <div class="text-xl font-thin text-blue-600">ChitChat</div>
         <p class="text-slate-500">You have a new message!</p>
       </div>
-    </div>
-    @endforeach
+    </div> -->
 
     <x-filament::button wire:click="chooseTestModal">
       Choose
