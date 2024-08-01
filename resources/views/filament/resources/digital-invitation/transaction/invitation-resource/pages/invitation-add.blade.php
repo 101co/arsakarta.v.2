@@ -12,7 +12,7 @@
 
     <ul>
         @foreach ($this->getDataku() as $item)
-          <li>
+          <li class="mb-3">
             <div class="mx-auto mb-3 flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg">
               <div class="size-px ">
                 <img class="size-px rounded-full" src="{{ url('storage/'.$item->song_image) }}" alt="image" />
