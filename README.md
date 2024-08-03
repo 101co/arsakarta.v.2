@@ -1,5 +1,5 @@
 ## Create New Menu
-php artisan make:filament-resource ../../YourMenu --model --migration
+php artisan make:filament-resource ../../YourMenu --model --migration --simple
 
 ## Create Clusters (Grouping Menu)
 php artisan make:filament-cluster ../../YourCluster

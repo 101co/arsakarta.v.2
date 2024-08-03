@@ -113,16 +113,23 @@ if (! function_exists('getCustomTableAction'))
     {
       return CreateAction::make()
         ->mutateFormDataUsing((function (array $data): array {
-            $data['created_by'] = auth()->user()->username;
-            $data['updated_by'] = auth()->user()->username;
-            return $data;
+            try {
+              $data['created_by'] = auth()->user()->username;
+              $data['updated_by'] = auth()->user()->username;
+              return $data;
+            } catch (\Throwable $th) {
+              dd($th);
+            }
         }))
         ->label($label)
+        ->slideOver()
         ->icon($icon ? $icon->value : '')
         ->iconSize(IconSize::Small)
         ->modalHeading($modalLabel ? $modalLabel : '')
-        ->modalWidth(MaxWidth::Medium)
+        ->modalWidth(MaxWidth::Large)
         ->modalSubmitActionLabel($label)
+        ->stickyModalFooter()
+        ->stickyModalHeader()
         ->createAnother($enableAnother ? $enableAnother : false)
         ->modalCancelAction($disableCancel ? false : null)
         ->size(ActionSize::Small);
@@ -135,13 +142,16 @@ if (! function_exists('getCustomTableAction'))
             return $data;
         }))
         ->label($label)
+        ->slideOver()
         ->icon($icon ? $icon->value : '')
         ->iconSize(IconSize::Small)
         ->hiddenLabel()
         ->modalHeading($modalLabel)
-        ->modalWidth(MaxWidth::Medium)
+        ->modalWidth(MaxWidth::Large)
         ->modalSubmitActionLabel($label)
         ->modalCancelAction($disableCancel ? false : null)
+        ->stickyModalFooter()
+        ->stickyModalHeader()
         ->size(ActionSize::Small);
     }
     else if ($type == ActionType::DELETE)
