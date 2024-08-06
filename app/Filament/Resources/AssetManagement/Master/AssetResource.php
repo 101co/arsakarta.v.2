@@ -119,6 +119,13 @@ class AssetResource extends Resource
                     ToggleColumn::make('is_active')
                         ->label('Is Active')
                         ->alignEnd()
+                ]),
+                Split::make([
+                    TextColumn::make('asset_detail.0.value')
+                        ->badge()
+                        ->label('Aset')
+                        ->searchable()
+                        ->sortable(),
                 ])
             ])
             ->filters([])

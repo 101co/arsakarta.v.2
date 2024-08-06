@@ -61,46 +61,37 @@ class InvitationAdd extends Page implements HasForms
                             ->icon(Icons::GEAR->value)
                             ->schema([
                                 Split::make([
-                                    Section::make('Event Settings')
+                                    Section::make('Pengaturan Undangan')
                                         ->schema([
+                                            Select::make('selected_event_type_id')
+                                                ->required()
+                                                ->placeholder('Pilih Tipe Undangan')
+                                                ->hiddenLabel()
+                                                ->options(EventType::where('is_active', '=', true)->pluck('event_type', 'id'))
+                                                ->live()
+                                                ->afterStateUpdated(function (Set $set) {
+                                                    $set('selected_package_id', null);
+                                                })
+                                                ->searchable()
+                                                ->getSearchResultsUsing(fn (string $search): array => EventType::where('event_type', 'like', "%{$search}%")->limit(50)->pluck('event_type', 'id')->toArray()),
                                             TextInput::make('event_name')
                                                 ->required()
                                                 ->live(onBlur:true)
                                                 ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
                                                 ->hiddenLabel()
-                                                ->placeholder('Event Name'),
+                                                ->placeholder('Nama Undangan'),
                                             TextInput::make('slug')
                                                 ->required()
                                                 ->hiddenLabel()
                                                 ->live()
                                                 ->placeholder('Slug')
                                                 ->disabled(fn (Get $get): bool => !filled($get('event_name')))
-                                                ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug')),
-                                            Select::make('selected_event_type_id')
-                                                ->required()
-                                                ->placeholder('Choose Event Type')
-                                                ->hiddenLabel()
-                                                ->options(EventType::where('is_active', '=', true)->pluck('event_type', 'id'))
-                                                ->live()
-                                                // ->dehydrated(false)
-                                                ->afterStateUpdated(function (Set $set) {
-                                                    $set('selected_package_id', null);
-                                                })
-                                                ->searchable()
-                                                ->getSearchResultsUsing(fn (string $search): array => EventType::where('event_type', 'like', "%{$search}%")->limit(50)->pluck('event_type', 'id')->toArray()),
-                                            Toggle::make('is_active')
-                                                ->default(true)
-                                                ->inline()
-                                                ->label('Active')
-                                                ->onColor('success')
-                                                ->offColor('danger')
-                                                ->onIcon(Icons::V_MARK->value)
-                                                ->offIcon(Icons::X_MARK->value)
+                                                ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
                                         ])
                                         ->collapsible()
                                         ->icon(Icons::GEAR->value)
                                         ->iconSize(IconSize::Small),
-                                    Section::make('Media Settings')
+                                    Section::make('Paket Undangan')
                                         ->schema([
                                             Actions::make([
                                                 FormAction::make('open_modal')
@@ -119,29 +110,7 @@ class InvitationAdd extends Page implements HasForms
                                                     ->outlined()
                                                     ->size(ActionSize::ExtraSmall)
                                             ]),
-                                            KeyValue::make('meta')
-                                                ->addable(false)
-                                                ->deletable(false)
-                                                ->editableValues(false)
-                                                ->editableKeys(false)
-                                                ->hiddenLabel(),
-                                            Select::make('selected_song_id')
-                                                ->required()
-                                                ->placeholder('Choose Song')
-                                                ->hiddenLabel()
-                                                ->options(Song::where('is_active', '=', true)->pluck('song_title', 'id'))
-                                                ->searchable()
-                                                ->getSearchResultsUsing(fn (string $search): array => Song::where('song_title', 'like', "%{$search}%")->limit(50)->pluck('song_title', 'id')->toArray()),
-                                            Select::make('selected_theme_id')
-                                                ->required()
-                                                ->placeholder('Choose Theme')
-                                                ->hiddenLabel()
-                                                ->options(Theme::where('is_active', '=', true)->pluck('theme_name', 'id'))
-                                                ->searchable()
-                                                ->getSearchResultsUsing(fn (string $search): array => Theme::where('theme_name', 'like', "%{$search}%")->limit(50)->pluck('theme_name', 'id')->toArray()),
                                             Select::make('selected_package_id')
-                                                // ->dehydrated()
-                                                // ->disabled(fn (Get $get): bool => !filled($get('event_type_id')))
                                                 ->required()
                                                 ->placeholder('Choose Package')
                                                 ->hiddenLabel()
@@ -153,6 +122,35 @@ class InvitationAdd extends Page implements HasForms
                                                     }
                                                     return null;
                                                 })
+                                        ])
+                                        ->collapsible()
+                                        ->icon(Icons::TICKET->value)
+                                        ->iconSize(IconSize::Small)
+                                ])
+                                ->from('md'),
+                                Split::make([
+                                    Section::make('Tema Undangan')
+                                        ->schema([
+                                            Select::make('selected_theme_id')
+                                                ->required()
+                                                ->placeholder('Choose Theme')
+                                                ->hiddenLabel()
+                                                ->options(Theme::where('is_active', '=', true)->pluck('theme_name', 'id'))
+                                                ->searchable()
+                                                ->getSearchResultsUsing(fn (string $search): array => Theme::where('theme_name', 'like', "%{$search}%")->limit(50)->pluck('theme_name', 'id')->toArray()),
+                                        ])
+                                        ->collapsible()
+                                        ->icon(Icons::BRUSH->value)
+                                        ->iconSize(IconSize::Small),
+                                    Section::make('Lagu Undangan')
+                                        ->schema([
+                                            Select::make('selected_song_id')
+                                                ->required()
+                                                ->placeholder('Choose Song')
+                                                ->hiddenLabel()
+                                                ->options(Song::where('is_active', '=', true)->pluck('song_title', 'id'))
+                                                ->searchable()
+                                                ->getSearchResultsUsing(fn (string $search): array => Song::where('song_title', 'like', "%{$search}%")->limit(50)->pluck('song_title', 'id')->toArray()),
                                         ])
                                         ->collapsible()
                                         ->icon(Icons::MUSIC->value)
