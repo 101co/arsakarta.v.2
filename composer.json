@@ -6,12 +6,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-intl": "*",
         "filament/filament": "^3.2",
         "flowframe/laravel-trend": "^0.2.0",
+        "hugomyb/filament-media-action": "^3.1",
+        "jaocero/radio-deck": "^1.2",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.5",
-        "ext-intl": "*"
+        "livewire/livewire": "^3.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -8,6 +8,7 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Illuminate\Support\Str;
 use Filament\Actions\Action;
+use GuzzleHttp\Psr7\MimeType;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Tabs;
@@ -15,21 +16,25 @@ use Filament\Forms\Components\Split;
 use Filament\Support\Enums\IconSize;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Enums\ActionSize;
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Contracts\Support\Htmlable;
+use Filament\Forms\Components\ToggleButtons;
 use App\Models\DigitalInvitation\Master\Song;
 use App\Models\DigitalInvitation\Master\Theme;
 use Filament\Forms\Concerns\InteractsWithForms;
+use NunoMaduro\Collision\Adapters\Phpunit\State;
 use App\Models\DigitalInvitation\Master\EventType;
 use App\Models\DigitalInvitation\Setting\PackageFeature;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use Filament\Forms\Components\Actions\Action as FormAction;
+use Hugomyb\FilamentMediaAction\Forms\Components\Actions\MediaAction;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
 
 class InvitationAdd extends Page implements HasForms
@@ -38,6 +43,7 @@ class InvitationAdd extends Page implements HasForms
 
     public ?array $data = [];
     public $dataku = 'test';
+    public Set $set;
 
     protected static string $resource = InvitationResource::class;
 
@@ -46,13 +52,20 @@ class InvitationAdd extends Page implements HasForms
         return __('');
     }
 
-    protected function getRedirectUrl(): string
+    public function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
     }
 
     public function form(Form $form): Form
     {
+        $types = app(MimeType::class);
+
+        $acceptedAudioTypes = [
+            $types->fromExtension('mp3'),
+            $types->fromExtension('wav')
+        ];
+        
         return $form
             ->schema([
                 Tabs::make('Tabs')
@@ -62,6 +75,9 @@ class InvitationAdd extends Page implements HasForms
                             ->schema([
                                 Split::make([
                                     Section::make('Pengaturan Undangan')
+                                        ->collapsible()
+                                        ->icon(Icons::GEAR->value)
+                                        ->iconSize(IconSize::Small)
                                         ->schema([
                                             Select::make('selected_event_type_id')
                                                 ->required()
@@ -87,34 +103,20 @@ class InvitationAdd extends Page implements HasForms
                                                 ->placeholder('Slug')
                                                 ->disabled(fn (Get $get): bool => !filled($get('event_name')))
                                                 ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
-                                        ])
-                                        ->collapsible()
-                                        ->icon(Icons::GEAR->value)
-                                        ->iconSize(IconSize::Small),
+                                        ]),
+
                                     Section::make('Paket Undangan')
+                                        ->collapsible()
+                                        ->icon(Icons::TICKET->value)
+                                        ->iconSize(IconSize::Small)
+                                        ->columnSpanFull()
                                         ->schema([
-                                            Actions::make([
-                                                FormAction::make('open_modal')
-                                                    ->label('Choose Song')
-                                                    ->icon(Icons::MUSIC->value)
-                                                    ->iconSize(IconSize::Small)
-                                                    ->outlined()
-                                                    ->size(ActionSize::ExtraSmall)
-                                                    ->action('openChooseSong')
-                                                    ,
-                                                FormAction::make('open_modal')
-                                                    ->label('Choose Theme')
-                                                    ->icon(Icons::GENERAL->value)
-                                                    ->iconSize(IconSize::Small)
-                                                    ->action('openChooseTheme')
-                                                    ->outlined()
-                                                    ->size(ActionSize::ExtraSmall)
-                                            ]),
                                             Select::make('selected_package_id')
                                                 ->required()
                                                 ->placeholder('Choose Package')
                                                 ->hiddenLabel()
                                                 ->searchable()
+                                                ->live()
                                                 ->options(function (Get $get, Set $set) { 
                                                     if (! empty($get('selected_event_type_id')))
                                                     {
@@ -122,14 +124,14 @@ class InvitationAdd extends Page implements HasForms
                                                     }
                                                     return null;
                                                 })
-                                        ])
-                                        ->collapsible()
-                                        ->icon(Icons::TICKET->value)
-                                        ->iconSize(IconSize::Small)
+                                        ]),
                                 ])
                                 ->from('md'),
                                 Split::make([
                                     Section::make('Tema Undangan')
+                                        ->collapsible()
+                                        ->icon(Icons::BRUSH->value)
+                                        ->iconSize(IconSize::Small)
                                         ->schema([
                                             Select::make('selected_theme_id')
                                                 ->required()
@@ -138,23 +140,53 @@ class InvitationAdd extends Page implements HasForms
                                                 ->options(Theme::where('is_active', '=', true)->pluck('theme_name', 'id'))
                                                 ->searchable()
                                                 ->getSearchResultsUsing(fn (string $search): array => Theme::where('theme_name', 'like', "%{$search}%")->limit(50)->pluck('theme_name', 'id')->toArray()),
-                                        ])
-                                        ->collapsible()
-                                        ->icon(Icons::BRUSH->value)
-                                        ->iconSize(IconSize::Small),
+                                                Wizard::make([
+                                                    Wizard\Step::make('Order')
+                                                        ->schema([
+                                                            // ...
+                                                        ]),
+                                                    Wizard\Step::make('Delivery')
+                                                        ->schema([
+                                                            // ...
+                                                        ]),
+                                                    Wizard\Step::make('Billing')
+                                                        ->schema([
+                                                            // ...
+                                                        ]),
+                                                ])
+                                        ]),
                                     Section::make('Lagu Undangan')
-                                        ->schema([
-                                            Select::make('selected_song_id')
-                                                ->required()
-                                                ->placeholder('Choose Song')
-                                                ->hiddenLabel()
-                                                ->options(Song::where('is_active', '=', true)->pluck('song_title', 'id'))
-                                                ->searchable()
-                                                ->getSearchResultsUsing(fn (string $search): array => Song::where('song_title', 'like', "%{$search}%")->limit(50)->pluck('song_title', 'id')->toArray()),
-                                        ])
                                         ->collapsible()
                                         ->icon(Icons::MUSIC->value)
                                         ->iconSize(IconSize::Small)
+                                        ->schema([
+                                            Select::make('selected_song_id')
+                                                ->label('Pilih Lagu')
+                                                ->options(Song::where('is_active', '=', true)->pluck('song_title', 'id'))
+                                                ->live()
+                                                ->required()
+                                                ->searchable()
+                                                ->suffixActions([
+                                                    MediaAction::make('selected_song_id')
+                                                        ->iconButton()
+                                                        ->icon('heroicon-o-play')
+                                                        ->modalHeading(fn() => Song::find($this->data['selected_song_id'])->song_title)
+                                                        ->media(function() 
+                                                            {
+                                                                if (!empty($this->data['selected_song_id']))
+                                                                {
+                                                                    $fileName = Song::find($this->data['selected_song_id'])->song_filename;
+                                                                    return url('storage/'.$fileName);
+                                                                }
+                                                            })
+                                                        ->disabled(fn() => empty($this->data['selected_song_id'])),
+                                                ]),
+                                            FileUpload::make('song_filename')
+                                                ->label('Upload Lagu (.mp3)')
+                                                ->acceptedFileTypes($acceptedAudioTypes)
+                                                ->columnSpanFull()
+                                                ->hidden(fn() => empty($this->data['selected_song_id'])),
+                                        ])
                                 ])
                                 ->from('md')
                             ]),
@@ -173,10 +205,23 @@ class InvitationAdd extends Page implements HasForms
                             ->icon(Icons::CHAT->value)
                             ->badge(2)
                             ->schema([
-                                // ...
+                                // RadioDeck::make('selected_song_id')
+                                //     ->options([
+                                //         'ios' => 'iOS',
+                                //         'android' => 'Android',
+                                //         'web' => 'Web',
+                                //         'windows' => 'Windows',
+                                //         'mac' => 'Mac',
+                                //         'linux' => 'Linux',
+                                //     ])
+                                //     ->padding('px-4 px-6 py-4 py-6')
+                                //     ->extraCardsAttributes([ // Extra Attributes to add to the card HTML element
+                                //         'class' => 'space-y-3.5 > * + *'
+                                //     ])
                             ]),
-                    ])
+                        ]),
             ])
+            ->columns('full')
             ->statePath('data');
     }
 
@@ -195,15 +240,20 @@ class InvitationAdd extends Page implements HasForms
         $this->dispatch('open-modal', id:'test-modal');
     }
 
-    public function getDataku()
-    {
-        $songs = Song::where('is_active', true)->get();
-        return $songs;
-    }
+    // public function getDataku()
+    // {
+    //     $songs = Song::where('is_active', true)->get();
+    //     return $songs;
+    // }
 
     public function chooseSong($id)
     {
+        $selected = Song::find($id)->song_title;
         $this->dispatch('close-modal', id:'test-modal');
+        $this->form->fill([
+            'selected_song_id' => $selected,
+        ]);
+        // $this->set('selected_song_id', $selected);
     }
 
     public function chooseTestModal() 
@@ -235,11 +285,16 @@ class InvitationAdd extends Page implements HasForms
                 'selected_song_id' => $this->data['selected_song_id'],
                 'selected_theme_id' => $this->data['selected_theme_id'],
                 'selected_package_id' => $this->data['selected_package_id'],
-                'is_active' => $this->data['is_active'],
+                // 'is_active' => $this->data['is_active'],
                 'created_by' => auth()->user()->username,
                 'updated_by' => auth()->user()->username,
             ]);
             $savedData->saveOrFail();
+
+            Notification::make()
+                ->title('Saved successfully')
+                ->success()
+                ->send();
         } catch (\Throwable $th) {
             dd($th);
         }

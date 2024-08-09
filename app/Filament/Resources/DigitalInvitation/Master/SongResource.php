@@ -22,6 +22,7 @@ use App\Filament\Resources\DigitalInvitation\Master\SongResource\Pages;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
+use Hugomyb\FilamentMediaAction\Tables\Actions\MediaAction;
 use Illuminate\Database\Eloquent\Model;
 
 class SongResource extends Resource
@@ -110,7 +111,13 @@ class SongResource extends Resource
             ])
             ->actions([
                     getCustomTableAction(ActionType::EDIT, 'Update', 'Update Theme', Icons::EDIT, null, false),
-                    getCustomTableAction(ActionType::DELETE, null, 'Delete Theme', null, null, null)
+                    getCustomTableAction(ActionType::DELETE, null, 'Delete Theme', null, null, null),
+                    MediaAction::make('song')
+                        ->iconButton()
+                        ->icon('heroicon-o-play')
+                        ->modalHeading(fn($record) => $record->song_title)
+                        ->modalWidth('sm')
+                        ->media(fn($record) => url('storage/'.$record->song_filename))
             ])
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)

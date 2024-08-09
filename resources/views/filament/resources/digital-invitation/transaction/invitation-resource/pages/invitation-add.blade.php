@@ -5,7 +5,7 @@
     <x-filament-panels::form.actions :actions="$this->getFormActions()" />
   </x-filament-panels::form>
 
-  <x-filament::modal id="test-modal" :close-by-clicking-away="false" width="md">
+  {{-- <x-filament::modal id="test-modal" :close-by-clicking-away="false" width="md">
     <x-slot name="heading">
       Choose Song
     </x-slot>
@@ -14,7 +14,6 @@
     <div class="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
       <nav class="flex min-w-[240px] flex-col gap-1 p-1 font-sans text-base font-normal text-blue-gray-700">
         <div role="button" 
-        {{-- wire:click='chooseSong({{ $item->id }})' --}}
           class="flex items-center w-full p-3 gap-x-2 leading-tight transition-all rounded-lg outline-none text-start hover:bg-gray-200 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
           <div class="grid mr-4 place-items-center">
             <img alt="candice" src="{{ url('storage/'.$item->song_image) }}"
@@ -48,7 +47,7 @@
     </div>
     @endforeach
     <br>
-  </x-filament::modal>
+  </x-filament::modal> --}}
 
   <script>
     function playMusic(id) 
