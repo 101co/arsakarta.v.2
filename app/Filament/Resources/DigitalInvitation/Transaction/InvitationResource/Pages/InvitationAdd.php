@@ -12,24 +12,22 @@ use GuzzleHttp\Psr7\MimeType;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Split;
 use Filament\Support\Enums\IconSize;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Wizard;
+use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Support\Enums\ActionSize;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Contracts\Support\Htmlable;
-use Filament\Forms\Components\ToggleButtons;
 use App\Models\DigitalInvitation\Master\Song;
 use App\Models\DigitalInvitation\Master\Theme;
 use Filament\Forms\Concerns\InteractsWithForms;
-use NunoMaduro\Collision\Adapters\Phpunit\State;
+use App\Models\DigitalInvitation\Master\Package;
 use App\Models\DigitalInvitation\Master\EventType;
 use App\Models\DigitalInvitation\Setting\PackageFeature;
 use App\Models\DigitalInvitation\Transaction\Invitation;
@@ -100,6 +98,11 @@ class InvitationAdd extends Page implements HasForms
                                                 ->required()
                                                 ->hiddenLabel()
                                                 ->live()
+                                                ->unique()
+                                                ->afterStateUpdated(function (HasForms $livewire, TextInput $component) 
+                                                {
+                                                    $livewire->validate($component->getStatePath());
+                                                })
                                                 ->placeholder('Slug')
                                                 ->disabled(fn (Get $get): bool => !filled($get('event_name')))
                                                 ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
@@ -111,19 +114,43 @@ class InvitationAdd extends Page implements HasForms
                                         ->iconSize(IconSize::Small)
                                         ->columnSpanFull()
                                         ->schema([
-                                            Select::make('selected_package_id')
-                                                ->required()
-                                                ->placeholder('Choose Package')
+                                            TextInput::make('no_type_selected')
                                                 ->hiddenLabel()
-                                                ->searchable()
+                                                ->disabled()
+                                                ->default('Silahkan pilih tipe undangan terlebih dahulu...')
+                                                ->hidden(fn(Get $get) => !empty($get('selected_event_type_id'))),
+                                            Radio::make('selected_package_id')
+                                                ->hiddenLabel()
                                                 ->live()
-                                                ->options(function (Get $get, Set $set) { 
-                                                    if (! empty($get('selected_event_type_id')))
+                                                ->options(fn(Get $get) => !empty($get('selected_event_type_id')) ? PackageFeature::where('event_type_id', $get('selected_event_type_id'))->get()->pluck('package.package_name', 'package.id') : null)
+                                                ->descriptions(function(Get $get) {
+                                                    if(!empty($get('selected_event_type_id')))
                                                     {
-                                                        return PackageFeature::where('event_type_id', $get('selected_event_type_id'))->get()->pluck('package.package_name', 'package.id');
+                                                        $price = PackageFeature::where('event_type_id', $get('selected_event_type_id'))->get()->pluck('price', 'package.id');
+                                                        $formatedPrice = [];
+
+                                                        foreach ($price as $item => $entry)
+                                                        {
+                                                            $price[$item] = 'IDR '. number_format($price[$item], 0);
+                                                        }
+                                                        return $price;
                                                     }
                                                     return null;
-                                                })
+                                                }),
+                                        ])
+                                        ->headerActions([
+                                            FormAction::make('upgrade')
+                                                ->label('Info Paket')
+                                                ->disabled(fn(Get $get) => empty($get('selected_event_type_id')))
+                                                ->link()
+                                                ->icon(Icons::INFO->value)
+                                        ])
+                                        ->footerActionsAlignment(Alignment::End)
+                                        ->footerActions([
+                                            FormAction::make('choose')
+                                                ->label('Pilih Paket')
+                                                ->icon(Icons::CHECK->value)
+                                                ->disabled(fn(Get $get) => empty($get('selected_package_id')) ? true : false)
                                         ]),
                                 ])
                                 ->from('md'),
@@ -133,59 +160,65 @@ class InvitationAdd extends Page implements HasForms
                                         ->icon(Icons::BRUSH->value)
                                         ->iconSize(IconSize::Small)
                                         ->schema([
+                                            TextInput::make('no_package_selected')
+                                                ->hiddenLabel()
+                                                ->disabled()
+                                                ->default('Silahkan pilih paket undangan terlebih dahulu...')
+                                                ->hidden(fn(Get $get) => !empty($get('selected_package_id'))),
                                             Select::make('selected_theme_id')
                                                 ->required()
-                                                ->placeholder('Choose Theme')
+                                                ->placeholder('Pilih tema undangan')
                                                 ->hiddenLabel()
+                                                ->hidden(fn(Get $get) => empty($get('selected_package_id')))
                                                 ->options(Theme::where('is_active', '=', true)->pluck('theme_name', 'id'))
                                                 ->searchable()
-                                                ->getSearchResultsUsing(fn (string $search): array => Theme::where('theme_name', 'like', "%{$search}%")->limit(50)->pluck('theme_name', 'id')->toArray()),
-                                                Wizard::make([
-                                                    Wizard\Step::make('Order')
-                                                        ->schema([
-                                                            // ...
-                                                        ]),
-                                                    Wizard\Step::make('Delivery')
-                                                        ->schema([
-                                                            // ...
-                                                        ]),
-                                                    Wizard\Step::make('Billing')
-                                                        ->schema([
-                                                            // ...
-                                                        ]),
-                                                ])
+                                                ->getSearchResultsUsing(fn (string $search): array => Theme::where('theme_name', 'like', "%{$search}%")->limit(50)->pluck('theme_name', 'id')->toArray())
                                         ]),
                                     Section::make('Lagu Undangan')
                                         ->collapsible()
                                         ->icon(Icons::MUSIC->value)
                                         ->iconSize(IconSize::Small)
                                         ->schema([
+                                            TextInput::make('no_package_selected')
+                                                ->hiddenLabel()
+                                                ->disabled()
+                                                ->default('Silahkan pilih paket undangan terlebih dahulu...')
+                                                ->hidden(fn(Get $get) => !empty($get('selected_package_id'))),
                                             Select::make('selected_song_id')
-                                                ->label('Pilih Lagu')
+                                                ->hiddenLabel()
+                                                ->placeholder('Pilih lagu')
                                                 ->options(Song::where('is_active', '=', true)->pluck('song_title', 'id'))
                                                 ->live()
                                                 ->required()
                                                 ->searchable()
+                                                ->hidden(fn(Get $get) => empty($get('selected_package_id')))
                                                 ->suffixActions([
                                                     MediaAction::make('selected_song_id')
                                                         ->iconButton()
                                                         ->icon('heroicon-o-play')
                                                         ->modalHeading(fn() => Song::find($this->data['selected_song_id'])->song_title)
-                                                        ->media(function() 
-                                                            {
-                                                                if (!empty($this->data['selected_song_id']))
-                                                                {
-                                                                    $fileName = Song::find($this->data['selected_song_id'])->song_filename;
-                                                                    return url('storage/'.$fileName);
-                                                                }
-                                                            })
+                                                        ->tooltip('Putar Lagu Terpilih')
+                                                        ->media(fn() => !empty($this->data['selected_song_id']) ? url('storage/'.Song::find($this->data['selected_song_id'])->song_filename) : null)
                                                         ->disabled(fn() => empty($this->data['selected_song_id'])),
                                                 ]),
                                             FileUpload::make('song_filename')
                                                 ->label('Upload Lagu (.mp3)')
                                                 ->acceptedFileTypes($acceptedAudioTypes)
                                                 ->columnSpanFull()
-                                                ->hidden(fn() => empty($this->data['selected_song_id'])),
+                                                ->hidden(function(Get $get)
+                                                    {
+                                                        if (!empty($get('selected_package_id')))
+                                                        {
+                                                            try {
+                                                                $check = Package::find($get('selected_package_id'))->package_name;
+                                                                return Str::lower('platinum') == Str::lower($check) ? false: true;
+                                                            } catch (\Throwable $th) {
+                                                                dd($th);
+                                                            }
+                                                        }
+
+                                                        return true;
+                                                    }),
                                         ])
                                 ])
                                 ->from('md')
@@ -277,6 +310,7 @@ class InvitationAdd extends Page implements HasForms
     {
         try {
             $this->validate();
+            dd($this->validate());
             $savedData = new Invitation();
             $savedData->fill([
                 'event_name' => $this->data['event_name'],

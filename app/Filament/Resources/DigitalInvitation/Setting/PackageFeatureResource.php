@@ -67,6 +67,7 @@ class PackageFeatureResource extends Resource
                                 ->relationship('package', 'package_name')
                                 ->preload()
                                 ->unique(PackageFeature::class, 'id', null, $ignoreRecord = true, $modifyRuleUsing = function (Unique $rule, string $context, ?Model $record) {
+
                                     if ($record)
                                     {
                                         return $rule
@@ -74,7 +75,7 @@ class PackageFeatureResource extends Resource
                                             ->whereNot('id', $record->id);
                                     }
         
-                                    return null;
+                                    return false;
                                 })
                                 ->searchable(),
                             TextInput::make('price')

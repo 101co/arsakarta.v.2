@@ -27,5 +27,6 @@ enum Icons: string
     case MUSIC = 'heroicon-o-musical-note';
     case V_MARK = 'heroicon-o-check';
     case X_MARK = 'heroicon-o-x-mark';
+    case INFO = 'heroicon-o-information-circle';
 
 }
