@@ -95,15 +95,17 @@ class InvitationAdd extends Page implements HasForms
                                                 ->hiddenLabel()
                                                 ->placeholder('Nama Undangan'),
                                             TextInput::make('slug')
-                                                ->required()
-                                                ->hiddenLabel()
-                                                ->live()
-                                                ->unique()
-                                                ->afterStateUpdated(function (HasForms $livewire, TextInput $component) 
-                                                {
-                                                    $livewire->validate($component->getStatePath());
-                                                })
                                                 ->placeholder('Slug')
+                                                ->unique(table: Invitation::class)
+                                                ->validationMessages([
+                                                    'unique'=> 'Slug dengan nama tersebut telah digunakan.'
+                                                ])
+                                                ->hiddenLabel()
+                                                ->required()
+                                                ->live()
+                                                ->afterStateUpdated(function ($livewire) {
+                                                    $livewire->validateOnly('data.slug');
+                                                })
                                                 ->disabled(fn (Get $get): bool => !filled($get('event_name')))
                                                 ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
                                         ]),
@@ -309,8 +311,8 @@ class InvitationAdd extends Page implements HasForms
     public function create()
     {
         try {
+            // dd($this->validate());
             $this->validate();
-            dd($this->validate());
             $savedData = new Invitation();
             $savedData->fill([
                 'event_name' => $this->data['event_name'],
@@ -329,8 +331,10 @@ class InvitationAdd extends Page implements HasForms
                 ->title('Saved successfully')
                 ->success()
                 ->send();
+
+            redirect($this->getResource()::getUrl('index'));
         } catch (\Throwable $th) {
-            dd($th);
+            $this->validate();
         }
     }
 
