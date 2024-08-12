@@ -11,12 +11,13 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Columns\Layout\Split as TableSplit;
 use App\Filament\Clusters\DigitalInvitation\Transaction;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource\Pages;
-use Filament\Tables\Columns\TextColumn\TextColumnSize;
-use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class InvitationResource extends Resource
 {
@@ -77,6 +78,10 @@ class InvitationResource extends Resource
             ->emptyStateActions([
                 getCustomTableAction(ActionType::CREATE, 'Add', 'Choose Menu', Icons::ADD, false, false)
             ])
+            ->modifyQueryUsing(function (Builder $query) 
+            { 
+                return $query->where('user_id', auth()->user()->id); 
+            }) 
             ->defaultPaginationPageOption(10)
             ->heading('Invitation')
             ->recordUrl(null)
@@ -89,7 +94,7 @@ class InvitationResource extends Resource
         return [
             'index' => Pages\ListInvitations::route('/'),
             'create' => Pages\InvitationAdd::route('/create'),
-            'edit' => Pages\EditInvitation::route('/{record}/edit'),
+            'edit' => Pages\InvitationAdd::route('/{record}/edit'),
         ];
     }
 }

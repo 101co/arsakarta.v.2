@@ -5,6 +5,38 @@
     <x-filament-panels::form.actions :actions="$this->getFormActions()" />
   </x-filament-panels::form>
 
+  <x-filament::modal id="modal-info-paket" width="xl" sticky-header sticky-footer>
+    <x-slot name="heading">
+      <span class="text-xl font-bold">Paket</span>
+    </x-slot>
+
+    @foreach ($this->getDataPaket() as $item)
+    <x-filament::section collapsible>
+        <x-slot name="heading">
+          {{ $item->package->package_name }}
+        </x-slot>
+    
+
+        <ul class="space-y-4 text-left text-gray-500 dark:text-gray-400">
+          <li class="flex items-center space-x-3 gap-4 rtl:space-x-reverse">
+              <x-filament::icon icon="heroicon-o-check" class="h-5 w-5 text-gray-500 dark:text-gray-400"/>
+              <span>Individual configuration</span>
+          </li>
+          <li class="flex items-center space-x-3 gap-4 rtl:space-x-reverse">
+              <x-filament::icon icon="heroicon-o-x-mark" class="h-5 w-5 text-gray-500 dark:text-gray-400"/>
+              <span>No setup, or hidden fees</span>
+          </li>
+      </ul>
+
+      <x-slot name="footerActions">
+        <x-filament::button size="xs" color="gray" wire:click="selectFromModalInfoPaket({{ $item->package->id }})" outlined>
+            Pilih Paket
+        </x-filament::button>
+      </x-slot>
+    </x-filament::section>
+    @endforeach
+  </x-filament::modal>
+
   {{-- <x-filament::modal id="test-modal" :close-by-clicking-away="false" width="md">
     <x-slot name="heading">
       Choose Song
@@ -49,6 +81,7 @@
     <br>
   </x-filament::modal> --}}
 
+  <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-s9t2Tqf5BY_zW7qZ"></script>
   <script>
     function playMusic(id) 
       {
@@ -107,5 +140,73 @@
           return currentAudio.pause();
         }
       }
+
+    function snapPay()
+    {
+      console.log('snapPay');
+    }
+    
+    window.addEventListener("snap-pay", (event) => 
+    {
+      console.log('snapPay');
+      let data = event.detail;
+      console.log(data);
+
+      window.snap.pay(data.token, 
+      {
+          onSuccess: function(result)
+          {
+              /* You may add your own implementation here */
+              // alert("payment success!"); console.log(result);
+              // $('#all-package-modal').modal('hide');
+              // Swal.fire({
+              //     title: 'Payment',
+              //     text: 'Pembayaran berhasil.',
+              //     icon: 'success',
+              //     timer: 4000,
+              //     toast: true
+              // });
+              Livewire.dispatch('payment-success');
+          },
+          onPending: function(result)
+          {
+              /* You may add your own implementation here */
+              // alert("wating your payment!"); console.log(result);
+              // Swal.fire({
+              //     title: 'Payment',
+              //     text: 'Pembayaran dipending.',
+              //     icon: 'warning',
+              //     timer: 3000,
+              //     toast: true
+              // });
+              Livewire.dispatch('payment-close');
+          },
+          onError: function(result)
+          {
+              /* You may add your own implementation here */
+              // alert("payment failed!"); console.log(result);
+              // Swal.fire({
+              //     title: 'Payment',
+              //     text: 'Pembayaran gagal.',
+              //     icon: 'error',
+              //     timer: 3000,
+              //     toast: true
+              // });
+              Livewire.dispatch('payment-close');
+          },
+          onClose: function()
+          {
+              /* You may add your own implementation here */
+              // Swal.fire({
+              //     title: 'Payment',
+              //     text: 'Pembayaran dibatalkan.',
+              //     icon: 'warning',
+              //     timer: 3000,
+              //     toast: true
+              // });
+              Livewire.dispatch('payment-closed');
+          }
+      });
+  });
   </script>
 </x-filament-panels::page>

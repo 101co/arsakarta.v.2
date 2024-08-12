@@ -1,12 +1,13 @@
 <?php
 
-use App\Enums\ActionType;
 use App\Enums\Icons;
+use App\Enums\ActionType;
 use Filament\Actions\Action;
-use Filament\Support\Enums\ActionSize;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -100,6 +101,7 @@ if (! function_exists('getCustomCancelFormAction'))
           ->color('gray')
           ->iconSize(IconSize::Small)
           ->size(ActionSize::Small);
+          // ->extraAttributes(['onclick' => new HtmlString("return confirm('Are you sure you want to save?')")]);
     }
     return [];
   }
