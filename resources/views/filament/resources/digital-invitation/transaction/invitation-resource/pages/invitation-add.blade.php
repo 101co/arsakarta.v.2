@@ -166,7 +166,7 @@
               //     timer: 4000,
               //     toast: true
               // });
-              Livewire.dispatch('payment-success');
+              Livewire.dispatch('payment-success', {order_id: result.order_id});
           },
           onPending: function(result)
           {

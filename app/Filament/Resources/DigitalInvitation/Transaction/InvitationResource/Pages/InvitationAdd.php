@@ -19,7 +19,6 @@ use Filament\Forms\Components\Select;
 use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Support\Enums\ActionSize;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -101,24 +100,30 @@ class InvitationAdd extends Page implements HasForms
                                         ->iconSize(IconSize::Small)
                                         ->schema([
                                             Select::make('selected_event_type_id')
-                                                ->required()
-                                                ->placeholder('Pilih Tipe Undangan')
-                                                ->hiddenLabel()
-                                                ->options(EventType::where('is_active', '=', true)->pluck('event_type', 'id'))
                                                 ->live()
+                                                ->required()
+                                                ->searchable()
+                                                ->label('Jenis Undangan')
+                                                ->placeholder('Pilih Tipe Undangan')
+                                                ->options(EventType::where('is_active', '=', true)->pluck('event_type', 'id'))
+                                                ->disabled(fn () => !empty($this->data['id']))
                                                 ->afterStateUpdated(function (Set $set) {
                                                     $set('selected_package_id', null);
                                                 })
-                                                ->searchable()
                                                 ->getSearchResultsUsing(fn (string $search): array => EventType::where('event_type', 'like', "%{$search}%")->limit(50)->pluck('event_type', 'id')->toArray()),
                                             TextInput::make('event_name')
                                                 ->required()
                                                 ->live(onBlur:true)
-                                                ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
-                                                ->hiddenLabel()
-                                                ->placeholder('Nama Undangan'),
+                                                ->label('Nama Undangan')
+                                                ->placeholder('Nama Undangan')
+                                                ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
                                             TextInput::make('slug')
+                                                ->live()
+                                                ->required()
+                                                ->label('Link Undangan')
                                                 ->placeholder('Slug')
+                                                ->disabled(fn (Get $get): bool => !filled($get('event_name')))
+                                                ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
                                                 ->rule(function (Get $get, Component $component)
                                                     {
                                                         return static function (string $attr, $value, Closure $fail) use ($get, $component)
@@ -134,14 +139,9 @@ class InvitationAdd extends Page implements HasForms
                                                         };
                                                     }
                                                 )
-                                                ->hiddenLabel()
-                                                ->required()
-                                                ->live()
                                                 ->afterStateUpdated(function ($livewire) {
                                                     $livewire->validateOnly('data.slug');
                                                 })
-                                                ->disabled(fn (Get $get): bool => !filled($get('event_name')))
-                                                ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
                                         ]),
 
                                     Section::make('Paket Undangan')
@@ -159,29 +159,27 @@ class InvitationAdd extends Page implements HasForms
                                                 ->hiddenLabel()
                                                 ->live()
                                                 ->disableOptionWhen(function (string $value)
+                                                {
+                                                    if (!empty($this->data['id']))
                                                     {
-                                                        if (!empty($this->data['id']))
+                                                        $currentInvitation = Invitation::find($this->data['id']);
+                                                        $currentPackage = PackageFeature::where('event_type_id', $currentInvitation->selected_event_type_id)
+                                                                            ->where('package_id', $currentInvitation->selected_package_id)
+                                                                            ->first();
+                                                        $selectedPackage = PackageFeature::where('event_type_id', $this->data['selected_event_type_id'])
+                                                                            ->where('package_id', $value)
+                                                                            ->first();
+
+                                                        if ($currentPackage->price > $selectedPackage->price)
                                                         {
-                                                            $currentInvitation = Invitation::find($this->data['id']);
-                                                            $currentPackage = PackageFeature::where('event_type_id', $currentInvitation->selected_event_type_id)
-                                                                                ->where('package_id', $currentInvitation->selected_package_id)
-                                                                                ->first();
-                                                            $selectedPackage = PackageFeature::where('event_type_id', $this->data['selected_event_type_id'])
-                                                                                ->where('package_id', $value)
-                                                                                ->first();
-
-                                                            if ($currentPackage->price > $selectedPackage->price)
-                                                            {
-                                                                return true;
-                                                            }
-                                                            else
-                                                            {
-                                                                return false;
-                                                            }
-
+                                                            return true;
+                                                        }
+                                                        else
+                                                        {
+                                                            return false;
                                                         }
                                                     }
-                                                )
+                                                })
                                                 ->options(fn(Get $get) => !empty($get('selected_event_type_id')) ? PackageFeature::where('event_type_id', $get('selected_event_type_id'))->get()->pluck('package.package_name', 'package.id') : null)
                                                 ->descriptions(function(Get $get) {
                                                     if(!empty($get('selected_event_type_id')))
@@ -197,12 +195,7 @@ class InvitationAdd extends Page implements HasForms
                                                     }
                                                     return null;
                                                 })
-                                                ->afterStateUpdated(function (Set $set)
-                                                    {
-                                                        $set('is_paid', false);
-                                                        $set('selected_theme_id', null);
-                                                        $set('selected_song_id', null);
-                                                    }
+                                                ->afterStateUpdated(function (Set $set) { $this->paketDipilih($set); }
                                                 ),
                                         ])
                                         ->headerActions([
@@ -219,42 +212,19 @@ class InvitationAdd extends Page implements HasForms
                                                 ->label('Pilih Paket')
                                                 ->icon(Icons::CHECK->value)
                                                 ->action('pilihPaket')
-                                                ->disabled(function(Set $set) 
+                                                ->disabled(function (Set $set) 
                                                     {
-                                                        if (!empty($this->data['id']))
-                                                        {
-                                                            $currentInvitation = Invitation::find($this->data['id']);
-                                                            $currentPackage = PackageFeature::where('event_type_id', $currentInvitation->selected_event_type_id)
-                                                                                ->where('package_id', $currentInvitation->selected_package_id)
-                                                                                ->first();
-                                                            $selectedPackage = PackageFeature::where('event_type_id', $this->data['selected_event_type_id'])
-                                                                                ->where('package_id', $this->data['selected_package_id'])
-                                                                                ->first();
-
-                                                            if ($selectedPackage->id != $currentPackage->id
-                                                                && $selectedPackage->price > $currentPackage->price)
-                                                            {
-                                                                return false;
-                                                            }
-                                                            else
-                                                            {
-                                                                // Notification::make()
-                                                                //     ->title('Tidak dapat melakukan downgrade paket.')
-                                                                //     ->warning()
-                                                                //     ->send();
-
-                                                                $set('selected_package_id', $currentInvitation->selected_package_id);
-                                                                $set('selected_theme_id', $currentInvitation->selected_theme_id);
-                                                                $set('selected_song_id', $currentInvitation->selected_song_id);
-                                                                $set('is_paid', $currentInvitation->is_paid);
-                                                                return true;
-                                                            }
-                                                        }
+                                                        return $this->disabledPilihUndangan($set);
                                                     }
                                                 )
                                         ]),
                                 ])
                                 ->from('md'),
+                            ]),
+                        Tab::make('Design')
+                            ->icon(Icons::BRUSH->value)
+                            ->schema([
+                                
                                 Split::make([
                                     Section::make('Tema Undangan')
                                         ->collapsible()
@@ -267,7 +237,7 @@ class InvitationAdd extends Page implements HasForms
                                                 ->placeholder('Pilih paket undangan terlebih dahulu...')
                                                 ->hidden(fn(Get $get) => !empty($get('is_paid'))),
                                             Select::make('selected_theme_id')
-                                                ->required()
+                                                // ->required()
                                                 ->placeholder('Pilih tema undangan')
                                                 ->hiddenLabel()
                                                 ->hidden(fn(Get $get) => empty($get('is_paid')))
@@ -290,7 +260,7 @@ class InvitationAdd extends Page implements HasForms
                                                 ->placeholder('Pilih lagu')
                                                 ->options(Song::where('is_active', '=', true)->pluck('song_title', 'id'))
                                                 ->live()
-                                                ->required()
+                                                // ->required()
                                                 ->searchable()
                                                 ->hidden(fn(Get $get) => empty($this->data['is_paid']))
                                                 ->suffixActions([
@@ -323,11 +293,6 @@ class InvitationAdd extends Page implements HasForms
                                         ])
                                 ])
                                 ->from('md')
-                            ]),
-                        Tab::make('Design')
-                            ->icon(Icons::BRUSH->value)
-                            ->schema([
-                                // ...
                             ]),
                         Tab::make('Guest')
                             ->icon(Icons::TWO_PEOPLE->value)
@@ -400,7 +365,14 @@ class InvitationAdd extends Page implements HasForms
     {
         return 
         [
-            getCustomCreateFormAction('Save', Icons::CHECK) /* this button will call create method below */,
+            // getCustomCreateFormAction('Save', Icons::CHECK) /* this button will call create method below */,
+            FormAction::make('create')
+                ->label('Save')
+                ->submit('create')
+                ->disabled(function () { return $this->disabledButtonSave() ? true : false; })
+                ->keyBindings(['mod+s'])
+                ->icon(Icons::CHECK->value)
+                ->iconSize(IconSize::Small),
             getCustomCancelFormAction('Cancel', Icons::CROSS, Js::from($this->getResource()::getUrl('index')))
         ];
     }
@@ -409,7 +381,12 @@ class InvitationAdd extends Page implements HasForms
     {
         try 
         {
+            $this->validateInvitationData();
             $this->validate();
+
+            $this->data['content'] = null;
+
+            // dd($this->data);
 
             if (!empty($this->data['id']) && $this->data['id'])
             {
@@ -421,7 +398,9 @@ class InvitationAdd extends Page implements HasForms
                 $updatedData['selected_theme_id']       = $this->data['selected_theme_id'];
                 $updatedData['selected_package_id']     = $this->data['selected_package_id'];
                 $updatedData['is_paid']                 = $this->data['is_paid'];
+                $updatedData['is_free']                 = $this->data['is_free'];
                 $updatedData['midtrans_transaction_id'] = $this->data['midtrans_transaction_id'];
+                $updatedData['content']                 = $this->data['content'];
                 $updatedData['user_id']                 = auth()->user()->id;
                 $updatedData['updated_by']              = auth()->user()->username;
                 $updatedData->save();
@@ -438,7 +417,9 @@ class InvitationAdd extends Page implements HasForms
                     'selected_theme_id'         => $this->data['selected_theme_id'],
                     'selected_package_id'       => $this->data['selected_package_id'],
                     'is_paid'                   => $this->data['is_paid'],
+                    'is_free'                   => $this->data['is_free'],
                     'midtrans_transaction_id'   => $this->data['midtrans_transaction_id'],
+                    'content'                   => $this->data['content'],
                     'user_id'                   => auth()->user()->id,
                     'created_by'                => auth()->user()->username,
                     'updated_by'                => auth()->user()->username,
@@ -465,6 +446,30 @@ class InvitationAdd extends Page implements HasForms
         $data['created_by'] = auth()->user()->username;
         $data['updated_by'] = auth()->user()->username;
         return $data;
+    }
+
+    // validasi
+    public function validateInvitationData()
+    {
+        // dd($this->data);
+        $message = null;
+        $body = null;
+
+        if (empty($this->data['midtrans_transaction_id']))
+        {
+            $message = 'Tombol Pilih Paket belum diklik.';
+            $body = 'Setelah melakukan pemilihan paket, harap tekan tombol Pilih Paket.';
+            return;
+        }
+
+        // dd(!empty($message));
+
+        if (!empty($message))
+            Notification::make()
+            ->title($message)
+            ->body(!empty($body) ? $body : '')
+            ->danger()
+            ->send();
     }
 
     // start of modal info paket 
@@ -508,6 +513,134 @@ class InvitationAdd extends Page implements HasForms
         }
     }
 
+    public function isSameCurrentAndSelectedPackage($checkIsPaid)
+    {
+        $isSame = false;
+        if (!empty($this->data['id']))
+        {
+            $currentInvitation = Invitation::find($this->data['id']);
+            $currentPackage = PackageFeature::where('event_type_id', $currentInvitation->selected_event_type_id)
+                                ->where('package_id', $currentInvitation->selected_package_id)
+                                ->first();
+            $selectedPackage = PackageFeature::where('event_type_id', $this->data['selected_event_type_id'])
+                                ->where('package_id', $this->data['selected_package_id'])
+                                ->first();
+
+            if (!$checkIsPaid && $selectedPackage->id == $currentPackage->id && $selectedPackage->price >= $currentPackage->price)
+                $isSame = true; 
+            else if ($checkIsPaid && $selectedPackage->id != $currentPackage->id && !$this->data['is_paid'])
+            {
+                $isSame = true; 
+            }
+        }
+
+        return $isSame;
+    }
+
+    public function disabledButtonSave()
+    {
+        $buttonDisabled = false;
+
+        $buttonDisabled = $this->isSameCurrentAndSelectedPackage(true /* $checkIsPaid */);
+        $buttonDisabled = empty($this->data['selected_package_id']) ? true : false;
+        
+        if (!empty($this->data['is_free']) && !empty($this->data['is_paid']))
+            $buttonDisabled = !$this->data['is_free'] && !$this->data['is_paid'] ? true : false;
+
+        $buttonDisabled = empty($this->data['midtrans_transaction_id']) ? true : false;
+
+        return $buttonDisabled;
+    }
+
+    public function disabledPilihUndangan($set)
+    {
+        $buttonDisabled = false;
+
+        if (!empty($this->data['is_free']) && $this->data['is_free'])
+            $buttonDisabled = true;
+
+        $buttonDisabled = $this->isSameCurrentAndSelectedPackage(false /* $checkIsPaid */);
+        $buttonDisabled = empty($this->data['selected_package_id']) ? true : false;
+        $buttonDisabled = !empty($this->data['midtrans_transaction_id']) ? true : false;
+
+        return $buttonDisabled;
+
+        // if (!empty($this->data['id']))
+        // {
+        //     $currentInvitation = Invitation::find($this->data['id']);
+        //     $currentPackage = PackageFeature::where('event_type_id', $currentInvitation->selected_event_type_id)
+        //                         ->where('package_id', $currentInvitation->selected_package_id)
+        //                         ->first();
+        //     $selectedPackage = PackageFeature::where('event_type_id', $this->data['selected_event_type_id'])
+        //                         ->where('package_id', $this->data['selected_package_id'])
+        //                         ->first();
+
+        //     if ($selectedPackage->id != $currentPackage->id
+        //         && $selectedPackage->price > $currentPackage->price)
+        //     {
+        //         return false;
+        //     }
+        //     else
+        //     {
+        //         // Notification::make()
+        //         //     ->title('Tidak dapat melakukan downgrade paket.')
+        //         //     ->warning()
+        //         //     ->send();
+
+        //         $set('selected_package_id', $currentInvitation->selected_package_id);
+        //         $set('selected_theme_id', $currentInvitation->selected_theme_id);
+        //         $set('selected_song_id', $currentInvitation->selected_song_id);
+        //         $set('is_paid', $currentInvitation->is_paid);
+        //         return true;
+        //     }
+        // }
+        // else if (!empty($this->data['is_paid']))
+        // {
+        //     return $this->data['is_paid'] ? true : false;
+        // }
+        // else if (!empty($this->data['is_free']))
+        // {
+        //     return $this->data['is_free'] ? true : false;
+        // }
+        // else
+        // {
+        //     if (!empty($this->data['selected_package_id']))
+        //     {
+        //         $selectedPackage = $this->getPackgaeById($this->data['selected_package_id']);
+        //         if (str_contains(Str::lower($selectedPackage['package_name']), 'free'))
+        //         {
+        //             $this->data['is_paid'] = false; 
+        //             $this->data['is_free'] = true; 
+        //             $this->data['midtrans_transaction_id'] = null;
+        //             return false;
+        //         }
+        //     }
+        //     else
+        //         return true;
+        // }
+        // return true;
+    }
+
+    public function paketDipilih($set)
+    {
+        $selectedPackage = null;
+        $set('is_paid', false);
+        $set('is_free', false);
+        $set('selected_theme_id', null);
+        $set('selected_song_id', null);
+        $set('midtrans_transaction_id', null);
+
+        /* cek paket yang dipilih */
+        if (!empty($this->data['selected_package_id']))
+        {
+            $selectedPackage = $this->getPackgaeById($this->data['selected_package_id']);
+            if (str_contains(Str::lower($selectedPackage['package_name']), 'free'))
+            {
+                $set('is_free', true);
+            }
+        }
+    }
+
     public function pilihPaket() 
     {
         try 
@@ -517,8 +650,9 @@ class InvitationAdd extends Page implements HasForms
                 $selectedPackage = $this->getPackgaeById($this->data['selected_package_id']);
                 if (str_contains(Str::lower($selectedPackage['package_name']), 'free'))
                 {
-                    $this->data['is_paid'] = true; 
-                    $this->data['midtrans_transaction_id'] = null;
+                    $this->data['is_paid'] = false; 
+                    $this->data['is_free'] = true; 
+                    $this->data['midtrans_transaction_id'] = '-';
                 }
                 else 
                 {
@@ -556,7 +690,6 @@ class InvitationAdd extends Page implements HasForms
                     );
 
                     $snapToken = \Midtrans\Snap::getSnapToken($params);
-                    $this->data['midtrans_transaction_id'] = $snapToken;
                     $this->dispatch('snap-pay', title: 'tokenizer', token: $snapToken);
                 }
             }
@@ -580,8 +713,9 @@ class InvitationAdd extends Page implements HasForms
 
     }
 
-    public function paymentSuccess()
+    public function paymentSuccess($order_id)
     {
+        $this->data['midtrans_transaction_id'] = $order_id;
         $this->data['is_paid'] = true;
 
         Notification::make()

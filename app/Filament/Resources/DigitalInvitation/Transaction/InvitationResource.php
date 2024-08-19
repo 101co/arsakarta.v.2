@@ -12,7 +12,6 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use Filament\Tables\Columns\Layout\Split as TableSplit;
 use App\Filament\Clusters\DigitalInvitation\Transaction;
@@ -45,13 +44,18 @@ class InvitationResource extends Resource
                         TextColumn::make('event_name')
                             ->label('Event Name')
                             ->weight(FontWeight::Medium), 
-                        TextColumn::make('slug')
-                            ->label('Slug')
-                            ->weight(FontWeight::Thin)
-                            ->size(TextColumnSize::ExtraSmall)
-                            ->copyable()
-                            ->copyableState(fn (string $state): string => "https://arsakarta.com/{$state}")
-                            ->prefix('https://arsakarta.com/'),
+                        TableSplit::make([
+                            TextColumn::make('package.package_name')
+                                ->badge()
+                                ->grow(false),
+                            TextColumn::make('slug')
+                                ->label('Slug')
+                                ->weight(FontWeight::Thin)
+                                ->size(TextColumnSize::ExtraSmall)
+                                ->copyable()
+                                ->copyableState(fn (string $state): string => "https://arsakarta.com/{$state}")
+                                ->prefix('https://arsakarta.com/'),
+                        ]),
                     ]),
                     Stack::make([ 
                         ToggleColumn::make('is_active')

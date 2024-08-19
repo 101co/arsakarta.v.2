@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::table('invitations', function (Blueprint $table) 
-        // {
-        //     $table->foreignId('user_id')->constrained('users');
-        // });
+        Schema::table('invitations', function (Blueprint $table) 
+        {
+            $table->string('content', length:5000)->default(null)->nullable();
+        });
     }
 
     /**
