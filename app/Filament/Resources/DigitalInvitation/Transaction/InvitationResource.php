@@ -53,8 +53,8 @@ class InvitationResource extends Resource
                                 ->weight(FontWeight::Thin)
                                 ->size(TextColumnSize::ExtraSmall)
                                 ->copyable()
-                                ->copyableState(fn (string $state): string => "https://arsakarta.com/{$state}")
-                                ->prefix('https://arsakarta.com/'),
+                                ->copyableState(fn (string $state): string => env('APP_URL')."/{$state}")
+                                ->prefix(env('APP_URL').'/'),
                         ]),
                     ]),
                     Stack::make([ 
