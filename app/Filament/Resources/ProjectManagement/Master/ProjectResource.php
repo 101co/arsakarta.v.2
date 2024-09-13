@@ -15,6 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Enums\ActionsPosition;
 use App\Models\ProjectManagement\Master\Project;
 use App\Filament\Clusters\ProjectManagement\Master;
 use App\Filament\Resources\ProjectManagement\Master\ProjectResource\Pages;
@@ -77,30 +78,31 @@ class ProjectResource extends Resource
                     ->label('Project Name')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('Client Name')
+                    ->searchable(),
                 TextColumn::make('client_name')
-                    ->label('Client Name'),
-                TextColumn::make('status')
-                    ->label('Project Status')
-                    ->badge(),
-                TextColumn::make('start_date')
-                    ->label('Project Start'),
-                TextColumn::make('end_date')
-                    ->label('Project End')
+                    ->searchable()
+                    ->sortable()
             ])
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Project', null, null, null)
+            ], position: ActionsPosition::BeforeColumns)
+            ->bulkActions([
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', 'Add Event Type', Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->emptyStateActions([
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+            ])
+            ->heading('Project')
+            ->deferLoading()
+            ->defaultPaginationPageOption(10)
+            ->striped();
     }
 
     public static function getRelations(): array
