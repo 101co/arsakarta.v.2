@@ -9,7 +9,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable //implements FilamentUser
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -49,6 +49,6 @@ class User extends Authenticatable //implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;// str_ends_with($this->email, '@gmail.com'); //&& $this->hasVerifiedEmail();
+        return str_ends_with($this->email, '@gmail.com'); //&& $this->hasVerifiedEmail();
     }
 }
