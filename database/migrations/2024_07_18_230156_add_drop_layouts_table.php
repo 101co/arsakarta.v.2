@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('layouts', function (Blueprint $table) {
             $table->dropColumn('sequence');
-            $table->boolean('is_active')->default(true);
+            // $table->boolean('is_active')->default(true);
         });
     }
 
