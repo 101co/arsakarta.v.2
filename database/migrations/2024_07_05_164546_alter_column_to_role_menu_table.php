@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('role_menus', function (Blueprint $table) {
-            $table->dropForeign('role_menus_menu_id_foreign');
+            // $table->dropForeign('role_menus_menu_id_foreign');
             $table->dropColumn('menu_id');
         });
     }
