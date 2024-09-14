@@ -29,6 +29,7 @@ use Filament\Tables\Actions\Action as ActionTable;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use App\Filament\Clusters\ProjectManagement\Transaction;
 use App\Filament\Resources\ProjectManagement\Transaction\TaskResource\Pages;
+use Filament\Support\Enums\ActionSize;
 
 class TaskResource extends Resource
 {
@@ -66,35 +67,29 @@ class TaskResource extends Resource
                     ->preload()
                     ->live()
                     ->columnSpanFull(),
-                SplitForm::make([
-                    Select::make('task_type_id')
-                        ->searchable()
-                        ->relationship('taskType', 'name')
-                        ->getOptionLabelFromRecordUsing(fn (TaskType $record) => "{$record->name}")
-                        ->preload()
-                        ->live(),
-                    Select::make('status')
-                        ->label('Status')
-                        ->required()
-                        ->options([
-                            'notstarted'    => 'Not Started',
-                            'inprogress'    => 'In Progress',
-                            'pending'       => 'Pending',
-                            'complete'      => 'Complete'
-                        ]),
-                ]),
-                SplitForm::make([
-                    DateTimePicker::make('plan_start_date')
-                        ->label('Start Date (Plan)'),
-                    DateTimePicker::make('plan_end_date')
-                        ->label('End Date (Plan)'),
-                ]),
-                SplitForm::make([
-                    DateTimePicker::make('actual_start_date')
-                        ->label('Start Date (Actual)'),
-                    DateTimePicker::make('actual_end_date')
-                        ->label('End Date (Actual)'),
-                ]),
+                Select::make('task_type_id')
+                    ->searchable()
+                    ->relationship('taskType', 'name')
+                    ->getOptionLabelFromRecordUsing(fn (TaskType $record) => "{$record->name}")
+                    ->preload()
+                    ->live(),
+                Select::make('status')
+                    ->label('Status')
+                    ->required()
+                    ->options([
+                        'notstarted'    => 'Not Started',
+                        'inprogress'    => 'In Progress',
+                        'pending'       => 'Pending',
+                        'complete'      => 'Complete'
+                    ]),
+                DateTimePicker::make('plan_start_date')
+                    ->label('Start Date (Plan)'),
+                DateTimePicker::make('plan_end_date')
+                    ->label('End Date (Plan)'),
+                DateTimePicker::make('actual_start_date')
+                    ->label('Start Date (Actual)'),
+                DateTimePicker::make('actual_end_date')
+                    ->label('End Date (Actual)'),
                 SplitForm::make([
                     TextInput::make('plan_hours')
                         ->readOnly()
@@ -174,6 +169,7 @@ class TaskResource extends Resource
                     {
                         $task->startOrEndTask($task, false);
                     })
+                    ->size(ActionSize::Large)
                     ->label('')
                     ->icon(function (Task $task) {
                         switch ($task->status) 
@@ -197,6 +193,7 @@ class TaskResource extends Resource
                     {
                         $task->startOrEndTask($task, true);
                     })
+                    ->size(ActionSize::Large)
                     ->label('')
                     ->icon(function (Task $task) 
                     {
