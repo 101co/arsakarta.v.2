@@ -12,6 +12,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Columns\Layout\Stack;
 
 class ProjectMembersRelationManager extends RelationManager
 {
@@ -41,7 +42,8 @@ class ProjectMembersRelationManager extends RelationManager
                 ImageColumn::make('user.avatar')
                     ->circular()
                     ->defaultImageUrl(url('images/placeholder.png'))
-                    ->label(''),
+                    ->label('')
+                    ->grow(false),
                 TextColumn::make('user.name')
                     ->label('Name')
                     ->searchable()

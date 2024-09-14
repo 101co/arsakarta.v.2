@@ -28,5 +28,7 @@ enum Icons: string
     case V_MARK = 'heroicon-o-check';
     case X_MARK = 'heroicon-o-x-mark';
     case INFO = 'heroicon-o-information-circle';
-
+    case PLAY = 'heroicon-o-play';
+    case STOP = 'heroicon-o-stop';
+    case PAUSE = 'heroicon-o-pause';
 }

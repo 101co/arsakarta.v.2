@@ -20,6 +20,8 @@ use App\Models\ProjectManagement\Master\Project;
 use App\Filament\Clusters\ProjectManagement\Master;
 use App\Filament\Resources\ProjectManagement\Master\ProjectResource\Pages;
 use App\Filament\Resources\ProjectManagement\Master\ProjectResource\RelationManagers\ProjectMembersRelationManager;
+use Filament\Support\Enums\FontWeight;
+use Filament\Tables\Columns\Layout\Stack;
 
 class ProjectResource extends Resource
 {
@@ -74,22 +76,27 @@ class ProjectResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label('Project Name')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('Client Name')
-                    ->searchable(),
-                TextColumn::make('client_name')
-                    ->searchable()
-                    ->sortable()
+                Stack::make([
+                    TextColumn::make('name')
+                        ->label('Project Name')
+                        ->searchable()
+                        ->weight(FontWeight::SemiBold)
+                        ->sortable(),
+                    TextColumn::make('client_name')
+                        ->searchable()
+                        ->badge()
+                        ->color('info')
+                        ->searchable()
+                        ->sortable()
+                ])
+                ->space(2)
             ])
             ->filters([
             ])
             ->actions([
                 getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
                 getCustomTableAction(ActionType::DELETE, null, 'Delete Project', null, null, null)
-            ], position: ActionsPosition::BeforeColumns)
+            ])
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])

@@ -6,6 +6,7 @@ use App\Enums\Icons;
 use Filament\Forms\Form;
 use App\Enums\ActionType;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
@@ -24,6 +25,7 @@ use App\Models\ProjectManagement\Master\Project;
 use App\Models\ProjectManagement\Master\TaskType;
 use Filament\Forms\Components\Split as SplitForm;
 use App\Models\ProjectManagement\Transaction\Task;
+use Filament\Tables\Actions\Action as ActionTable;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use App\Filament\Clusters\ProjectManagement\Transaction;
 use App\Filament\Resources\ProjectManagement\Transaction\TaskResource\Pages;
@@ -77,6 +79,7 @@ class TaskResource extends Resource
                         ->options([
                             'notstarted'    => 'Not Started',
                             'inprogress'    => 'In Progress',
+                            'pending'       => 'Pending',
                             'complete'      => 'Complete'
                         ]),
                 ]),
@@ -136,6 +139,7 @@ class TaskResource extends Resource
                         {
                             'notstarted'    => 'danger',
                             'inprogress'    => 'warning',
+                            'pending'       => 'danger',
                             'complete'      => 'success'
                         })
                         ->badge()
@@ -164,7 +168,45 @@ class TaskResource extends Resource
             ])
             ->actions([
                 getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
-                getCustomTableAction(ActionType::DELETE, null, 'Delete Task', null, null, null)
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Task', null, null, null),
+                ActionTable::make('playPauseTask')
+                    ->action(function(Task $task)
+                    {
+                        $task->startOrEndTask($task, false);
+                    })
+                    ->label('')
+                    ->icon(function (Task $task) {
+                        switch ($task->status) 
+                        {
+                            case 'notstarted':
+                                return Icons::PLAY->value;
+                                break;
+                            case 'pending':
+                                return Icons::PLAY->value;
+                                break;
+                            case 'inprogress':
+                                return Icons::PAUSE->value;
+                                break;
+                            default:
+                                return null;
+                                break;
+                        }
+                    }),
+                ActionTable::make('stopTask')
+                    ->action(function(Task $task)
+                    {
+                        $task->startOrEndTask($task, true);
+                    })
+                    ->label('')
+                    ->icon(function (Task $task) 
+                    {
+                        if ($task->status <> 'notstarted' && $task->status <> 'complete') 
+                        {
+                            return Icons::STOP->value;
+                        }
+
+                        return null;
+                    })
             ])
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
@@ -177,6 +219,7 @@ class TaskResource extends Resource
             ])
             ->heading('Project')
             ->deferLoading()
+            ->defaultSort('plan_start_date', 'desc')
             ->defaultPaginationPageOption(10)
             ->striped();
     }
