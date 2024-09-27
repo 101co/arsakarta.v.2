@@ -29,7 +29,7 @@ class AssetResource extends Resource
 
     protected static ?string $cluster = Master::class;
     protected static ?string $slug = 'asset';
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = Icons::DEFAULT->value;
     protected static ?string $navigationLabel = 'Aset';
     protected static ?int $navigationSort = 3;
