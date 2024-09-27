@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('layouts', function (Blueprint $table) {
-            $table->dropColumn('sequence');
-            // $table->boolean('is_active')->default(true);
+        Schema::table('hot_wheels_my_collections', function (Blueprint $table) 
+        {
+            $table->string('color', length:50)->nullable()->change();
+            $table->string('images', length:500)->nullable()->change();
+            $table->integer('sell_price')->nullable()->change();
         });
     }
 

@@ -26,6 +26,7 @@ if (! function_exists('authUserMenu'))
                   ->first();
 
     return $authMenu ? true : false;
+    // return true;
   }
 }
 
