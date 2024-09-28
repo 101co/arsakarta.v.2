@@ -26,6 +26,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 
 class AssetVehicleServiceTransactionResource extends Resource
 {
@@ -104,6 +106,7 @@ class AssetVehicleServiceTransactionResource extends Resource
                 FileUpload::make('images')
                     ->label('Attachment')
                     ->nullable()
+                    ->multiple()
                     ->maxFiles(5)
                     ->columnSpanFull(),
                 Checkbox::make('is_active')
@@ -133,22 +136,35 @@ class AssetVehicleServiceTransactionResource extends Resource
         $pageTitle = 'Vehicle Service';
         return $table
             ->columns([
-                TextColumn::make('asset.asset_name')
-                    ->label('Vehicle')
-                    ->searchable()
-                    ->sortable()
-                    ->grow(false),
-                TextColumn::make('service_date')
-                    ->date('d/m/Y'),
-                TextColumn::make('current_odometer')
-                    ->label('Current Odometer')
-                    ->suffix(' Km'),
-                TextColumn::make('next_odometer')
-                    ->label('Current Odometer')
-                    ->suffix(' Km'),
-                IconColumn::make('is_active')
-                    ->label('Active')
-                    ->boolean(true)
+                Split::make([
+                    Stack::make([
+                        TextColumn::make('asset.asset_name')
+                            ->label('Vehicle')
+                            ->searchable()
+                            ->sortable()
+                            ->grow(false),
+                        TextColumn::make('service_date')
+                            ->date('d/m/Y')
+                            ->sortable(),
+                        Split::make([
+                            TextColumn::make('current_odometer')
+                                ->label('Current Odometer')
+                                ->badge()
+                                ->color('info')
+                                ->suffix(' Km'),
+                            TextColumn::make('next_odometer')
+                                ->label('Next Odometer')
+                                ->badge()
+                                ->color('warning')
+                                ->suffix(' Km'),
+                        ])
+                        ->grow(false)
+                    ])
+                    ->space(2),
+                    IconColumn::make('is_active')
+                        ->label('Active')
+                        ->boolean(true)
+                ])
             ])
             ->filters([])
             ->contentGrid([
