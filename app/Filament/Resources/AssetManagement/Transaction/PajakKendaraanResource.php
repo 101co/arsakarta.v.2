@@ -31,7 +31,7 @@ class PajakKendaraanResource extends Resource
 
     protected static ?string $cluster = Transaction::class;
     protected static ?string $slug = 'pajak-kendaraan';
-    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = Icons::DEFAULT->value;
     protected static ?string $navigationLabel = 'Pajak Kendaraan';
     protected static ?int $navigationSort = 1;
