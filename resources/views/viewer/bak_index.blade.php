@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -69,7 +69,7 @@
             }
         }
     </style>
-    <script src="https://unpkg.com/scrollreveal"></script>
+    {{-- <script src="https://unpkg.com/scrollreveal"></script> --}}
 
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
@@ -89,19 +89,19 @@
             <img class="absolute top-0 w-full" src="{{ asset('/storage/asset-invitation/javanese-ornamen-1.png') }}" alt="">
         </div>
         <!-- Content -->
-        <div id="content" class="hidden w-full overflow-y-scroll h-auto scroll-smooth relative">
-            <div class="bg-custom fixed inset-0 opacity-10 -z-0"></div>
+        <div id="content" class="relative hidden w-full h-auto overflow-y-scroll scroll-smooth">
+            <div class="fixed inset-0 bg-custom opacity-10 -z-0"></div>
         
             <!-- Section 1 -->
-            <div class="relative flex items-center overflow-hidden h-full">
-                <div class="animated-bg absolute inset-0 -z-0"></div>
-                <div class="animated-bg-2 absolute inset-0"></div>
+            <div class="relative flex items-center h-full overflow-hidden">
+                <div class="absolute inset-0 animated-bg -z-0"></div>
+                <div class="absolute inset-0 animated-bg-2"></div>
 
                 <p class="text-center text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ipsa eum maiores unde sunt accusantium natus corporis, quibusdam, dignissimos, corrupti ab modi est eveniet culpa dolorum earum voluptates! Incidunt, iste.</p>
             </div>
-            <div class="section-1 relative flex items-center h-full">
-                <div class="animated-bg absolute inset-0 -z-0"></div>
-                <div class="animated-bg-2 absolute inset-0"></div>
+            <div class="relative flex items-center h-full section-1">
+                <div class="absolute inset-0 animated-bg -z-0"></div>
+                <div class="absolute inset-0 animated-bg-2"></div>
 
                 <p class="text-center text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae ipsa eum maiores unde sunt accusantium natus corporis, quibusdam, dignissimos, corrupti ab modi est eveniet culpa dolorum earum voluptates! Incidunt, iste.</p>
             </div>
@@ -143,14 +143,14 @@
         }
     </style> --}}
 
-    <div class="container flex flex-col mx-auto px-10">
-        <div class="w-full flex flex-col items-center bg-yellow-200 ">
-            <h1 class="hel1 h-full py-96 text-4xl">TEST</h1>
+    <div class="container flex flex-col px-10 mx-auto">
+        <div class="flex flex-col items-center w-full bg-yellow-200 ">
+            <h1 class="h-full text-4xl hel1 py-96">TEST</h1>
         </div>
-        <div class="w-full flex flex-col items-center bg-yellow-400 ">
-            <h1 class="hel2 h-full py-96 text-4xl">TEST2</h1>
+        <div class="flex flex-col items-center w-full bg-yellow-400 ">
+            <h1 class="h-full text-4xl hel2 py-96">TEST2</h1>
         </div>
     </div>
 </body>
 
-</html>
+</html> --}}
