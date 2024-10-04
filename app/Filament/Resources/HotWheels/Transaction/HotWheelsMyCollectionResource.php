@@ -8,14 +8,17 @@ use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Split;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
+use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Section;
+use Filament\Support\Enums\FontWeight;
 use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -23,6 +26,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Enums\ActionsPosition;
 use App\Filament\Clusters\HotWheels\Transaction;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Filament\Tables\Columns\Layout\Split as SplitTable;
 use App\Models\HotWheels\Transaction\HotWheelsMyCollection;
 use App\Filament\Resources\HotWheels\Transaction\HotWheelsMyCollectionResource\Pages;
@@ -44,8 +48,7 @@ class HotWheelsMyCollectionResource extends Resource
         return authUserMenu($menuCode, auth()->user()->id);
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
                 TextInput::make('sku')
@@ -123,67 +126,150 @@ class HotWheelsMyCollectionResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
         $pageTitle = 'My Collection';
         return $table
             ->columns([
-                ImageColumn::make('images')
-                    ->circular()
-                    ->stacked()
-                    ->grow(false),
-                TextColumn::make('name')
-                    ->label('Cast Name')
-                    ->searchable()
-                    ->sortable()
-                    ->grow(false),
-                TextColumn::make('hotWheelsCarBrand.name')
-                    ->badge()
-                    ->color('info')
-                    ->label('Info')
-                    ->searchable()
-                    ->sortable()
-                    ->grow(false),
-                TextColumn::make('hotWheelsType.name')
-                    ->badge()
-                    ->color('success')
-                    ->label('Info')
-                    ->searchable()
-                    ->sortable()
-                    ->grow(false),
-                TextColumn::make('hotWheelsLot.lot')
-                    ->badge()
-                    ->color('warning')
-                    ->label('Info')
-                    ->searchable()
-                    ->sortable()
-                    ->grow(false),
-                TextColumn::make('hotWheelsSeri.name')
-                    ->badge()
-                    ->color('info')
-                    ->label('Info')
-                    ->searchable()
-                    ->sortable()
-                    ->grow(false),
-                IconColumn::make('is_to_be_hunted')
-                    ->label('Hunted')
-                    ->boolean(true),
-                IconColumn::make('is_owned')
-                    ->label('Owned')
-                    ->boolean(true),
-                IconColumn::make('is_active')
-                    ->label('Active')
-                    ->boolean(true)
+                // tampilan untuk mobile
+                SplitTable::make([
+                    ImageColumn::make('images')
+                        ->circular()
+                        ->stacked()
+                        ->grow(false),
+                    Stack::make([
+                        TextColumn::make('name')
+                            ->label('Cast Name')
+                            ->weight(FontWeight::Bold)
+                            ->searchable()
+                            ->sortable()
+                            ->grow(false),
+                        SplitTable::make([
+                            TextColumn::make('hotWheelsCarBrand.name')
+                                ->badge()
+                                ->color('info')
+                                ->label('Brand')
+                                ->searchable()
+                                ->sortable()
+                                ->grow(false),
+                            TextColumn::make('hotWheelsType.name')
+                                ->badge()
+                                ->color('success')
+                                ->label('Type')
+                                ->searchable()
+                                ->sortable()
+                                ->grow(false),
+                        ]),
+                        SplitTable::make([
+                            TextColumn::make('is_to_be_hunted')
+                                ->html()
+                                ->grow(false)
+                                ->label('Hunted')
+                                ->color('danger')
+                                ->badge(fn ($record) => $record->is_to_be_hunted ? true : false)
+                                ->hidden(fn ($record) => !$record->is_to_be_hunted ? true : false)
+                                ->icon(fn ($record) => $record->is_to_be_hunted ? 'heroicon-o-check-circle' : '')
+                                ->getStateUsing(function ($record) {
+                                    return $record->is_to_be_hunted
+                                        ? '<span class="flex items-center"> Hunted</span>'
+                                        : '';
+                                }),
+                            TextColumn::make('is_owned')
+                                ->html()
+                                ->label('Owned')
+                                ->color('info')
+                                ->badge(fn ($record) => $record->is_owned ? true : false)
+                                ->icon(fn ($record) => $record->is_owned ? 'heroicon-o-check-circle' : '')
+                                ->getStateUsing(function ($record) {
+                                    return $record->is_owned
+                                        ? '<span class="flex items-center"> Owned</span>'
+                                        : '';
+                                })
+                            ]),
+                        IconColumn::make('actions')
+                            ->icon('heroicon-o-check-circle')
+                            ->label('test')
+                    ])
+                    ->space(2)
+                ])
+                ->hiddenFrom('lg'),
+
+                // tampilan untuk web browser
+                SplitTable::make([
+                    ImageColumn::make('images')
+                        ->circular()
+                        ->stacked()
+                        ->grow(false)
+                        ->visibleFrom('lg'),
+                    TextColumn::make('name')
+                        ->label('Cast Name')
+                        ->searchable()
+                        ->sortable()
+                        ->grow(false)
+                        ->visibleFrom('lg'),
+                    TextColumn::make('hotWheelsCarBrand.name')
+                        ->badge()
+                        ->color('info')
+                        ->label('Brand')
+                        ->searchable()
+                        ->sortable()
+                        ->grow(false)
+                        ->visibleFrom('lg'),
+                    TextColumn::make('hotWheelsType.name')
+                        ->badge()
+                        ->color('success')
+                        ->label('Type')
+                        ->searchable()
+                        ->sortable()
+                        ->grow(false)
+                        ->visibleFrom('lg'),
+                    TextColumn::make('hotWheelsLot.lot')
+                        ->badge()
+                        ->color('warning')
+                        ->label('Lot')
+                        ->searchable()
+                        ->sortable()
+                        ->grow(false)
+                        ->visibleFrom('lg'),
+                    TextColumn::make('hotWheelsSeri.name')
+                        ->badge()
+                        ->color('info')
+                        ->label('Seri')
+                        ->searchable()
+                        ->sortable()
+                        ->grow(false)
+                        ->visibleFrom('lg'),
+                    IconColumn::make('is_to_be_hunted')
+                        ->label('Hunted')
+                        ->boolean(true)
+                        ->visibleFrom('lg'),
+                    IconColumn::make('is_owned')
+                        ->label('Owned')
+                        ->boolean(true)
+                        ->visibleFrom('lg'),
+                    IconColumn::make('is_active')
+                        ->label('Active')
+                        ->boolean(true)
+                        ->visibleFrom('lg')
+                ])
+                ->from('lg')
             ])
-            ->filters([])
+            ->filters([
+                Filter::make('is_to_be_hunted')
+                    ->label('Hunted')
+                    ->query(fn (Builder $query) => $query->where('is_to_be_hunted', true)),
+                Filter::make('is_owned')
+                    ->label('Owned')
+                    ->query(fn (Builder $query) => $query->where('is_owned', true))
+            ])
+            ->persistFiltersInSession()
             ->contentGrid([
-                // 'sm' => 1,
-                // 'xl' => 1,
+                'sm' => 1,
+                'xl' => 2,
             ])
             ->actions([
                 getCustomTableAction(ActionType::EDIT, 'Update', 'Update '.$pageTitle, Icons::EDIT, null, false),
                 getCustomTableAction(ActionType::DELETE, null, 'Delete '.$pageTitle, null, null, null)
-            ], position: ActionsPosition::BeforeColumns)
+            ], position: ActionsPosition::AfterColumns)
             ->bulkActions([
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
             ])
@@ -194,9 +280,25 @@ class HotWheelsMyCollectionResource extends Resource
                 getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
             ])
             ->defaultPaginationPageOption(10)
+            ->persistColumnSearchesInSession()
             ->heading($pageTitle)
             ->deferLoading()
             ->striped();
+    }
+
+    protected function showActionGroup($record)
+    {
+        return ActionGroup::make([
+            Action::make('edit')
+                ->label('Edit')
+                ->icon('heroicon-s-pencil')
+                ->url(fn () => route('edit', $record->id)), // Ganti dengan URL edit yang sesuai
+
+            Action::make('delete')
+                ->label('Delete')
+                ->icon('heroicon-s-trash')
+                ->action(fn () => $record->delete()), // Aksi hapus
+        ]);
     }
 
     public static function getPages(): array
