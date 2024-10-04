@@ -91,6 +91,8 @@ class HotWheelsMyCollectionResource extends Resource
                 FileUpload::make('images')
                     ->maxFiles(5)
                     ->multiple()
+                    ->reorderable()
+                    // ->acceptedFileTypes(['image/*'])
                     ->columnSpanFull(),
                 TextInput::make('year')
                     ->numeric()
@@ -135,7 +137,9 @@ class HotWheelsMyCollectionResource extends Resource
                     ImageColumn::make('images')
                         ->circular()
                         ->stacked()
-                        ->grow(false),
+                        ->grow(false)
+                        ->disk('public')
+                        ->url(fn ($record) => $record->getFirstMediaUrl('images')),
                     Stack::make([
                         TextColumn::make('name')
                             ->label('Cast Name')
