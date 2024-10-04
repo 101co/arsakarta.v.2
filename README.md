@@ -94,3 +94,37 @@ php artisan make:filament-cluster ../../YourCluster
     {
         return [];
     }
+
+## Optimizing Images
+
+### Installasi
+    composer require spatie/laravel-medialibrary
+
+### Publish Config
+    php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider"
+
+### Jalankan Migrate
+    php artisan migrate
+
+### Implement Media Lybrary
+    namespace App\Models;
+
+    use Illuminate\Database\Eloquent\Model;
+    use Spatie\MediaLibrary\HasMedia;
+    use Spatie\MediaLibrary\InteractsWithMedia;
+
+    class YourModel extends Model implements HasMedia
+    {
+        use InteractsWithMedia;
+
+        public function registerMediaCollections(): void
+        {
+            $this->addMediaCollection('images');
+        }
+
+        public function addImage($image)
+        {
+            $this->addMedia($image)
+                ->toMediaCollection('images');
+        }
+    }
