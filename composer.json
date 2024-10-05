@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.2",
         "ext-intl": "*",
+        "blade-ui-kit/blade-heroicons": "^2.4",
+        "blade-ui-kit/blade-ui-kit": "^0.6.2",
         "filament/filament": "^3.2",
         "flowframe/laravel-trend": "^0.2.0",
         "hugomyb/filament-media-action": "^3.1",

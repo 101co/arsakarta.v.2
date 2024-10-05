@@ -1,4 +1,5 @@
-<div>    {{-- hero --}}
+<div>    
+    {{-- hero --}}
     <section class="mt-20 md:mt-[80px] lg:mt-[85px] md:px-5" aria-label="JogjaTripTravel First Hero">
         <div id="indicators-carousel" class="relative w-full" data-carousel="static" data-carousel-touch="true">
             <!-- Carousel wrapper -->
@@ -9,9 +10,9 @@
                         class="absolute block object-cover w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                         alt="...">
                     <div class="absolute inset-0 flex flex-col items-center justify-center px-5 bg-black bg-opacity-70">
-                        <h1 class="w-4/5 mx-auto leading-8 text-center text-slate-100 text-2xl lg:text-[44px] font-bold">Buat Undangan Untuk Berbagai Acara</h1>
-                        <p class="w-4/5 mx-auto mt-4 text-sm leading-8 text-center text-slate-100 text-opacity-65 lg:mt-5">Membuat undangan online semudah menggunakan sosial media, buat dan sebarkan undanganmu sekarang.</p>
-                        <a href="#travel-catalogue"
+                        <span class="w-4/5 mx-auto leading-8 text-center text-slate-100 text-2xl lg:text-[44px] font-bold">Buat Undangan Untuk Berbagai Acara</span>
+                        <p class="w-4/5 mx-auto mt-4 text-sm leading-8 text-center text-slate-100 text-opacity-65 lg:mt-5">Membuat undangan online semudah menggunakan sosial media, buat dan sebarkan undanganmu sekarang</p>
+                        <a href="/admin"
                             class="z-50 text-slate-800 bg-white text-base lg:text-lg font-semibold px-8 py-2 rounded-full mt-6 lg:mt-[30px] focus:outline-none active:scale-95 transition-transform duration-150 ease-in-out">
                             Coba Sekarang
                         </a>
@@ -23,23 +24,23 @@
                         class="absolute block object-cover w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                         alt="...">
                     <div class="absolute inset-0 flex flex-col items-center justify-center px-5 bg-black bg-opacity-70">
-                        <h1 class="w-4/5 mx-auto leading-8 text-center text-slate-100 text-2xl lg:text-[44px] font-bold">Jogja Trip Travel</h1>
-                        <p class="w-3/4 mx-auto mt-2 text-base text-center leading-1 text-slate-100 text-opacity-65 lg:mt-5">Temukan informasi lebih lanjut tentang pilihan wisata dari Jogja Trip Travel</p>
-                        <a href="#contact"
+                        <span class="w-4/5 mx-auto leading-8 text-center text-slate-100 text-2xl lg:text-[44px] font-bold">Temukan Berbagai Tema Undangan Menarik</span>
+                        <p class="w-3/4 mx-auto mt-2 text-base text-center leading-1 text-slate-100 text-opacity-65 lg:mt-5">Berbagai tema undangan online yang menarik dapat kamu temukan diplatform undangan digital Arsakarta</p>
+                        <a href="#fitur"
                             class="z-50 text-slate-800 bg-white text-base lg:text-lg font-semibold px-8 py-2 rounded-full mt-4 lg:mt-[30px] focus:outline-none active:scale-95 transition-transform duration-150 ease-in-out">
                             Hubungi Kami
                         </a>
                     </div>
                 </div>
-                <!-- Item 2 -->
+                <!-- Item 3 -->
                 <div class="hidden duration-700 ease-in-out" data-carousel-item="">
                     <img src="{{ asset('/storage/01J8RRFG4T7FATV1EDEFRZH6WE.jpg')}}"
                         class="absolute block object-cover w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                         alt="...">
                     <div class="absolute inset-0 flex flex-col items-center justify-center px-5 bg-black bg-opacity-70">
-                        <h1 class="w-4/5 mx-auto leading-8 text-center text-slate-100 text-2xl lg:text-[44px] font-bold">Sosial Media Jogja Trip Travel</h1>
-                        <p class="w-3/4 mx-auto mt-2 text-base text-center leading-1 text-slate-100 text-opacity-65 lg:mt-5">Intip berbagai keseruan wisata Jogja melalui akun sosial media kami</p>
-                        <a href="#contact"
+                        <span class="w-4/5 mx-auto leading-8 text-center text-slate-100 text-2xl lg:text-[44px] font-bold">Temukan Berbagai Kemudahan Dalam Membuat Undangan</span>
+                        <p class="w-3/4 mx-auto mt-2 text-base text-center leading-1 text-slate-100 text-opacity-65 lg:mt-5">Melalui platform undangan Arsakarta, kamu akan merasakan mudahnya dalam membuat undangan digital</p>
+                        <a href="#kontak"
                             class="z-50 text-slate-800 bg-white text-base lg:text-lg font-semibold px-8 py-2 rounded-full mt-4 lg:mt-[30px] focus:outline-none active:scale-95 transition-transform duration-150 ease-in-out">
                             Ikuti Kami
                         </a>
@@ -84,4 +85,219 @@
             </button>
         </div>
     </section>
+
+    {{-- fitur --}}
+    <div id="fitur" class="flex flex-col items-center pb-24 pt-14 mx-14">
+        {{-- judul --}}
+        <div class="flex flex-col items-center mb-8">
+            <h1 class="mb-3 text-3xl font-semibold">Fitur</h1>
+            <p class="text-center">Tersedia fitur untuk memaksimalkan undangan onlinemu</p>
+        </div>
+
+        {{-- fitur konten --}}
+        <div class="flex flex-col items-center text-center gap-y-8 w-80">
+            {{-- fitur 1 --}}
+            <div class="flex flex-col items-center">
+                <img src="{{ asset('/storage/arsakarta/assets/pencil-icon.svg') }}" class="w-16" alt="atur konten arsakarta">
+                <span class="mt-2 text-lg font-semibold">Atur Konten Undanganmu</span>
+                <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
+            </div>
+            {{-- fitur 2 --}}
+            <div class="flex flex-col items-center">
+                <img src="{{ asset('/storage/arsakarta/assets/design-icon.svg') }}" class="w-16" alt="atur konten arsakarta">
+                <span class="mt-2 text-lg font-semibold">Pilih Tema Sesuai Keinginan</span>
+                <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
+            </div>
+            {{-- fitur 3 --}}
+            <div class="flex flex-col items-center">
+                <img src="{{ asset('/storage/arsakarta/assets/music-icon.svg') }}" class="w-16" alt="atur konten arsakarta">
+                <span class="mt-2 text-lg font-semibold">Pilih & Unggah Lagu Sendiri</span>
+                <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
+            </div>
+        </div>
+    </div>
+
+    {{-- paket undangan --}}
+    <div id="paket" class="flex flex-col items-center pb-24 mx-14">
+        {{-- judul --}}
+        <div class="flex flex-col items-center mb-8">
+            <h1 class="mb-3 text-3xl font-semibold">Paket Undangan</h1>
+            <p class="text-center">Tersedia berbagai pilihan paket undangan untukmu</p>
+        </div>
+
+        {{-- konten --}}
+        <div class="flex flex-col items-center text-center gap-y-8 w-80">
+            {{-- paket 1 --}}
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex flex-col items-center pt-8 pb-10">
+                    {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Free Trial</h5>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">IDR 0</span>
+                    <div class="py-10">
+                        <ul class="space-y-4">
+                            <li>Layout standar</li>
+                            <li>3 tema gratis</li>
+                            <li>1 tema premium</li>
+                            <li>2 pilihan lagu</li>
+                            <li>5 tamu undangan</li>
+                            <li>Edit selama 1 hari</li>
+                            <li class="font-semibold">Masa aktif 2 hari</li>
+                        </ul>
+                    </div>
+                    <div class="flex md:mt-6">
+                        <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-full ms-2 focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Coba Sekarang</a>
+                    </div>
+                </div>
+            </div>
+            {{-- paket 2 --}}
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex flex-col items-center pt-8 pb-10">
+                    {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Gold</h5>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">IDR 79k</span>
+                    <div class="py-10">
+                        <ul class="space-y-4">
+                            <li>Layout standar</li>
+                            <li>10 tema gratis</li>
+                            <li>5 tema premium</li>
+                            <li>10 pilihan lagu</li>
+                            <li>500 tamu undangan</li>
+                            <li>Edit selama 7 hari</li>
+                            <li class="font-semibold">Masa aktif 6 bulan</li>
+                        </ul>
+                    </div>
+                    <div class="flex md:mt-6">
+                        <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-full ms-2 focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Coba Sekarang</a>
+                    </div>
+                </div>
+            </div>
+            {{-- paket 3 --}}
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex flex-col items-center pt-8 pb-10">
+                    {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Platinum</h5>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">IDR 129k</span>
+                    <div class="py-10">
+                        <ul class="space-y-4">
+                            <li>Layout custom</li>
+                            <li>20 tema gratis</li>
+                            <li>10 tema premium</li>
+                            <li>15 pilihan lagu</li>
+                            <li>1000 tamu undangan</li>
+                            <li>Edit selama 7 hari</li>
+                            <li class="font-semibold">Masa aktif 1 tahun</li>
+                        </ul>
+                    </div>
+                    <div class="flex md:mt-6">
+                        <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-full ms-2 focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Coba Sekarang</a>
+                    </div>
+                </div>
+            </div>
+            {{-- paket 4 --}}
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex flex-col items-center pt-8 pb-10">
+                    {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Diamond</h5>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">IDR 159k</span>
+                    <div class="py-10">
+                        <ul class="space-y-4">
+                            <li>Layout custom</li>
+                            <li>Unlimited tema gratis</li>
+                            <li>Unlimited tema premium</li>
+                            <li>Unlimited & unggah lagu</li>
+                            <li>10.000 tamu undangan</li>
+                            <li>Edit selama 7 hari</li>
+                            <li class="font-semibold">Masa aktif 3 tahun</li>
+                        </ul>
+                    </div>
+                    <div class="flex md:mt-6">
+                        <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-full ms-2 focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Coba Sekarang</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- hubungi admin --}}
+    <div id="kontak" class="flex items-center pb-24 mx-14">
+        <img class="h-56" src="{{ asset('/storage/arsakarta/assets/admin-icon.svg') }}" alt="admin arsakarta">
+        <div class="flex flex-col items-end text-end">
+            <h1 class="mb-3 text-3xl font-semibold">Hubungi Admin</h1>
+            <p class="">Temukan informasi & diskusi lebih lanjut</p>
+            <div class="flex mt-4">
+                <a href="https://wa.me/62859106849531?text=Halo%20mimin%20Arsakarta,%20saya%20ingin%20informasi%20lebih%20lanjut" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-full ms-2 focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Chat Admin</a>
+            </div>
+        </div>
+    </div>
+
+    {{-- faq --}}
+    <div id="faq" class="flex flex-col items-center mx-14">
+        {{-- judul --}}
+        <div class="flex flex-col items-center mb-8">
+            <h1 class="mb-3 text-3xl font-semibold">FAQ's</h1>
+            <p class="text-center">Pertanyaan yang sering ditanyakan</p>
+        </div>
+
+        {{-- konten --}}
+        <div class="flex flex-col items-center pb-10 text-center gap-y-8 w-80">
+            <div id="accordion-flush" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">
+                {{-- item 1 --}}
+                <h2 id="accordion-flush-heading-1">
+                  <button type="button" class="flex items-center justify-between w-full gap-3 py-5 font-medium text-gray-500 border-b border-gray-200 rtl:text-right dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-1" aria-expanded="true" aria-controls="accordion-flush-body-1">
+                    <span>Cara membuat undangan?</span>
+                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                    </svg>
+                  </button>
+                </h2>
+                <div id="accordion-flush-body-1" class="hidden" aria-labelledby="accordion-flush-heading-1">
+                  <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+                    <p class="mb-2 text-gray-500 dark:text-gray-400 text-start">Lorem ipsum dolor sit amet consectetur. Eu quam aliquam donec auctor scelerisque. Nisl in maecenas suspendisse ac a sapien tristique augue. Magna pellentesque in odio.</p>
+                  </div>
+                </div>
+                {{-- item 2 --}}
+                <h2 id="accordion-flush-heading-2">
+                  <button type="button" class="flex items-center justify-between w-full gap-3 py-5 font-medium text-gray-500 border-b border-gray-200 rtl:text-right dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-2" aria-expanded="false" aria-controls="accordion-flush-body-2">
+                    <span>Fitur apa saja yang didapat?</span>
+                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                    </svg>
+                  </button>
+                </h2>
+                <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
+                  <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+                    <p class="mb-2 text-gray-500 dark:text-gray-400 text-start">Lorem ipsum dolor sit amet consectetur. Eu quam aliquam donec auctor scelerisque. Nisl in maecenas suspendisse ac a sapien tristique augue. Magna pellentesque in odio.</p>
+                  </div>
+                </div>
+                {{-- item 3 --}}
+                <h2 id="accordion-flush-heading-3">
+                  <button type="button" class="flex items-center justify-between w-full gap-3 py-5 font-medium text-gray-500 border-b border-gray-200 rtl:text-right dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-3" aria-expanded="false" aria-controls="accordion-flush-body-3">
+                    <span>Bagaimana cara export pdf?</span>
+                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                    </svg>
+                  </button>
+                </h2>
+                <div id="accordion-flush-body-3" class="hidden" aria-labelledby="accordion-flush-heading-3">
+                  <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+                    <p class="mb-2 text-gray-500 dark:text-gray-400 text-start">The main difference is that the core components from Flowbite are open source under the MIT license, whereas Tailwind UI is a paid product. Another difference is that Flowbite relies on smaller and standalone components, whereas Tailwind UI offers sections of pages.</p>
+                  </div>
+                </div>
+                {{-- item 4 --}}
+                <h2 id="accordion-flush-heading-4">
+                  <button type="button" class="flex items-center justify-between w-full gap-3 py-5 font-medium text-gray-500 border-b border-gray-200 rtl:text-right dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-4" aria-expanded="false" aria-controls="accordion-flush-body-4">
+                    <span class="text-start">Metode pembayaran yang tersedia?</span>
+                    <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                    </svg>
+                  </button>
+                </h2>
+                <div id="accordion-flush-body-4" class="hidden" aria-labelledby="accordion-flush-heading-4">
+                  <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+                    <p class="mb-2 text-gray-500 dark:text-gray-400 text-start">The main difference is that the core components from Flowbite are open source under the MIT license, whereas Tailwind UI is a paid product. Another difference is that Flowbite relies on smaller and standalone components, whereas Tailwind UI offers sections of pages.</p>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
