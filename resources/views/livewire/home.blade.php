@@ -6,7 +6,7 @@
             <div class="relative h-[25rem] md:h-[425px] lg:h-[525px] overflow-hidden md:rounded-2xl">
                 <!-- Item 1 -->
                 <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
-                    <img src="{{ asset('/storage/01J8RRFG4T7FATV1EDEFRZH6WE.jpg')}}"
+                    <img src="{{ asset('/storage/arsakarta/assets/hero/hero.webp')}}"
                         class="absolute block object-cover w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                         alt="...">
                     <div class="absolute inset-0 flex flex-col items-center justify-center px-5 bg-black bg-opacity-70">
@@ -20,7 +20,7 @@
                 </div>
                 <!-- Item 2 -->
                 <div class="hidden duration-700 ease-in-out" data-carousel-item="">
-                    <img src="{{ asset('/storage/01J8RRFG4T7FATV1EDEFRZH6WE.jpg')}}"
+                    <img src="{{ asset('/storage/arsakarta/assets/hero/hero2.webp')}}"
                         class="absolute block object-cover w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                         alt="...">
                     <div class="absolute inset-0 flex flex-col items-center justify-center px-5 bg-black bg-opacity-70">
@@ -34,7 +34,7 @@
                 </div>
                 <!-- Item 3 -->
                 <div class="hidden duration-700 ease-in-out" data-carousel-item="">
-                    <img src="{{ asset('/storage/01J8RRFG4T7FATV1EDEFRZH6WE.jpg')}}"
+                    <img src="{{ asset('/storage/arsakarta/assets/hero/hero3.webp')}}"
                         class="absolute block object-cover w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                         alt="...">
                     <div class="absolute inset-0 flex flex-col items-center justify-center px-5 bg-black bg-opacity-70">
@@ -98,19 +98,19 @@
         <div class="flex flex-col items-center text-center gap-y-8 w-80">
             {{-- fitur 1 --}}
             <div class="flex flex-col items-center">
-                <img src="{{ asset('/storage/arsakarta/assets/pencil-icon.svg') }}" class="w-16" alt="atur konten arsakarta">
+                <img src="{{ asset('/storage/arsakarta/assets/pencil-icon.png') }}" class="w-16" alt="atur konten arsakarta">
                 <span class="mt-2 text-lg font-semibold">Atur Konten Undanganmu</span>
                 <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
             </div>
             {{-- fitur 2 --}}
             <div class="flex flex-col items-center">
-                <img src="{{ asset('/storage/arsakarta/assets/design-icon.svg') }}" class="w-16" alt="atur konten arsakarta">
+                <img src="{{ asset('/storage/arsakarta/assets/design-icon.png') }}" class="w-16" alt="atur konten arsakarta">
                 <span class="mt-2 text-lg font-semibold">Pilih Tema Sesuai Keinginan</span>
                 <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
             </div>
             {{-- fitur 3 --}}
             <div class="flex flex-col items-center">
-                <img src="{{ asset('/storage/arsakarta/assets/music-icon.svg') }}" class="w-16" alt="atur konten arsakarta">
+                <img src="{{ asset('/storage/arsakarta/assets/music-icon.png') }}" class="w-16" alt="atur konten arsakarta">
                 <span class="mt-2 text-lg font-semibold">Pilih & Unggah Lagu Sendiri</span>
                 <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
             </div>
@@ -220,7 +220,7 @@
 
     {{-- hubungi admin --}}
     <div id="kontak" class="flex items-center pb-24 mx-14">
-        <img class="h-56" src="{{ asset('/storage/arsakarta/assets/admin-icon.svg') }}" alt="admin arsakarta">
+        <img class="h-56" src="{{ asset('/storage/arsakarta/assets/admin-icon.png') }}" alt="admin arsakarta">
         <div class="flex flex-col items-end text-end">
             <h1 class="mb-3 text-3xl font-semibold">Hubungi Admin</h1>
             <p class="">Temukan informasi & diskusi lebih lanjut</p>
