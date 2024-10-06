@@ -23,7 +23,7 @@
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-900 start-0 dark:border-gray-600">
         <div class="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
             <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="{{ asset('/storage/assets/logo.svg') }}" class="h-12" alt="Arsakarta Logo">
+                <img src="{{ asset('/storage/arsakarta/assets/logo.svg') }}" class="h-12" alt="Arsakarta Logo">
             </a>
             <div class="flex space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
                 <a href="/admin" type="button" class="px-8 py-2 text-sm font-medium text-center text-white rounded-full bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-slate-300 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-slate-800">Login</a>
