@@ -87,48 +87,48 @@
     </section>
 
     {{-- fitur --}}
-    <div id="fitur" class="flex flex-col items-center pb-24 pt-14 mx-14">
+    <div id="fitur" class="flex flex-col items-center pt-24 pb-24 mx-14">
         {{-- judul --}}
         <div class="flex flex-col items-center mb-8">
-            <h1 class="mb-3 text-3xl font-semibold">Fitur</h1>
-            <p class="text-center">Tersedia fitur untuk memaksimalkan undangan onlinemu</p>
+            <h1 class="mb-3 text-3xl font-semibold animation-title">Fitur</h1>
+            <p class="text-center animation-title-sub">Tersedia fitur untuk memaksimalkan undangan onlinemu</p>
         </div>
 
         {{-- fitur konten --}}
         <div class="flex flex-col items-center text-center gap-y-8 w-80">
             {{-- fitur 1 --}}
             <div class="flex flex-col items-center">
-                <img src="{{ asset('/storage/arsakarta/assets/pencil-icon.png') }}" class="w-16" alt="atur konten arsakarta">
-                <span class="mt-2 text-lg font-semibold">Atur Konten Undanganmu</span>
-                <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
+                <img src="{{ asset('/storage/arsakarta/assets/pencil-icon.png') }}" class="w-16 animation-content-icon" alt="atur konten arsakarta">
+                <span class="mt-2 text-lg font-semibold animation-content-title">Atur Konten Undanganmu</span>
+                <p class="mt-2 animation-content">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
             </div>
             {{-- fitur 2 --}}
             <div class="flex flex-col items-center">
-                <img src="{{ asset('/storage/arsakarta/assets/design-icon.png') }}" class="w-16" alt="atur konten arsakarta">
-                <span class="mt-2 text-lg font-semibold">Pilih Tema Sesuai Keinginan</span>
-                <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
+                <img src="{{ asset('/storage/arsakarta/assets/design-icon.png') }}" class="w-16 animation-content-icon" alt="atur konten arsakarta">
+                <span class="mt-2 text-lg font-semibold animation-content-title">Pilih Tema Sesuai Keinginan</span>
+                <p class="mt-2 animation-content">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
             </div>
             {{-- fitur 3 --}}
             <div class="flex flex-col items-center">
-                <img src="{{ asset('/storage/arsakarta/assets/music-icon.png') }}" class="w-16" alt="atur konten arsakarta">
-                <span class="mt-2 text-lg font-semibold">Pilih & Unggah Lagu Sendiri</span>
-                <p class="mt-2">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
+                <img src="{{ asset('/storage/arsakarta/assets/music-icon.png') }}" class="w-16 animation-content-icon" alt="atur konten arsakarta">
+                <span class="mt-2 text-lg font-semibold animation-content-title">Pilih & Unggah Lagu Sendiri</span>
+                <p class="mt-2 animation-content">Lorem ipsum dolor sit amet consectetur. Varius diam suspendisse a sit hendrerit</p>
             </div>
         </div>
     </div>
 
     {{-- paket undangan --}}
-    <div id="paket" class="flex flex-col items-center pb-24 mx-14">
+    <div id="paket" class="flex flex-col items-center pt-24 pb-24 mx-14">
         {{-- judul --}}
         <div class="flex flex-col items-center mb-8">
-            <h1 class="mb-3 text-3xl font-semibold">Paket Undangan</h1>
-            <p class="text-center">Tersedia berbagai pilihan paket undangan untukmu</p>
+            <h1 class="mb-3 text-3xl font-semibold animation-title">Paket Undangan</h1>
+            <p class="text-center animation-title-sub">Tersedia berbagai pilihan paket undangan untukmu</p>
         </div>
 
         {{-- konten --}}
         <div class="flex flex-col items-center text-center gap-y-8 w-80">
             {{-- paket 1 --}}
-            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow animation-card-left dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex flex-col items-center pt-8 pb-10">
                     {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
                     <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Free Trial</h5>
@@ -150,7 +150,7 @@
                 </div>
             </div>
             {{-- paket 2 --}}
-            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow animation-card-left dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex flex-col items-center pt-8 pb-10">
                     {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
                     <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Gold</h5>
@@ -172,7 +172,7 @@
                 </div>
             </div>
             {{-- paket 3 --}}
-            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow animation-card-left dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex flex-col items-center pt-8 pb-10">
                     {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
                     <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Platinum</h5>
@@ -194,7 +194,7 @@
                 </div>
             </div>
             {{-- paket 4 --}}
-            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow animation-card-left dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex flex-col items-center pt-8 pb-10">
                     {{-- <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> --}}
                     <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Diamond</h5>
@@ -219,27 +219,27 @@
     </div>
 
     {{-- hubungi admin --}}
-    <div id="kontak" class="flex items-center pb-24 mx-14">
-        <img class="h-56" src="{{ asset('/storage/arsakarta/assets/admin-icon.png') }}" alt="admin arsakarta">
+    <div id="kontak" class="flex items-center pt-24 pb-24 mx-14">
+        <img class="h-56 animation-hubungi-admin-icon" src="{{ asset('/storage/arsakarta/assets/admin-icon.png') }}" alt="admin arsakarta">
         <div class="flex flex-col items-end text-end">
-            <h1 class="mb-3 text-3xl font-semibold">Hubungi Admin</h1>
-            <p class="">Temukan informasi & diskusi lebih lanjut</p>
-            <div class="flex mt-4">
+            <h1 class="mb-3 text-3xl font-semibold animation-hubungi-admin-title">Hubungi Admin</h1>
+            <p class="animation-hubungi-admin-title-sub">Temukan informasi & diskusi lebih lanjut</p>
+            <div class="flex mt-4 animation-hubungi-admin-button">
                 <a href="https://wa.me/62859106849531?text=Halo%20mimin%20Arsakarta,%20saya%20ingin%20informasi%20lebih%20lanjut" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-full ms-2 focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Chat Admin</a>
             </div>
         </div>
     </div>
 
     {{-- faq --}}
-    <div id="faq" class="flex flex-col items-center mx-14">
+    <div id="faq" class="flex flex-col items-center pt-24 mx-14">
         {{-- judul --}}
         <div class="flex flex-col items-center mb-8">
-            <h1 class="mb-3 text-3xl font-semibold">FAQ's</h1>
-            <p class="text-center">Pertanyaan yang sering ditanyakan</p>
+            <h1 class="mb-3 text-3xl font-semibold animation-title">FAQ's</h1>
+            <p class="text-center animation-title-sub">Pertanyaan yang sering ditanyakan</p>
         </div>
 
         {{-- konten --}}
-        <div class="flex flex-col items-center pb-10 text-center gap-y-8 w-80">
+        <div class="flex flex-col items-center pb-10 text-center gap-y-8 w-80 animation-content">
             <div id="accordion-flush" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">
                 {{-- item 1 --}}
                 <h2 id="accordion-flush-heading-1">
