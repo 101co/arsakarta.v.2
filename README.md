@@ -128,3 +128,59 @@ php artisan make:filament-cluster ../../YourCluster
                 ->toMediaCollection('images');
         }
     }
+
+### Override Filament Registration
+#### Create Page Register
+    php artisan make:filament-page Auth/Register
+
+#### Edit Page Register
+    use Filament\Forms\Components\Select;
+    use Filament\Forms\Components\Component;
+    
+    class Register extends BaseRegister
+    {
+        protected function getForms(): array
+        {
+            return [
+                'form' => $this->form(
+                    $this->makeForm()
+                        ->schema([
+                            $this->getNameFormComponent(),
+                            $this->getEmailFormComponent(),
+                            $this->getPasswordFormComponent(),
+                            $this->getPasswordConfirmationFormComponent(),
+                            $this->getRoleFormComponent(), 
+                        ])
+                        ->statePath('data'),
+                ),
+            ];
+        }
+    
+        protected function getRoleFormComponent(): Component
+        {
+            return Select::make('role')
+                ->options([
+                    'buyer' => 'Buyer',
+                    'seller' => 'Seller',
+                ])
+                ->default('buyer')
+                ->required();
+        }
+    }
+
+#### Edit AdminPanelProvider
+    use App\Filament\Pages\Auth\Register;
+    
+    class AdminPanelProvider extends PanelProvider
+    {
+        public function panel(Panel $panel): Panel
+        {
+            return $panel
+                ->default()
+                ->id('admin')
+                ->path('admin')
+                ->login()
+                ->registration(Register::class) 
+                // ...
+        }
+    }
