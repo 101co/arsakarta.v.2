@@ -17,16 +17,19 @@ if (! function_exists('authUserMenu'))
 {
   function authUserMenu($code, $userId) 
   {
-    $authMenu = DB::table('role_menus')
-                  ->join('role_menu_details', 'role_menu_details.role_menu_id', '=', 'role_menus.id')
-                  ->join('menus', 'menus.id', '=', 'role_menu_details.menu_id')
-                  ->join('role_menu_users', 'role_menu_users.role_menu_id', '=', 'role_menus.id')
-                  ->where('menus.code', '=', $code)
-                  ->where('role_menu_users.user_id', '=', $userId)
-                  ->first();
-
-    return $authMenu ? true : false;
-    // return true;
+    if (auth()->user()->username === 'super.admin') {
+      return true;
+    }
+    else {
+      $authMenu = DB::table('sysmans_role_menu')
+                    ->join('sysmans_role_menu_detail', 'sysmans_role_menu_detail.role_menu_id', '=', 'sysmans_role_menu.id')
+                    ->join('sysmanm_menu', 'sysmanm_menu.id', '=', 'sysmans_role_menu_detail.menu_id')
+                    ->join('sysmans_role_menu_user', 'sysmans_role_menu_user.role_menu_id', '=', 'sysmans_role_menu.id')
+                    ->where('sysmanm_menu.code', '=', $code)
+                    ->where('sysmans_role_menu_user.user_id', '=', $userId)
+                    ->first();
+      return $authMenu ? true : false;
+    }
   }
 }
 
@@ -110,7 +113,7 @@ if (! function_exists('getCustomCancelFormAction'))
 
 if (! function_exists('getCustomTableAction'))
 {
-  function getCustomTableAction($type, $label, $modalLabel, $icon, $enableAnother, $disableCancel)
+  function getCustomTableAction($type, $label, $modalLabel, $icon, $enableAnother, $disableCancel, $isModal)
   {
     if ($type == ActionType::CREATE)
     {
@@ -125,7 +128,7 @@ if (! function_exists('getCustomTableAction'))
             }
         }))
         ->label($label)
-        ->slideOver()
+        ->slideOver(!$isModal)
         ->icon($icon ? $icon->value : '')
         ->iconSize(IconSize::Small)
         ->modalHeading($modalLabel ? $modalLabel : '')
@@ -145,7 +148,7 @@ if (! function_exists('getCustomTableAction'))
             return $data;
         }))
         ->label($label)
-        ->slideOver()
+        ->slideOver(!$isModal)
         ->icon($icon ? $icon->value : '')
         ->iconSize(IconSize::Small)
         ->hiddenLabel()

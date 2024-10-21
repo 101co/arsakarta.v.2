@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Application extends Model
-{
+class Application extends Model {
     use HasFactory;
+    protected $table = 'sysmanm_application';
 
-    public function module(): BelongsTo
-    {
+    public function module(): BelongsTo {
         return $this->belongsTo(Module::class);
     }
 }

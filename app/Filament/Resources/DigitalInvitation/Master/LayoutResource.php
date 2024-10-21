@@ -7,14 +7,18 @@ use Filament\Forms\Form;
 use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
+use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\ToggleColumn;
 use App\Models\DigitalInvitation\Master\Layout;
 use App\Filament\Clusters\DigitalInvitation\Master;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use App\Filament\Resources\DigitalInvitation\Master\LayoutResource\Pages;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\ToggleColumn;
 
 class LayoutResource extends Resource
 {
@@ -22,69 +26,94 @@ class LayoutResource extends Resource
 
     protected static ?string $cluster = Master::class;
     protected static ?string $slug = 'layout';
+    protected static ?string $navigationLabel = 'Layout';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-    protected static ?string $navigationIcon = Icons::DEFAULT->value;
-    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static ?int $navigationSort = 5;
 
-    public static function canViewAny(): bool
-    {
-        $menuCode = 'INVTM001';
+    public static function canViewAny(): bool {
+        $menuCode = 'INVTM005';
         return authUserMenu($menuCode, auth()->user()->id);
     }
 
-    public static function form(Form $form): Form
-    {
+    public static function form(Form $form): Form {
         return $form
             ->schema([
-                TextInput::make('layout_name')
-                    ->label('Layout Name')
+                TextInput::make('initial')
                     ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(100)
+                    ->maxLength(5)
                     ->columnSpanFull()
+                    ->label('Initial')
+                    ->placeholder('L001')
+                    ->unique(ignoreRecord: true)
+                    ->default(fn () => Layout::generateCode()),
+                TextInput::make('name')
+                    ->required()
+                    ->maxLength(50)
+                    ->columnSpanFull()
+                    ->label('Layout')
+                    ->placeholder('Opening'),
+                Checkbox::make('is_active')
+                    ->required()
+                    ->default(true)
+                    ->label('Active')
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
+    public static function table(Table $table): Table {
+        $title = 'Layout';
         return $table
             ->columns([
                 Split::make([
-                    TextColumn::make('layout_name')
-                        ->label('Layout Name')
-                        ->searchable()
-                        ->sortable(),
+                    Stack::make([
+                        Split::make([
+                            TextColumn::make('initial')
+                                ->sortable()
+                                ->searchable()
+                                ->grow(false)
+                                ->label('Initial')
+                        ]),
+                        TextColumn::make('name')
+                            ->sortable()
+                            ->searchable()
+                            ->label('Layout')
+                            ->weight(FontWeight::SemiBold)
+                            ->size(TextColumnSize::Medium)
+                    ])
+                    ->space(2),
                     ToggleColumn::make('is_active')
-                        ->label('Is Active')
                         ->alignEnd()
+                        ->label('Active')
                 ])
             ])
             ->filters([])
             ->contentGrid([
                 'sm' => 1,
-                'xl' => 1,
+                'xl' => 3,
             ])
             ->actions([
-                getCustomTableAction(ActionType::EDIT, 'Update', 'Update Layout', Icons::EDIT, null, false),
-                getCustomTableAction(ActionType::DELETE, null, 'Delete Layout', null, null, null)
+                getCustomTableAction(ActionType::EDIT, 'Update', 'Update '.$title, Icons::EDIT, null, false, true),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete '.$title, null, null, null, true)
             ])
             ->bulkActions([
-                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null, true)
             ])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', 'Add Layout', Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', 'Add '.$title, Icons::ADD, false, false, true)
             ])
             ->emptyStateActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
             ])
-            ->defaultPaginationPageOption(10)
-            ->heading('Layout')
+            ->striped()
             ->deferLoading()
-            ->striped();
+            ->heading($title)
+            ->persistSortInSession()
+            ->persistSearchInSession()
+            ->persistFiltersInSession()
+            ->defaultPaginationPageOption(10);
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ManageLayouts::route('/'),
         ];

@@ -3,27 +3,30 @@
 namespace App\Filament\Resources\DigitalInvitation\Master;
 
 use App\Enums\Icons;
-use Filament\Tables;
+use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Enums\ActionType;
 use Filament\Tables\Table;
-use GuzzleHttp\Psr7\MimeType;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\IconSize;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Forms\Components\Select;
+use Filament\Support\Enums\ActionSize;
+use Filament\Support\Enums\FontWeight;
+use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Enums\ActionsPosition;
-use App\Models\DigitalInvitation\Master\Song;
-use App\Filament\Clusters\DigitalInvitation\Master;
-use App\Filament\Resources\DigitalInvitation\Master\SongResource\Pages;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
-use Hugomyb\FilamentMediaAction\Tables\Actions\MediaAction;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Columns\ToggleColumn;
+use App\Models\DigitalInvitation\Master\Song;
+use App\Filament\Clusters\DigitalInvitation\Master;
+use Filament\Tables\Columns\TextColumn\TextColumnSize;
+use App\Filament\Resources\DigitalInvitation\Master\SongResource\Pages;
+use Filament\Tables\Filters\SelectFilter;
 
 class SongResource extends Resource
 {
@@ -31,111 +34,135 @@ class SongResource extends Resource
 
     protected static ?string $cluster = Master::class;
     protected static ?string $slug = 'song';
+    protected static ?string $navigationLabel = 'Song';
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 8;
 
     public static function canViewAny(): bool
     {
-        $menuCode = 'INVTM006';
+        $menuCode = 'INVTM008';
         return authUserMenu($menuCode, auth()->user()->id);
     }
 
     public static function form(Form $form): Form
     {
-        $types = app(MimeType::class);
-
-        $acceptedAudioTypes = [
-            $types->fromExtension('mp3'),
-            $types->fromExtension('wav')
-        ];
-
         return $form
             ->schema([
-                TextInput::make('song_title')
-                    ->label('Title')
+                TextInput::make('title')
                     ->required()
-                    ->unique(ignoreRecord: true)
                     ->maxLength(100)
-                    ->columnSpanFull(),
-                FileUpload::make('song_filename')
-                    ->label('Song File (.mp3)')
-                    ->acceptedFileTypes($acceptedAudioTypes)
-                    ->required()
-                    ->columnSpanFull(),
-                FileUpload::make('song_image')
-                    ->label('Cover Image')
-                    ->image()
                     ->columnSpanFull()
-                    ->panelLayout('grid')
+                    ->label('Song Title')
+                    ->placeholder('Kita'),
+                TextInput::make('artist')
+                    ->required()
+                    ->maxLength(50)
+                    ->columnSpanFull()
+                    ->label('Artist')
+                    ->placeholder('Sheila on 7'),
+                Select::make('event_category_id')
+                    ->preload()
+                    ->searchable()
+                    ->columnSpanFull()
+                    ->relationship('eventCategory', 'name'),
+                FileUpload::make('filename')
+                    ->columnSpanFull()
+                    ->label('Song File (.mp3)'),
+                Checkbox::make('is_for_all')
+                    ->required()
+                    ->default(true)
+                    ->columnSpanFull()
+                    ->label('Display For All'),
+                Checkbox::make('is_active')
+                    ->required()
+                    ->default(true)
+                    ->label('Active')
+                    ->columnSpanFull()
             ]);
     }
 
     public static function table(Table $table): Table
     {
+        $title = 'Song';
         return $table
             ->columns([
                 Split::make([
-                    ImageColumn::make('song_image')
-                        ->label('Images')
-                        ->circular()
-                        ->grow(false),
                     Stack::make([
-                        TextColumn::make('song_title')
-                            ->label('Title')
+                        TextColumn::make('title')
+                            ->sortable()
                             ->searchable()
-                            ->sortable(),
-                        TextColumn::make('song_by_user')
-                            ->label('Uploaded By')
-                            ->badge()
-                            ->formatStateUsing(fn (bool $state) => match($state)
-                            {
-                                true => 'User',
-                                false => 'Admin'
-                            })
-                            ->color(fn (bool $state) => match ($state)
-                            {   
-                                true => 'success',
-                                false => 'warning'
-                            })
-                    ]),
+                            ->label('Title')
+                            ->weight(FontWeight::SemiBold)
+                            ->size(TextColumnSize::Medium),
+                        TextColumn::make('artist')
+                            ->sortable()
+                            ->searchable()
+                            ->label('Artist')
+                    ])
+                    ->space(1),
                     ToggleColumn::make('is_active')
-                        ->label('Is Active')
                         ->alignEnd()
+                        ->label('Active')
                 ])
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('event_category_id')
+                    ->label('Event Category')
+                    ->relationship('eventCategory', 'name')
+                    ->searchable()
+                    ->preload()
+            ])
             ->contentGrid([
                 'sm' => 1,
                 'xl' => 2,
             ])
             ->actions([
-                    getCustomTableAction(ActionType::EDIT, 'Update', 'Update Theme', Icons::EDIT, null, false),
-                    getCustomTableAction(ActionType::DELETE, null, 'Delete Theme', null, null, null),
-                    MediaAction::make('song')
-                        ->iconButton()
-                        ->icon('heroicon-o-play')
-                        ->modalHeading(fn($record) => $record->song_title)
-                        ->modalWidth('sm')
-                        ->media(fn($record) => url('storage/'.$record->song_filename))
+                getCustomTableAction(ActionType::EDIT, 'Update', 'Update '.$title, Icons::EDIT, null, false, true),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete '.$title, null, null, null, true)
             ])
             ->bulkActions([
-                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null, true)
             ])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', 'Add Theme', Icons::ADD, false, false)
+                CreateAction::make()
+                    ->mutateFormDataUsing((function (array $data): array {
+                        try {
+                            $data['created_by'] = auth()->user()->username;
+                            $data['updated_by'] = auth()->user()->username;
+                            $data['user_id'] = auth()->user()->id;
+                            return $data;
+                        } catch (\Throwable $th) {
+                        dd($th);
+                        }
+                    }))
+                    ->label('Add')
+                    ->slideOver(false)
+                    ->icon(Icons::ADD->value)
+                    ->iconSize(IconSize::Small)
+                    ->modalHeading('Add '.$title)
+                    ->modalWidth(MaxWidth::Large)
+                    ->modalSubmitActionLabel('Add')
+                    ->stickyModalFooter()
+                    ->stickyModalHeader()
+                    ->createAnother(false)
+                    ->modalCancelAction(false)
+                    ->size(ActionSize::Small)
+                // getCustomTableAction(ActionType::CREATE, 'Add', 'Add '.$title, Icons::ADD, false, false, true)
             ])
             ->emptyStateActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
             ])
-            ->defaultPaginationPageOption(10)
-            ->heading('Song')
+            ->striped()
             ->deferLoading()
-            ->striped();
+            ->heading($title)
+            ->persistSortInSession()
+            ->persistSearchInSession()
+            ->persistFiltersInSession()
+            ->defaultPaginationPageOption(10);
     }
 
-    public static function getPages(): array
-    {
+    public static function getPages(): array {
         return [
             'index' => Pages\ManageSongs::route('/'),
         ];
