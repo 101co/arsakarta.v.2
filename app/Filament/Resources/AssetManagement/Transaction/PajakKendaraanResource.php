@@ -123,17 +123,17 @@ class PajakKendaraanResource extends Resource
                 'xl' => 1,
             ])
             ->actions([
-                getCustomTableAction(ActionType::EDIT, 'Update', 'Update Pajak Kendaraan', Icons::EDIT, null, false),
-                getCustomTableAction(ActionType::DELETE, null, 'Delete Pajak Kendaraan', null, null, null)
+                getCustomTableAction(ActionType::EDIT, 'Update', 'Update Pajak Kendaraan', Icons::EDIT, null, false, true),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Pajak Kendaraan', null, null, null, true)
             ])
             ->bulkActions([
-                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null, true)
             ])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', 'Pajak Kendaraan', Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', 'Pajak Kendaraan', Icons::ADD, false, false, true)
             ])
             ->emptyStateActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
             ])
             ->defaultPaginationPageOption(10)
             ->heading('Pajak Kendaraan')

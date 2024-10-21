@@ -49,14 +49,14 @@ class RoleMenuUsersRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', 'Choose User', Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', 'Choose User', Icons::ADD, false, false, true)
             ])
             ->actions([
-                getCustomTableAction(ActionType::EDIT, 'Update', 'Choose User', Icons::EDIT, null, false),
-                getCustomTableAction(ActionType::DELETE, null, 'Delete User', null, null, null)
+                getCustomTableAction(ActionType::EDIT, 'Update', 'Choose User', Icons::EDIT, null, false, true),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete User', null, null, null, true)
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null, true)
             ])
             ->striped();
     }

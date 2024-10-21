@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RoleMenuDetail extends Model
-{
+class RoleMenuDetail extends Model {
     use HasFactory;
+    protected $table = 'sysmans_role_menu_detail';
 
-    public function menu()
-    {
+    public function menu() {
         return $this->belongsTo(Menu::class);
     }
 
