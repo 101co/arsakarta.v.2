@@ -41,6 +41,7 @@ class CreateInvitationCustom extends Page implements HasForms {
     public ?array $data = [];
     public $newPaymentId = null;
     public $isMoreThanEditingDay = false;
+    public $isBackToList = true;
     protected static string $resource = InvitationResource::class;
     protected static string $view = 'filament.resources.digital-invitation.transaction.invitation-resource.pages.create-invitation-custom';
     protected $listeners = [
@@ -319,6 +320,8 @@ class CreateInvitationCustom extends Page implements HasForms {
             $this->newPaymentId = $order_id;
             $this->data['order_id'] = $this->newPaymentId;
             $this->data['is_paid'] = true;
+            $this->isBackToList = false;
+            $this->create();
     
             Notification::make()
                 ->title('Paymen success.')
@@ -392,7 +395,8 @@ class CreateInvitationCustom extends Page implements HasForms {
                 ->success()
                 ->send();
 
-            redirect($this->getResource()::getUrl('index'));
+            if ($this->isBackToList)
+                redirect($this->getResource()::getUrl('index'));
         } catch (\Throwable $th) {
             $this->validate();
             Log::error('Error Create Data', $th);
