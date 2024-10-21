@@ -77,22 +77,23 @@ class MenuResource extends Resource
                     ->relationship('application', 'name')
             ])
             ->actions([
-                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
-                getCustomTableAction(ActionType::DELETE, null, 'Delete Menu', null, null, null)
+                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false, true),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Menu', null, null, null, true)
             ], position: ActionsPosition::BeforeColumns)
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
             ])
             ->bulkActions([
-                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null, true)
             ])
             ->emptyStateActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
             ])
             ->defaultPaginationPageOption(10)
             ->heading('Menu')
             ->striped()
-            ->deferLoading();
+            ->deferLoading()
+            ->persistFiltersInSession();
     }
 
     public static function getRelations(): array

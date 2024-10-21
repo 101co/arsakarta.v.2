@@ -60,17 +60,17 @@ class ModuleResource extends Resource
             ])
             ->filters([])
             ->actions([
-                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false),
-                getCustomTableAction(ActionType::DELETE, null, 'Delete Module', null, null, null)
+                getCustomTableAction(ActionType::EDIT, 'Update', null, Icons::EDIT, null, false, true),
+                getCustomTableAction(ActionType::DELETE, null, 'Delete Module', null, null, null, true)
             ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null)
+                getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null, true)
             ])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
             ])
             ->emptyStateActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false)
+                getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
             ])
             ->defaultPaginationPageOption(10)
             ->striped();
