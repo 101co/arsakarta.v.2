@@ -37,7 +37,7 @@ use Carbon\Carbon;
 
 class CreateInvitationCustom extends Page implements HasForms {
     use InteractsWithForms;
-
+ 
     public ?array $data = [];
     public $newPaymentId = null;
     public $isMoreThanEditingDay = false;
