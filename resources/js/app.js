@@ -1,108 +1,22 @@
 import './bootstrap';
 import 'flowbite';
-import ScrollReveal from 'scrollreveal';
+import gsap from 'gsap';
 
-/* scroll reveal plugin */
+// Hide preloader and show content after a delay (1000 ms or 1 second)
+window.addEventListener('load', function () {
+    setTimeout(function () {
+        document.getElementById('preloader').style.display = 'none'; // Hide loader
+        document.getElementById('content').style.display = 'block';  // Show page content
+    }, 500); // 1000 ms = 1 second delay
+});
+
+document.addEventListener('livewire:init', () => {
+  console.log('heree');
+  
+  gsap.from(".animation-title", { opacity: 0, y: -50, duration: 2 });
+})
+
 document.addEventListener('DOMContentLoaded', function () {
-    /* title */
-    ScrollReveal().reveal('.animation-title', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'bottom',
-        reset: true
-    });
-    ScrollReveal().reveal('.animation-title-sub', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'bottom',
-        delay: 200,
-        reset: true
-    });
-
-    /* content */
-    ScrollReveal().reveal('.animation-content-icon', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'top',
-        delay: 400,
-        reset: true
-    });
-    ScrollReveal().reveal('.animation-content-title', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'top',
-        delay: 500,
-        reset: true
-    });
-    ScrollReveal().reveal('.animation-content-title-sub', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'top',
-        delay: 600,
-        reset: true
-    });
-    ScrollReveal().reveal('.animation-content', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'top',
-        delay: 700,
-        reset: true
-    });
-
-    /* card */
-    const sr = ScrollReveal({
-        distance: '150px',
-        duration: 1000,
-        opacity: 0,   
-        delay: 300,
-        interval: 500,
-        reset: true
-    });
-
-    /*  Mengatur reveal untuk semua card */
-    sr.reveal('.animation-card-left', {
-        origin: 'left',  // Card muncul dari bawah
-    });
-
-    /* hubungi admin */
-    ScrollReveal().reveal('.animation-hubungi-admin-icon', {
-        distance: '50px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'left',
-        reset: true
-    });
-    ScrollReveal().reveal('.animation-hubungi-admin-title', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'right',
-        delay: 200,
-        reset: true
-    });
-    ScrollReveal().reveal('.animation-hubungi-admin-title-sub', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'right',
-        delay: 300,
-        reset: true
-    });
-    ScrollReveal().reveal('.animation-hubungi-admin-button', {
-        distance: '20px',
-        duration: 1000,
-        easing: 'ease-in-out',
-        origin: 'right',
-        delay: 400,
-        reset: true
-    });
-
     /* touch scroll hero */
     const carouselElement = document.getElementById('indicators-carousel');
     let startX = 0;
