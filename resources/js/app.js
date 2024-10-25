@@ -10,7 +10,7 @@ window.addEventListener('load', function () {
     document.getElementById('preloader').style.display = 'none';
     document.getElementById("media-button").classList.remove("hidden");
     document.getElementById("media-button").classList.add("flex");
-  }, 1200);
+  }, 1500);
 });
 
 document.addEventListener('DOMContentLoaded', function () {
