@@ -117,7 +117,7 @@
         </div>
     </div>
 
-    <div id="content" class="h-[calc(100vh-50px)] max-w-lg px-2 py-2 mx-auto">
+    <div id="content" class="h-screen max-w-lg px-2 py-2 mx-auto">
         <div class="flex items-center justify-center w-full h-full overflow-hidden bg-white rounded-3xl">
             <div class="w-full h-full">
                 {{ $slot }}
@@ -125,16 +125,19 @@
         </div>
     </div>
 
-    {{-- <div id="content" class="h-screen max-w-lg px-2 py-2 mx-auto">
-        <div class="flex items-center justify-center w-full h-full overflow-hidden bg-white rounded-3xl">
-            <div class="w-full h-full">
-                {{ $slot }}
-            </div>
-        </div>
-    </div> --}}
-
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-
+    <script>
+        function adjustHeight() {
+            const content = document.getElementById('content');
+            // Mengurangi tinggi viewport untuk memperhitungkan address bar
+            const vh = window.innerHeight * 0.01; // 1% dari tinggi viewport
+            content.style.height = `${vh * 100}px`; // Atur tinggi content ke 100vh yang disesuaikan
+        }
+    
+        window.addEventListener('resize', adjustHeight);
+        window.addEventListener('load', adjustHeight);
+        adjustHeight(); // Panggil fungsi saat pertama kali dimuat
+    </script>
     @livewireScripts
 </body>
 </html>
