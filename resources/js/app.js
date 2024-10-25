@@ -4,19 +4,19 @@ import gsap from 'gsap';
 
 // Hide preloader and show content after a delay (1000 ms or 1 second)
 window.addEventListener('load', function () {
-    setTimeout(function () {
-        document.getElementById('preloader').style.display = 'none'; // Hide loader
-        document.getElementById('content').style.display = 'block';  // Show page content
-    }, 500); // 1000 ms = 1 second delay
+  gsap.to("#content", { opacity: 1, duration: 2 });
+  document.getElementById('content').style.display = 'block';
+  setTimeout(function () {
+    document.getElementById('preloader').style.display = 'none';
+    document.getElementById("media-button").classList.remove("hidden");
+    document.getElementById("media-button").classList.add("flex");
+  }, 1200);
 });
 
-document.addEventListener('livewire:init', () => {
-  console.log('heree');
-  
-  gsap.from(".animation-title", { opacity: 0, y: -50, duration: 2 });
-})
-
 document.addEventListener('DOMContentLoaded', function () {
+  
+    gsap.from(".animation-title", { opacity: 0, y: -50, duration: 2 });
+
     /* touch scroll hero */
     const carouselElement = document.getElementById('indicators-carousel');
     let startX = 0;
