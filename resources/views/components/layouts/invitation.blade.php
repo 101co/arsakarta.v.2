@@ -117,22 +117,13 @@
         </div>
     </div>
 
-    <div id="content" class="max-w-lg h-[calc(100vh-env(safe-area-inset-bottom))] px-2 py-2 mx-auto">
+    <div id="content" class="h-screen max-w-lg px-2 py-2 mx-auto">
         <div class="flex items-center justify-center w-full h-full overflow-hidden bg-white rounded-3xl">
             <div class="w-full h-full">
                 {{ $slot }}
             </div>
         </div>
     </div>
-
-    {{-- <div id="content" class="h-screen max-w-lg px-2 py-2 mx-auto">
-        <div class="flex items-center justify-center w-full h-full overflow-hidden bg-white rounded-3xl">
-            <div class="w-full h-full">
-                {{ $slot }}
-            </div>
-        </div>
-    </div> --}}
-
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 
