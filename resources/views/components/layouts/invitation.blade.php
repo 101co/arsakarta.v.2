@@ -117,6 +117,7 @@
         </div>
     </div>
 
+    
     <div id="content" class="max-w-lg h-[calc(100vh-env(safe-area-inset-bottom))] px-2 py-2 mx-auto">
         <div class="flex items-center justify-center w-full h-full overflow-hidden bg-white rounded-3xl">
             <div class="w-full h-full">
