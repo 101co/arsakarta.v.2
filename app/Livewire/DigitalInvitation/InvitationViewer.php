@@ -7,9 +7,11 @@ use Livewire\Component;
 class InvitationViewer extends Component {
     public $items = [];
     public $namaTamu = "Bowo & Selly";
+    public $isButtonBasedView = true;
 
     public function mount() {
         $this->namaTamu = request()->query('guest') ? request()->query('guest'):'unknown';
+        $this->isButtonBasedView = true;
 
         for ($i = 1; $i <= 28; $i++) {
             $content = '<h2 class="text-lg font-normal tracking-widest text-center uppercase animation-title">The Wedding Of '.$i.'</h2>
