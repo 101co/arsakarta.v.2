@@ -4,13 +4,25 @@ import gsap from 'gsap';
 
 // Hide preloader and show content after a delay (1000 ms or 1 second)
 window.addEventListener('load', function () {
-  gsap.to("#content", { opacity: 1, duration: 2 });
-  document.getElementById('content').style.display = 'block';
-  setTimeout(function () {
-    document.getElementById('preloader').style.display = 'none';
-    document.getElementById("media-button").classList.remove("hidden");
-    document.getElementById("media-button").classList.add("flex");
-  }, 1800);
+  gsap.to("#content", {
+      opacity: 1,
+      duration: 1,
+      onComplete: function() {
+        document.getElementById('content').style.display = 'block';
+  
+        setTimeout(function () {
+          gsap.to("#preloader", {
+            opacity: 0,
+            duration: .2,
+            onComplete: function() {
+              document.getElementById('preloader').style.display = 'none';
+              document.getElementById("media-button").classList.remove("hidden");
+              document.getElementById("media-button").classList.add("flex");
+            }
+          });
+        }, 1800);
+      }
+  });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
