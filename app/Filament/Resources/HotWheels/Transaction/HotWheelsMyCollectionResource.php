@@ -199,11 +199,11 @@ class HotWheelsMyCollectionResource extends Resource
 
                 // tampilan untuk web browser
                 SplitTable::make([
-                    ImageColumn::make('images')
-                        ->circular()
-                        ->stacked()
-                        ->grow(false)
-                        ->visibleFrom('lg'),
+                    // ImageColumn::make('images')
+                    //     ->circular()
+                    //     ->stacked()
+                    //     ->grow(false)
+                    //     ->visibleFrom('lg'),
                     TextColumn::make('name')
                         ->label('Cast Name')
                         ->searchable()
