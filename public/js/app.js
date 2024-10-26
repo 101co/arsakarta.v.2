@@ -1,4 +1,9 @@
 let currentIndex = 0;
+var timeline = gsap.timeline();
+let animationTopLeft;
+let animationTopRight;
+let animationBottomLeft;
+let animationBottomRight;
             
 function selectItem(index) {
     const navItems = document.getElementById("nav-items");
@@ -14,8 +19,6 @@ function selectItem(index) {
     // Tampilkan halaman yang dipilih berdasarkan indeks
     document.getElementById(`page${index}`).classList.remove("hidden");
     document.getElementById(`page${index}`).classList.add("flex");
-
-    animateTitle();
 
     // Hitung offset untuk pergeseran
     if (totalItems > itemsToShow) {
@@ -41,6 +44,7 @@ function selectItem(index) {
 
     // Mengubah kelas aktif
     updateActiveClass();
+    animateAll();
 }
 
 function updateActiveClass() {
@@ -52,27 +56,64 @@ function updateActiveClass() {
         }
     });
 }
-function animateTitle() {
-    // Reset posisi elemen ke keadaan awal
-    gsap.set(".animation-title", { opacity: 0, y: -50 });
-    
-    // Jalankan animasi
-    gsap.fromTo(
-        ".animation-title",
-        { opacity: 0, y: -50 }, // Nilai awal
-        { opacity: 1, y: 0, duration: 1 } // Nilai akhir
-    );
+
+function animateAll() {
+    animateOpening();
+}
+
+function animateOpening() {
+    console.log('animateOpening');
+    if (animationTopLeft || animationTopRight || animationBottomLeft || animationBottomRight) {
+        animationTopLeft.revert();
+        animationTopRight.revert();
+        animationBottomLeft.revert();
+        animationBottomRight.revert();
+      }
+
+    timeline.clear();
+    timeline.play();
+    timeline.fromTo("#opening-title", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1 })
+        .fromTo("#opening-couple-name", { opacity: 0, y:-30 }, { opacity: 1, y: 0, duration: 1.5 }, "-=0.7")
+        .fromTo("#opening-guest", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "-=0.9")
+        .fromTo("#opening-button-open-invitation", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.7 }, "<1");
+    timeline.paused();
+
+    animationTopLeft = gsap.to("#object-tl", {x: 5, y: 7, duration: 1.5, repeat: -1, yoyo: true, ease: "power1.inOut"});
+    animationTopRight = gsap.to("#object-tr", {x: -5, y: 7, duration: 1.5, repeat: -1, yoyo: true, ease: "power1.inOut"});
+    animationBottomLeft = gsap.to("#object-bl", {x: 5, y: -7, duration: 1.5, repeat: -1, yoyo: true, ease: "power1.inOut"});
+    animationBottomRight = gsap.to("#object-br", {x: -5, y: -7, duration: 1.5, repeat: -1, yoyo: true, ease: "power1.inOut"});
 }
 
 function openInvitation() {
+    gsap.fromTo(
+        ".ornament",
+        { opacity: 0 }, // Nilai awal
+        { opacity: 1, duration: 5 } // Nilai akhir
+    );
+
+    document.querySelectorAll(".ornament").forEach((page) => {
+        page.classList.remove("hidden");
+    });
+
+    document.querySelectorAll(".ornament-cover").forEach((page) => {
+        page.classList.add("hidden");
+    });
+    
+    gsap.fromTo(
+        ".ornament-cover",
+        { y: 0 }, // Nilai awal
+        { y: 1000, duration: 5 } // Nilai akhir
+    );
+
     gsap.to("#page0", {
         opacity: 0,
         duration: 1,
         onComplete: function() {
-            document.getElementById("page0").classList.remove("relative");
+            // document.getElementById("page0").classList.remove("relative");
+            document.getElementById("bottom-navigation").classList.add("z-50");
             document.getElementById("button-open-invitation").classList.add("hidden");
             
-            animateTitle();
+            animateAll();
             gsap.to("#page0", {
                 opacity: 1,
                 duration: 1

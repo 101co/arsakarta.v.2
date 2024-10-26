@@ -2,11 +2,25 @@
 <div id="content" class="h-screen max-w-lg px-2 py-2 mx-auto">
     <div class="flex items-center justify-center w-full h-full overflow-hidden bg-white rounded-3xl">
         <div class="w-full h-full">
-            <div class="relative w-full h-full bg-cover" style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">
+            <div class="relative w-full h-full bg-cover bg-[#3d1f17]" > {{--style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">--}}
                 @foreach ($items as $index => $item)
-                <div id="page{{$index}}" class="{{$index == 0 ? 'relative':''}} z-40 flex items-center justify-center h-full overflow-hidden bg-cover content-page rounded-xl" style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">
+                <div id="page{{$index}}" class="{{$index == 0 ? 'relative':''}} z-40 flex items-center justify-center h-full overflow-hidden bg-cover content-page rounded-xl bg-[#3d1f17]"> {{--style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">--}}
                     <div class="p-4 space-y-4">
-                    {!! $item[$index]['content'] = str_replace('{{ namaTamu }}', $namaTamu, $item['content']) !!}
+                        {!! $item['content'] !!}
+                        
+                        {{-- ornamen pada cover undangan --}}
+                        <div class="absolute left-0 w-full h-20 overflow-hidden ornament-cover -top-5">
+                            <img src="{{ asset('storage/asset-invitation/javanese-ornamen-1.png') }}" class="object-cover w-full h-auto" alt="Gambar Kiri Atas">
+                        </div>
+                        <div class="absolute left-0 w-full h-20 overflow-hidden ornament-cover bottom-1">
+                            <img src="{{ asset('storage/asset-invitation/javanese-ornamen-1.png') }}" class="object-cover w-full h-auto" alt="Gambar Kiri Atas">
+                        </div>                       
+                        
+                        {{-- ornamen pada halaman undangan --}}
+                        <img id="object-tl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden -top-16 -left-4 w-32 transform rotate-[145deg]" alt="Gambar Kiri Atas">
+                        <img id="object-tr" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden -top-16 -right-4 w-32 transform rotate-[-145deg]" alt="Gambar Kanan Atas">
+                        <img id="object-bl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden w-32 transform rotate-[55deg] bottom-20 -left-10" alt="Gambar Kiri Bawah">
+                        <img id="object-br" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden bottom-20 -right-10 w-32 transform rotate-[-55deg]" alt="Gambar Kanan Bawah">
                     </div>
                 </div>
                 @endforeach
@@ -17,7 +31,7 @@
                             <div id="nav-items" class="flex transition-transform duration-300" style="min-width: 300%;">
                                 @foreach ($items as $index => $item)
                                     <button class="nav-item flex flex-col items-center justify-center space-y-2 h-full py-4 text-gray-700 transition-all duration-300 ease-in-out transform rounded-lg {{ $index == 0 ? 'bg-slate-100' : '' }}" data-index="{{ $index }}" onclick="selectItem({{ $index }})" style="flex: 0 0 calc(100% / 15);">
-                                        <ion-icon name="home-sharp" class="size-6 text-slate-600"></ion-icon>
+                                        <ion-icon name="{{ $item['icon'] }}" class="size-6 text-slate-600"></ion-icon>
                                         <span class="text-xs text-center text-slate-600">{{ $item['menu'] }}</span>
                                     </button>
                                 @endforeach
