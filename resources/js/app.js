@@ -9,6 +9,11 @@ window.addEventListener('load', function () {
       duration: 1,
       onComplete: function() {
         document.getElementById('content').style.display = 'block';
+        document.querySelectorAll(".ornament-cover").forEach((page) => {
+          page.classList.remove("hidden");
+        });
+
+        gsap.set("#media-button, #bottom-navigation, .ornament", {opacity: 0});
   
         setTimeout(function () {
           gsap.to("#preloader", {
@@ -16,8 +21,6 @@ window.addEventListener('load', function () {
             duration: 1,
             onComplete: function() {
               document.getElementById('preloader').style.display = 'none';
-              document.getElementById("media-button").classList.remove("hidden");
-              document.getElementById("media-button").classList.add("flex");
             }
           });
         }, 1800);
@@ -26,8 +29,6 @@ window.addEventListener('load', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    // gsap.from(".animation-title", { opacity: 0, y: -50, duration: 2 });
-
     /* touch scroll hero */
     const carouselElement = document.getElementById('indicators-carousel');
     let startX = 0;

@@ -9,23 +9,27 @@
                         {!! $item['content'] !!}
                         
                         {{-- ornamen pada cover undangan --}}
-                        <div class="absolute left-0 w-full h-20 overflow-hidden ornament-cover -top-5">
+                        <div id="ornament-cover" class="absolute left-0 hidden w-full h-20 overflow-hidden ornament-cover -top-5">
                             <img src="{{ asset('storage/asset-invitation/javanese-ornamen-1.png') }}" class="object-cover w-full h-auto" alt="Gambar Kiri Atas">
                         </div>
-                        <div class="absolute left-0 w-full h-20 overflow-hidden ornament-cover bottom-1">
+                        <div id="ornament-cover" class="absolute left-0 hidden w-full h-20 overflow-hidden ornament-cover bottom-1">
                             <img src="{{ asset('storage/asset-invitation/javanese-ornamen-1.png') }}" class="object-cover w-full h-auto" alt="Gambar Kiri Atas">
-                        </div>                       
+                        </div>    
                         
                         {{-- ornamen pada halaman undangan --}}
-                        <img id="object-tl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden -top-16 -left-4 w-32 transform rotate-[145deg]" alt="Gambar Kiri Atas">
-                        <img id="object-tr" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden -top-16 -right-4 w-32 transform rotate-[-145deg]" alt="Gambar Kanan Atas">
-                        <img id="object-bl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden w-32 transform rotate-[55deg] bottom-20 -left-10" alt="Gambar Kiri Bawah">
-                        <img id="object-br" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament hidden bottom-20 -right-10 w-32 transform rotate-[-55deg]" alt="Gambar Kanan Bawah">
+                        <img id="object-tl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-16 -left-4 w-32 transform rotate-[145deg]" alt="Gambar Kiri Atas">
+                        <img id="object-tr" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-16 -right-4 w-32 transform rotate-[-145deg]" alt="Gambar Kanan Atas">
+                        <img id="object-bl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament w-32 transform rotate-[55deg] bottom-20 -left-10" alt="Gambar Kiri Bawah">
+                        <img id="object-br" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament bottom-20 -right-10 w-32 transform rotate-[-55deg]" alt="Gambar Kanan Bawah">
+                        <img id="object-ct" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute top-0 w-[45%] transform -translate-x-1/2 ornament left-1/2" alt="Gambar Tengah Atas">
+                        <img id="object-cb" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute w-[60%] transform -translate-x-1/2 bottom-[120px] ornament left-1/2" alt="Gambar Tengah Bawah">
+                        <img id="object-cl" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[60%] transform -translate-y-[65%] left-3 ornament top-1/2" alt="Gambar Tengah Kiri">
+                        <img id="object-cr" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[60%] transform -translate-y-[65%] right-3 ornament top-1/2" alt="Gambar Tengah Kanan">
                     </div>
                 </div>
                 @endforeach
             
-                <div id="bottom-navigation" class="absolute bottom-0 left-0 w-full px-2 pt-3 mb-2">
+                <div id="bottom-navigation" class="absolute bottom-0 left-0 z-50 w-full px-2 pt-3 mb-2">
                     <div class="px-2 py-2 bg-white shadow-md rounded-2xl">
                         <div id="navigation-container" class="relative overflow-hidden">
                             <div id="nav-items" class="flex transition-transform duration-300" style="min-width: 300%;">
@@ -41,7 +45,7 @@
                 </div>
                 
                 <!-- Floating Icons -->
-                <div id="media-button" class="absolute z-50 flex-col hidden space-y-3 bottom-32 right-4">
+                <div id="media-button" class="absolute z-50 flex flex-col space-y-3 bottom-32 right-4">
                     <a href="#">
                         <ion-icon class="items-center p-4 text-xl text-white ease-in-out rounded-full cursor-pointer opacity-55 bg-slate-400 hover:bg-slate-500" name="qr-code-outline"></ion-icon>
                     </a>
