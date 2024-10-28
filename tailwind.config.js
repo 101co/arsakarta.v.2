@@ -14,6 +14,7 @@ export default {
         './resources/views/filament/**/*.blade.php',
 
         "./resources/**/*.js",
+        "./public/**/*.js",
         
         "./resources/components/layouts/**/*.blade.php",
         
