@@ -29,7 +29,7 @@ class InvitationViewer extends Component {
             ["menu" => "Countdown",     "icon" => "timer"], 
             ["menu" => "RSVP",          "icon" => "chatbubble-ellipses"], 
             ["menu" => "Gift",          "icon" => "gift"], 
-            ["menu" => "Terima Kasih",  "icon" => "star"], 
+            ["menu" => "Thanks",        "icon" => "star"], 
             // ["menu" => "Salam",         "icon" => "chatbubbles"], 
             // ["menu" => "Protokol",      "icon" => "shield"], 
             // ["menu" => "Video",         "icon" => "videocam"], 
