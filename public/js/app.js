@@ -48,15 +48,19 @@ function updateActiveClass() {
 
 function animateAll(selectedMenu) {
     animateOrnament();
+    console.log('animatedAll');
 
     switch (selectedMenu.toLowerCase()) {
         case 'opening':
+            console.log('opening');
             animateOpening();
             break;
         case 'quote':
+            console.log('quote');
             animateQuote();
             break;
         case 'mempelai':
+            console.log('mempemlai');
             animateMempelai();
             break;
     
