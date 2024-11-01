@@ -12,7 +12,6 @@
 
     @livewireStyles
     @vite(['resources/css/app.css','resources/js/app.js'])
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
@@ -50,6 +49,7 @@
         window.addEventListener('load', adjustHeight);
         adjustHeight(); // Panggil fungsi saat pertama kali dimuat
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 </body>
 </html>
