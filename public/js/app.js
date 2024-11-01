@@ -3,7 +3,6 @@ let animationTopLeft;
 let animationTopRight;
 let animationBottomLeft;
 let animationBottomRight;
-var timeline = gsap.timeline();
             
 function selectItem(index) {
     const navItems = document.getElementById("nav-items");
@@ -50,27 +49,31 @@ function updateActiveClass() {
 function animateAll(selectedMenu) {
     animateOrnament();
     console.log('animatedAll');
+    animateOpening();
+    animateQuote();
+    animateMempelai();
 
-    switch (selectedMenu.toLowerCase()) {
-        case 'opening':
-            console.log('opening');
-            animateOpening();
-            break;
-        case 'quote':
-            console.log('quote');
-            animateQuote();
-            break;
-        case 'mempelai':
-            console.log('mempemlai');
-            animateMempelai();
-            break;
+    // switch (selectedMenu.toLowerCase()) {
+    //     case 'opening':
+    //         console.log('opening');
+    //         animateOpening();
+    //         break;
+    //     case 'quote':
+    //         console.log('quote');
+    //         animateQuote();
+    //         break;
+    //     case 'mempelai':
+    //         console.log('mempemlai');
+    //         animateMempelai();
+    //         break;
     
-        default:
-            break;
-    }
+    //     default:
+    //         break;
+    // }
 }
 
 function animateOpening() {
+    var timeline = gsap.timeline();
     timeline.clear();
     timeline.play();
     timeline.fromTo("#opening-title", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1 })
@@ -87,6 +90,7 @@ function animateQuote() {
 }
 
 function animateMempelai() {
+    var timeline = gsap.timeline();
     timeline.clear();
     timeline.play();
     timeline.fromTo("#mempelai-title", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1 })
