@@ -51,36 +51,6 @@ function animateAll(selectedMenu) {
     animateOpening();
     animateQuote();
     animateMempelai();
-
-    // if (selectedMenu.toLowerCase() == 'opening') {
-    //     console.log('opening');
-    //     animateOpening();
-    // }
-    // else if (selectedMenu.toLowerCase() == 'quote') {
-    //     console.log('quote');
-    //     animateQuote();
-    // }
-    // else if (selectedMenu.toLowerCase() == 'mempelai') {
-    //     console.log('mempemlai');
-    //     animateMempelai();
-    // }
-
-    // switch (selectedMenu.toLowerCase()) {
-    //     case 'opening':
-    //         animateOpening();
-    //         break;
-    //     case 'quote':
-    //         console.log('quote');
-    //         animateQuote();
-    //         break;
-    //     case 'mempelai':
-    //         console.log('mempemlai');
-    //         animateMempelai();
-    //         break;
-    
-    //     default:
-    //         break;
-    // }
 }
 
 function animateOpening() {

@@ -17,14 +17,14 @@
                         </div>    
                         
                         {{-- ornamen pada halaman undangan --}}
-                        <img id="object-tl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-16 -left-4 w-32 transform rotate-[145deg]" alt="Gambar Kiri Atas">
-                        <img id="object-tr" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-16 -right-4 w-32 transform rotate-[-145deg]" alt="Gambar Kanan Atas">
-                        <img id="object-bl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament w-32 transform rotate-[55deg] bottom-20 -left-10" alt="Gambar Kiri Bawah">
-                        <img id="object-br" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament bottom-20 -right-10 w-32 transform rotate-[-55deg]" alt="Gambar Kanan Bawah">
-                        <img id="object-ct" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute top-0 w-[45%] transform -translate-x-1/2 ornament left-1/2" alt="Gambar Tengah Atas">
-                        <img id="object-cb" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute w-[60%] transform -translate-x-1/2 bottom-[120px] ornament left-1/2" alt="Gambar Tengah Bawah">
-                        <img id="object-cl" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[60%] transform -translate-y-[65%] left-3 ornament top-1/2" alt="Gambar Tengah Kiri">
-                        <img id="object-cr" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[60%] transform -translate-y-[65%] right-3 ornament top-1/2" alt="Gambar Tengah Kanan">
+                        <img id="object-tl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-[8%] -left-[5%] w-[25%] transform rotate-[145deg]" alt="Gambar Kiri Atas">
+                        <img id="object-tr" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-[8%] -right-[5%] w-[25%] transform rotate-[-145deg]" alt="Gambar Kanan Atas">
+                        <img id="object-bl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament w-[25%] transform rotate-[55deg] bottom-20 -left-[8%]" alt="Gambar Kiri Bawah">
+                        <img id="object-br" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament bottom-20 -right-[8%] w-[25%] transform rotate-[-55deg]" alt="Gambar Kanan Bawah">
+                        <img id="object-ct" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute top-0 w-[40%] transform -translate-x-1/2 ornament left-1/2" alt="Gambar Tengah Atas">
+                        <img id="object-cb" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute w-[55%] transform -translate-x-1/2 bottom-[120px] ornament left-1/2" alt="Gambar Tengah Bawah">
+                        <img id="object-cl" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[50%] transform -translate-y-[75%] left-3 ornament top-1/2" alt="Gambar Tengah Kiri">
+                        <img id="object-cr" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[50%] transform -translate-y-[75%] right-3 ornament top-1/2" alt="Gambar Tengah Kanan">
                     </div>
                 </div>
                 @endforeach
