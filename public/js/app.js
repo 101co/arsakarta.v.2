@@ -48,14 +48,22 @@ function updateActiveClass() {
 
 function animateAll(selectedMenu) {
     animateOrnament();
-    console.log('animatedAll');
-    animateOpening();
-    animateQuote();
-    animateMempelai();
+
+    if (selectedMenu.toLowerCase() == 'opening') {
+        console.log('opening');
+        animateOpening();
+    }
+    else if (selectedMenu.toLowerCase() == 'quote') {
+        console.log('quote');
+        animateQuote();
+    }
+    else if (selectedMenu.toLowerCase() == 'mempelai') {
+        console.log('mempemlai');
+        animateMempelai();
+    }
 
     // switch (selectedMenu.toLowerCase()) {
     //     case 'opening':
-    //         console.log('opening');
     //         animateOpening();
     //         break;
     //     case 'quote':
@@ -74,6 +82,7 @@ function animateAll(selectedMenu) {
 
 function animateOpening() {
     var timeline = gsap.timeline();
+    gsap.globalTimeline.killTweensOf("#opening-title, #opening-couple-name, #opening-guest, #opening-button-open-invitation");
     timeline.clear();
     timeline.play();
     timeline.fromTo("#opening-title", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1 })
@@ -91,6 +100,7 @@ function animateQuote() {
 
 function animateMempelai() {
     var timeline = gsap.timeline();
+    gsap.globalTimeline.killTweensOf("#mempelai-title, #mempelai-sub-title, #mempelai-pria, #mempelai-pria-sub, #mempelai-sub-title2, #mempelai-wanita, #mempelai-wanita-sub");
     timeline.clear();
     timeline.play();
     timeline.fromTo("#mempelai-title", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1 })
