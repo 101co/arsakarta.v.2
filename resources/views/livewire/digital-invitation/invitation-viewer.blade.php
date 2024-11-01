@@ -16,6 +16,7 @@
                             <img src="{{ asset('storage/asset-invitation/javanese-ornamen-1.png') }}" class="object-cover w-full h-auto" alt="Gambar Kiri Atas">
                         </div>
                         
+                        
                         {{-- ornamen pada halaman undangan --}}
                         <img id="object-tl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-[8%] -left-[5%] w-[25%] transform rotate-[145deg]" alt="Gambar Kiri Atas">
                         <img id="object-tr" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-[8%] -right-[5%] w-[25%] transform rotate-[-145deg]" alt="Gambar Kanan Atas">
