@@ -5,7 +5,7 @@
             <div class="relative w-full h-full bg-cover bg-[#3d1f17]" > {{--style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">--}}
                 @foreach ($items as $index => $item)
                 <div id="page{{$index}}" class="{{$index == 0 ? 'relative':''}} z-40 flex items-center justify-center h-full overflow-hidden bg-cover content-page rounded-xl bg-[#3d1f17]"> {{--style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">--}}
-                    <div class="p-4 space-y-4">
+                    <div class="px-2 py-4 mb-16 space-y-4">
                         {!! $item['content'] !!}
                         
                         {{-- ornamen pada cover undangan --}}
@@ -19,12 +19,12 @@
                         {{-- ornamen pada halaman undangan --}}
                         <img id="object-tl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-[8%] lg:-top-16 -left-[5%] lg:-left-4 w-[25%] lg:w-32 transform rotate-[145deg]" alt="Gambar Kiri Atas">
                         <img id="object-tr" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament -top-[8%] lg:-top-16 -right-[5%] lg:-right-4 w-[25%] lg:w-32 transform rotate-[-145deg]" alt="Gambar Kanan Atas">
-                        <img id="object-bl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament w-[25%] lg:w-32 transform rotate-[55deg] bottom-20 -left-[8%] lg:-left-10" alt="Gambar Kiri Bawah">
-                        <img id="object-br" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament bottom-20 -right-[8%] lg:-right-10 w-[25%] lg:w-32 transform rotate-[-55deg]" alt="Gambar Kanan Bawah">
-                        <img id="object-ct" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute top-0 w-[40%] lg:w-[45%] transform -translate-x-1/2 ornament left-1/2" alt="Gambar Tengah Atas">
-                        <img id="object-cb" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute w-[55%] lg:w-[60%] transform -translate-x-1/2 bottom-[120px] ornament left-1/2" alt="Gambar Tengah Bawah">
-                        <img id="object-cl" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[55%] lg:h-[60%] transform -translate-y-[70%] lg:-translate-y-[65%] left-3 ornament top-1/2" alt="Gambar Tengah Kiri">
-                        <img id="object-cr" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[55%] lg:h-[60%] transform -translate-y-[70%] lg:-translate-y-[65%] right-3 ornament top-1/2" alt="Gambar Tengah Kanan">
+                        <img id="object-bl" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament w-[25%] lg:w-32 transform rotate-[55deg] bottom-16 lg:bottom-20 -left-[8%] lg:-left-10" alt="Gambar Kiri Bawah">
+                        <img id="object-br" src="{{ asset('storage/asset-invitation/javanese-leaf.png') }}" class="absolute ornament bottom-16 lg:bottom-20 -right-[8%] lg:-right-10 w-[25%] lg:w-32 transform rotate-[-55deg]" alt="Gambar Kanan Bawah">
+                        <img id="object-ct" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute top-0 w-[50%] lg:w-[45%] transform -translate-x-1/2 ornament left-1/2" alt="Gambar Tengah Atas">
+                        <img id="object-cb" src="{{ asset('storage/asset-invitation/javanese-line-hr.png') }}" class="absolute w-[55%] lg:w-[60%] transform -translate-x-1/2 bottom-[100px] lg:bottom-[120px] ornament left-1/2" alt="Gambar Tengah Bawah">
+                        <img id="object-cl" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[60%] lg:h-[60%] transform -translate-y-[68%] lg:-translate-y-[65%] left-3 ornament top-1/2" alt="Gambar Tengah Kiri">
+                        <img id="object-cr" src="{{ asset('storage/asset-invitation/javanese-line-vr.png') }}" class="absolute h-[60%] lg:h-[60%] transform -translate-y-[68%] lg:-translate-y-[65%] right-3 ornament top-1/2" alt="Gambar Tengah Kanan">
                     </div>
                 </div>
                 @endforeach
@@ -35,7 +35,8 @@
                             <div id="nav-items" class="flex transition-transform duration-300" style="min-width: 300%;">
                                 @foreach ($items as $index => $item)
                                     <button class="nav-item flex flex-col items-center justify-center space-y-2 h-full py-3 lg:py-4 text-gray-700 transition-all duration-300 ease-in-out transform rounded-lg {{ $index == 0 ? 'bg-slate-100' : '' }}" data-index="{{ $index }}" onclick="selectItem({{ $index }})" style="flex: 0 0 calc(100% / 15);">
-                                        <ion-icon name="{{ $item['icon'] }}" class="size-4 lg:size-6 text-slate-600"></ion-icon>
+                                        <x-dynamic-component :component="$item['icon']" class="size-4 lg:size-6 text-slate-600" />
+                                        {{-- <ion-icon name="{{ $item['icon'] }}" class="size-4 lg:size-6 text-slate-600"></ion-icon> --}}
                                         <span class="text-xs text-center text-slate-600">{{ $item['menu'] }}</span>
                                     </button>
                                 @endforeach
@@ -47,10 +48,10 @@
                 <!-- Floating Icons -->
                 <div id="media-button" class="absolute z-50 flex flex-col space-y-3 bottom-32 right-4">
                     <a href="#">
-                        <ion-icon class="items-center p-4 text-xl text-white ease-in-out rounded-full cursor-pointer opacity-55 bg-slate-400 hover:bg-slate-500" name="qr-code-outline"></ion-icon>
+                        <x-heroicon-s-qr-code class="p-2 text-white rounded-full cursor-pointer size-12 opacity-55 bg-slate-400 hover:bg-slate-500" />
                     </a>
                     <a href="#">
-                        <ion-icon class="items-center p-4 text-xl text-white ease-in-out rounded-full cursor-pointer opacity-55 bg-slate-400 hover:bg-slate-500" name="volume-high-outline"></ion-icon>
+                        <x-heroicon-s-speaker-wave class="p-2 text-white rounded-full cursor-pointer size-12 opacity-55 bg-slate-400 hover:bg-slate-500" />
                     </a>
                 </div>
             </div>

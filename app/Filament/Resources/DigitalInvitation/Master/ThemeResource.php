@@ -2,21 +2,26 @@
 
 namespace App\Filament\Resources\DigitalInvitation\Master;
 
-use Filament\Forms;
 use App\Enums\Icons;
-use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use App\Enums\ActionType;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
+use Filament\Support\Enums\IconSize;
+use Filament\Support\Enums\MaxWidth;
+use Illuminate\Support\Facades\File;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\FontWeight;
 use Filament\Forms\Components\Checkbox;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\ToggleColumn;
@@ -25,14 +30,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
 use App\Models\DigitalInvitation\Master\Theme;
 use App\Filament\Clusters\DigitalInvitation\Master;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\DigitalInvitation\Master\ThemeCategory;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use App\Filament\Resources\DigitalInvitation\Master\ThemeResource\Pages;
-use App\Filament\Resources\DigitalInvitation\Master\ThemeResource\RelationManagers;
-use App\Models\DigitalInvitation\Master\LayoutThemePage;
-use Filament\Forms\Get;
-use Filament\Tables\Filters\Filter;
 
 class ThemeResource extends Resource {
     protected static ?string $model = Theme::class;
@@ -60,22 +60,42 @@ class ThemeResource extends Resource {
                     ->placeholder('TC001')
                     ->unique(ignoreRecord: true)
                     ->default(fn () => Theme::generateCode()),
-                Select::make('theme_master_id')
-                    ->live()
-                    ->preload()
-                    ->required()
+                Select::make('theme_category')
                     ->searchable()
                     ->columnSpanFull()
-                    ->options(function() {
+                    ->label('Theme Category')
+                    ->live()
+                    ->options(function () {
+                        $folders = File::directories(resource_path('views/livewire/digital-invitation/themes'));
                         $options = [];
-                        $themeCategories = ThemeCategory::with(['themeMaster'])->get();
-                        foreach ($themeCategories as $themeCategory) {
-                            $options[$themeCategory->name] = collect($themeCategory->themeMaster)->mapWithKeys(function ($category) {
-                                return [$category->id => $category->name];
-                            })->toArray();
+                
+                        foreach ($folders as $folder) {
+                            // Mengambil nama folder dari path
+                            $folderName = basename($folder);
+                            $options[$folderName] = ucfirst($folderName); // Menggunakan nama folder sebagai label
                         }
+                
                         return $options;
-                    }),
+                    })
+                    ->required(),
+                Select::make('theme_name')
+                    ->searchable()
+                    ->columnSpanFull()
+                    ->label('Theme')
+                    ->live()
+                    ->options(function (Get $get) {
+                        $folders = File::directories(resource_path('views/livewire/digital-invitation/themes/'.$get('theme_category')));
+                        $options = [];
+                
+                        foreach ($folders as $folder) {
+                            // Mengambil nama folder dari path
+                            $folderName = basename($folder);
+                            $options[$folderName] = ucfirst($folderName); // Menggunakan nama folder sebagai label
+                        }
+                
+                        return $options;
+                    })
+                    ->required(),
                 Select::make('package_id')
                     ->preload()
                     ->required()
@@ -102,14 +122,16 @@ class ThemeResource extends Resource {
                 Section::make([
                         CheckboxList::make('layouts')
                             ->options(function(Get $get) {
-                                $layoutThemePage = [];
-                                
-                                if (!is_null($get('theme_master_id'))) {
-                                    $layoutThemePage = LayoutThemePage::where('is_active', '=', true)
-                                                        ->where('theme_master_id', '=', $get('theme_master_id'))
-                                                        ->get()->pluck('name', 'id');
+                                $files = File::files(resource_path('views/livewire/digital-invitation/themes/'.$get('theme_category').'/'.$get('theme_name')));
+                                $options = [];
+                        
+                                foreach ($files as $file) {
+                                    // Mengambil nama folder dari path
+                                    $fileName  = basename($file, '.blade.php');
+                                    $options[$fileName ] = ucfirst($fileName ); // Menggunakan nama folder sebagai label
                                 }
-                                return $layoutThemePage;
+                        
+                                return $options;
                             })
                             ->noSearchResultsMessage('Not found')
                             ->searchable()
@@ -154,20 +176,6 @@ class ThemeResource extends Resource {
                 ])
             ])
             ->filters([
-                SelectFilter::make('theme_master_id')
-                    ->label('Theme Master')
-                    ->searchable()
-                    ->preload()
-                    ->options(function() {
-                        $options = [];
-                        $themeCategories = ThemeCategory::with(['themeMaster'])->get();
-                        foreach ($themeCategories as $themeCategory) {
-                            $options[$themeCategory->name] = collect($themeCategory->themeMaster)->mapWithKeys(function ($category) {
-                                return [$category->id => $category->name];
-                            })->toArray();
-                        }
-                        return $options;
-                    }),
                 SelectFilter::make('eventCategory')
                     ->label('Event Category')
                     ->searchable()
@@ -194,7 +202,30 @@ class ThemeResource extends Resource {
                 getCustomTableAction(ActionType::BULK_DELETE, null, null, null, null, null, true)
             ])
             ->headerActions([
-                getCustomTableAction(ActionType::CREATE, 'Add', 'Add '.$title, Icons::ADD, false, false, true)
+                CreateAction::make()
+                    ->mutateFormDataUsing((function (array $data): array {
+                        try {
+                            $data['created_by'] = auth()->user()->username;
+                            $data['updated_by'] = auth()->user()->username;
+                            // dd($data);
+                            return $data;
+                        } catch (\Throwable $th) {
+                            dd($th);
+                        }
+                    }))
+                    ->label('Add')
+                    ->slideOver(false)
+                    ->icon(Icons::ADD->value)
+                    ->iconSize(IconSize::Small)
+                    ->modalHeading('Add')
+                    ->modalWidth(MaxWidth::Large)
+                    ->modalSubmitActionLabel('Add')
+                    ->stickyModalFooter()
+                    ->stickyModalHeader()
+                    ->createAnother(false)
+                    ->modalCancelAction(null)
+                    ->size(ActionSize::Small)
+                // getCustomTableAction(ActionType::CREATE, 'Add', 'Add '.$title, Icons::ADD, false, false, true)
             ])
             ->emptyStateActions([
                 getCustomTableAction(ActionType::CREATE, 'Add', null, Icons::ADD, false, false, true)
