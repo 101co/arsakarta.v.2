@@ -19,10 +19,6 @@ class Theme extends Model
 
     protected $table = 'arskrtm_theme';
 
-    public function themeMaster() : BelongsTo {
-        return $this->belongsTo(ThemeMaster::class);
-    }
-
     public function package() : BelongsTo {
         return $this->belongsTo(Package::class);
     }

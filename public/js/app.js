@@ -51,6 +51,8 @@ function animateAll(selectedMenu) {
     animateOpening();
     animateQuote();
     animateMempelai();
+    animateAcara();
+    animateGaleri();
 }
 
 function animateOpening() {
@@ -68,7 +70,28 @@ function animateOpening() {
 function animateQuote() {
     gsap.fromTo("#quote-content", 
         { scale: 0 },
-        { y: -50, scale: 1, duration: 1.5, ease: "ease.out" });
+        { y: -50, scale: 1, duration: 1.5, ease: "ease.out", delay:0.4 });
+}
+
+function animateAcara() {
+    var timeline = gsap.timeline();
+    gsap.globalTimeline.killTweensOf("#acara-title, #acara-card1, #acara-card2");
+    timeline.clear();
+    timeline.play();
+    timeline.fromTo("#acara-title", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1 })
+        .fromTo("#acara-card1", { opacity: 0, y:-30 }, { opacity: 1, y: 0, duration: 1.5 }, "-=0.7")
+        .fromTo("#acara-card2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "<1");
+    timeline.paused();
+}
+
+function animateGaleri() {
+    var timeline = gsap.timeline();
+    gsap.globalTimeline.killTweensOf("#galeri-title, #galeri-foto");
+    timeline.clear();
+    timeline.play();
+    timeline.fromTo("#galeri-title", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 1 })
+        .fromTo("#galeri-foto", { opacity: 0, y:-30 }, { opacity: 1, y: 0, duration: 1.5 }, "-=0.7");
+    timeline.paused();
 }
 
 function animateMempelai() {
@@ -81,7 +104,7 @@ function animateMempelai() {
         .fromTo("#mempelai-pria", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "<1")
         .fromTo("#mempelai-pria-sub", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 1.5 }, "-=0.9")
         .fromTo("#mempelai-sub-title2", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.7 }, "-=0.5")
-        .fromTo("#mempelai-wanita", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "<1")
+        .fromTo("#mempelai-wanita", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "-=0.9")
         .fromTo("#mempelai-wanita-sub", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 1.5 }, "-=0.9");
     timeline.paused();
 }

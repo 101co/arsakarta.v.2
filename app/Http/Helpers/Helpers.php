@@ -2,6 +2,7 @@
 
 use App\Enums\Icons;
 use App\Enums\ActionType;
+use BladeUI\Icons\Components\Icon;
 use Filament\Actions\Action;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
@@ -29,6 +30,59 @@ if (! function_exists('authUserMenu'))
                     ->where('sysmans_role_menu_user.user_id', '=', $userId)
                     ->first();
       return $authMenu ? true : false;
+    }
+  }
+}
+
+if (! function_exists('getButtonIconMenu')) {
+  function getButtonIconMenu($layoutName) {
+    switch (strtolower($layoutName)) {
+      case 'opening':
+        return 'heroicon-s-home';
+        break;
+      case 'salam':
+        return 'heroicon-s-sparkles';
+        break;
+      case 'protokol':
+        return 'heroicon-m-check-badge';
+        break;
+      case 'quote':
+        return 'heroicon-s-chat-bubble-oval-left-ellipsis';
+        break;
+      case 'mempelai':
+        return 'heroicon-s-heart';
+        break;
+      case 'acara':
+        return 'heroicon-s-calendar-date-range';
+        break;
+      case 'footer':
+        return 'heroicon-s-information-circle';
+        break;
+      case 'galeri':
+        return 'heroicon-s-photo';
+        break;
+      case 'video':
+        return 'heroicon-s-video-camera';
+        break;
+      case 'love-story':
+        return 'heroicon-s-users';
+        break;
+      case 'countdown':
+        return 'heroicon-s-clock';
+        break;
+      case 'gift':
+        return 'heroicon-m-gift';
+        break;
+      case 'rsvp':
+        return 'heroicon-c-finger-print';
+        break;
+      case 'thanks':
+        return 'heroicon-m-signal';
+        break;
+      
+      default:
+        return 'heroicon-s-home';
+        break;
     }
   }
 }
