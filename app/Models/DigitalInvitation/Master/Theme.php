@@ -24,7 +24,7 @@ class Theme extends Model
     }
 
     public function eventCategory() : BelongsTo {
-        return $this->belongsTo(eventCategory::class);
+        return $this->belongsTo(EventCategory::class);
     }
 
     // Function untuk generate kode
