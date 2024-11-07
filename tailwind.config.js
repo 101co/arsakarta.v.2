@@ -40,6 +40,12 @@ export default {
         animation: {
           fadeIn: 'fadeIn 0.5s ease-in-out',
         },
+        fontFamily: {
+          carattere: ['Carattere', 'cursive'], 
+          oranienbaum: ['Oranienbaum', 'serif'],
+          tangerine: ['tangerine', 'cursive'],
+          charm: ['Charm', 'cursiv']
+        },
       },
     },
 }

@@ -1,5 +1,5 @@
 <h2 id="opening-title" class="text-sm font-light tracking-widest text-center uppercase text-slate-100 animation-title">The Wedding Of</h2>
-<h3 id="opening-couple-name" class="text-2xl font-medium tracking-widest text-center uppercase lg:text-4xl text-slate-100">{{ $namaMempelai }}</h3>
+<h3 id="opening-couple-name" class="text-6xl font-medium tracking-tight text-center font-tangerine lg:text-4xl text-slate-100">{{ $namaMempelai }}</h3>
 <div id="opening-guest" class="pt-4 space-y-1 text-sm font-light text-center text-slate-100">
     <p>Kepada Yth:</p>
     <p>Bapak/Ibu/Saudara/i</p>
