@@ -5,7 +5,7 @@
             <div class="relative w-full h-full bg-cover bg-[#3d1f17]" > {{--style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">--}}
                 @foreach ($items as $index => $item)
                 <div id="page{{$index}}" class="{{$index == 0 ? 'relative':''}} z-40 flex items-center justify-center h-full overflow-hidden bg-cover content-page rounded-xl bg-[#3d1f17]"> {{--style="background-image: url('{{ asset('storage/arsakarta/assets/theme/simple/background001.jpg') }}');">--}}
-                    <div class="px-2 py-4 mb-16 space-y-4">
+                    <div class="px-1 py-4 mb-16 space-y-4 lg:px-2">
                         {!! $item['content'] !!}
                         
                         {{-- ornamen pada cover undangan --}}
