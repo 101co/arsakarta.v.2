@@ -16,6 +16,12 @@ class Invitation extends Model
 
     protected $table = 'arskrtt_invitation';
 
+    protected function casts(): array {
+        return [
+            'layouts' => 'array',
+        ];
+    } 
+
     function eventCategory() {
         return $this->belongsTo(EventCategory::class);
     }

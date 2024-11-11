@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource\Pages;
 
 use Closure;
+use Carbon\Carbon;
 use Midtrans\Snap;
 use App\Enums\Icons;
 use Filament\Forms\Get;
@@ -18,25 +19,31 @@ use Filament\Forms\Components\Split;
 use Filament\Support\Enums\IconSize;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use function PHPUnit\Framework\isNull;
 use Filament\Forms\Components\Tabs\Tab;
+
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-
 use Illuminate\Contracts\Support\Htmlable;
+use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Models\DigitalInvitation\Master\Package;
 use App\Models\DigitalInvitation\Master\EventCategory;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
-use Carbon\Carbon;
+use App\Models\DigitalInvitation\Master\Theme;
 
 class CreateInvitationCustom extends Page implements HasForms {
     use InteractsWithForms;
+
+    public $layouts = [];
+    public $theme = null;
  
     public ?array $data = [];
     public $newPaymentId = null;
@@ -58,6 +65,9 @@ class CreateInvitationCustom extends Page implements HasForms {
     }
 
     public function mount(Invitation $record): void {
+        if ($record)
+            $this->theme = Theme::where('id', '=', $record->theme_id)->first();
+
         $this->form->fill($record->toArray());
         $this->checkDataIsMoreThanEditingDay();
     }
@@ -98,8 +108,53 @@ class CreateInvitationCustom extends Page implements HasForms {
             getCustomCancelFormAction('Cancel', Icons::CROSS, Js::from($this->getResource()::getUrl('index')))
         ];
     }
+
+    function dummy() {
+        $this->theme = Theme::where('id', '=', 6)->first();
+    }
+
+    private function getBlocks() {
+        if (!$this->theme)
+            return [];
+
+        // dump($this->theme->eventCategory['name']);
+
+        foreach ($this->theme['layouts'] as $layout ) {
+            $getLayout = getBlockBuilder($layout, $this->theme->eventCategory['name']);
+
+            if ($getLayout) {
+                array_push($this->layouts, $getLayout);
+            }
+        }
+
+        $blocks = array_map(function ($layout) {
+            $block = Block::make($layout['type'])
+                ->label($layout['label'])
+                ->schema(
+                    collect($layout['fields'])->map(function ($field) {
+                        switch ($field['type']) {
+                            case 'text':
+                                return TextInput::make($field['name'])
+                                            ->label($field['label'])
+                                            ->default($field['default'])
+                                            ->required($field['required']);
+                            case 'textarea':
+                                return TextArea::make($field['name'])
+                                            ->label($field['label']);
+                            default:
+                                return null;
+                        }
+                    })->filter()->toArray()
+                )
+                ->maxItems(1);
+            return $block;
+        }, $this->layouts);
+
+        return $blocks;
+    }
     
     public function form(Form $form): Form {
+
         return $form
             ->schema([
                 Tabs::make()
@@ -237,7 +292,50 @@ class CreateInvitationCustom extends Page implements HasForms {
                                             return $buttonDisabled;
                                         })
                                 ])
-                            ]),
+                            ])
+                            ->from('md'),
+                        ]),
+                    Tab::make('Design')
+                        ->schema([
+                            Split::make([
+                                Section::make([
+                                    Builder::make('layouts')
+                                        ->hiddenLabel(true)
+                                        ->reorderable(true)
+                                        ->collapsible()
+                                        ->blockNumbers(false)
+                                        ->blockIcons()
+                                        ->blocks($this->getBlocks())
+                                        ->reactive()
+                                        ->deleteAction(
+                                            fn (Action $action) => $action->requiresConfirmation(),
+                                        )
+                                ])
+                                ->iconSize(IconSize::Small)
+                                ->heading('Invitation Design')
+                                ->icon(Icons::BRUSH->value)
+                                ->headerActions([
+                                    Action::make('choose-theme')
+                                    ->label('Pilih Tema')
+                                    ->link()
+                                    ->action('dummy')
+                                    ->icon(Icons::GENERAL->value)
+                                ]),
+                                Section::make([
+                                    Section::make([
+                                        TextInput::make('test')
+                                    ])
+                                ])
+                                ->iconSize(IconSize::Small)
+                                ->heading('Preview')
+                                ->icon(Icons::BRUSH->value)
+                                ->headerActions([
+                                    Action::make('choose-theme')
+                                    ->label('Preview Undangan')
+                                    ->link()
+                                    ->icon(Icons::GENERAL->value)
+                                ])
+                            ])
                         ])
                 ])
             ])
@@ -367,6 +465,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                 $updatedData['slug']                = $this->data['slug'];
                 $updatedData['event_category_id']   = $this->data['event_category_id'];
                 $updatedData['package_id']          = $this->data['package_id'];
+                $updatedData['layouts']             = $this->data['layouts'];
                 $updatedData['user_id']             = $this->data['user_id'];
                 $updatedData['is_paid']             = $this->data['is_paid'];
                 $updatedData['updated_by']          = auth()->user()->username;
@@ -380,6 +479,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                     'slug'                  => $this->data['slug'],
                     'event_category_id'     => $this->data['event_category_id'],
                     'package_id'            => $this->data['package_id'],
+                    'layouts'               => $this->data['layouts'],
                     'user_id'               => auth()->user()->id,
                     'is_paid'               => $this->data['is_paid'],
                     'is_active'             => true,

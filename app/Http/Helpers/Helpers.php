@@ -37,7 +37,7 @@ if (! function_exists('authUserMenu'))
 if (! function_exists('getButtonIconMenu')) {
   function getButtonIconMenu($layoutName) {
     switch (strtolower($layoutName)) {
-      case 'opening':
+      case 'cover':
         return 'heroicon-s-home';
         break;
       case 'salam':
@@ -46,31 +46,34 @@ if (! function_exists('getButtonIconMenu')) {
       case 'protokol':
         return 'heroicon-m-check-badge';
         break;
-      case 'quote':
-        return 'heroicon-s-chat-bubble-oval-left-ellipsis';
-        break;
       case 'mempelai':
+        return 'heroicon-s-heart';
+        break;
+      case 'bride':
+        return 'heroicon-s-heart';
+        break;
+      case 'groom':
         return 'heroicon-s-heart';
         break;
       case 'acara':
         return 'heroicon-s-calendar-date-range';
         break;
-      case 'footer':
-        return 'heroicon-s-information-circle';
-        break;
       case 'galeri':
         return 'heroicon-s-photo';
         break;
-      case 'video':
+      case 'streaming':
         return 'heroicon-s-video-camera';
         break;
-      case 'love-story':
+      case 'story':
         return 'heroicon-s-users';
+        break;
+      case 'quote':
+        return 'heroicon-s-chat-bubble-oval-left-ellipsis';
         break;
       case 'countdown':
         return 'heroicon-s-clock';
         break;
-      case 'gift':
+      case 'hadiah':
         return 'heroicon-m-gift';
         break;
       case 'rsvp':
@@ -78,6 +81,9 @@ if (! function_exists('getButtonIconMenu')) {
         break;
       case 'thanks':
         return 'heroicon-m-signal';
+        break;
+      case 'footer':
+        return 'heroicon-s-information-circle';
         break;
       
       default:
