@@ -23,6 +23,7 @@ use Filament\Forms\Components\Actions\Action;
 use App\Filament\Clusters\MiniUrl\Transaction;
 use Filament\Tables\Columns\TextColumn\TextColumnSize;
 use App\Filament\Resources\MiniUrl\Transaction\MiniUrlResource\Pages;
+use Filament\Forms\Components\Hidden;
 
 class MiniUrlResource extends Resource
 {
@@ -55,10 +56,7 @@ class MiniUrlResource extends Resource
                         $set('short_url', substr(md5($get('original_url') .microtime()), 0, 6));
                     })
                     ->columnSpanFull(),
-                TextInput::make('short_url')
-                    ->required()
-                    ->hidden()
-                    ->readOnly(),
+                Hidden::make('short_url'),
             ]);
     }
 
