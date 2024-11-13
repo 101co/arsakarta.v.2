@@ -65,8 +65,9 @@ class CreateInvitationCustom extends Page implements HasForms {
     }
 
     public function mount(Invitation $record): void {
-        if ($record)
+        if ($record) {
             $this->theme = Theme::where('id', '=', $record->theme_id)->first();
+        }
 
         $this->form->fill($record->toArray());
         $this->checkDataIsMoreThanEditingDay();
@@ -109,16 +110,11 @@ class CreateInvitationCustom extends Page implements HasForms {
         ];
     }
 
-    function dummy() {
-        $this->theme = Theme::where('id', '=', 6)->first();
-    }
-
     private function getBlocks() {
         if (!$this->theme)
             return [];
 
-        // dump($this->theme->eventCategory['name']);
-
+        
         foreach ($this->theme['layouts'] as $layout ) {
             $getLayout = getBlockBuilder($layout, $this->theme->eventCategory['name']);
 
@@ -148,13 +144,12 @@ class CreateInvitationCustom extends Page implements HasForms {
                 )
                 ->maxItems(1);
             return $block;
-        }, $this->layouts);
+        }, collect($this->layouts)->unique()->values()->all());
 
-        return $blocks;
+        return collect($blocks)->unique()->values()->all();
     }
     
     public function form(Form $form): Form {
-
         return $form
             ->schema([
                 Tabs::make()
@@ -299,14 +294,41 @@ class CreateInvitationCustom extends Page implements HasForms {
                         ->schema([
                             Split::make([
                                 Section::make([
+                                    Select::make('theme_id')
+                                        ->required()
+                                        ->searchable()
+                                        ->preload()
+                                        ->reactive()
+                                        ->disabled(fn () => $this->isMoreThanEditingDay)
+                                        ->label('Theme')
+                                        ->options(function(Get $get) {
+                                            return Theme::where('is_active', true)
+                                                            ->where('event_category_id', '=', $get('event_category_id'))
+                                                            ->where('package_id', '=', $get('package_id'))
+                                                            ->pluck('theme_name', 'id');
+                                        })
+                                        ->afterStateUpdated(function ($state, Set $set) {
+                                            $this->theme = Theme::where('id', '=', $state)->first();
+                                            $set('layouts', [
+                                                Str::uuid()->toString() => [
+                                                    'type'  => 'cover',
+                                                    'data'  => [
+                                                        'cover_title'           => 'Hello 1',
+                                                        'cover_couple_name'     => 'hello 2',
+                                                        'cover_button_title'    => 'buka'
+                                                    ]
+                                                ]
+                                            ]);
+                                        }),
+                                ]),
+                                Section::make([
                                     Builder::make('layouts')
                                         ->hiddenLabel(true)
                                         ->reorderable(true)
                                         ->collapsible()
                                         ->blockNumbers(false)
                                         ->blockIcons()
-                                        ->blocks($this->getBlocks())
-                                        ->reactive()
+                                        ->blocks(fn() => $this->getBlocks())
                                         ->deleteAction(
                                             fn (Action $action) => $action->requiresConfirmation(),
                                         )
@@ -316,26 +338,13 @@ class CreateInvitationCustom extends Page implements HasForms {
                                 ->icon(Icons::BRUSH->value)
                                 ->headerActions([
                                     Action::make('choose-theme')
-                                    ->label('Pilih Tema')
-                                    ->link()
-                                    ->action('dummy')
-                                    ->icon(Icons::GENERAL->value)
+                                        ->label('Pilih Tema')
+                                        ->link()
+                                        ->action('dummy')
+                                        ->icon(Icons::GENERAL->value)
                                 ]),
-                                Section::make([
-                                    Section::make([
-                                        TextInput::make('test')
-                                    ])
-                                ])
-                                ->iconSize(IconSize::Small)
-                                ->heading('Preview')
-                                ->icon(Icons::BRUSH->value)
-                                ->headerActions([
-                                    Action::make('choose-theme')
-                                    ->label('Preview Undangan')
-                                    ->link()
-                                    ->icon(Icons::GENERAL->value)
-                                ])
                             ])
+                            ->from('md')
                         ])
                 ])
             ])
@@ -465,6 +474,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                 $updatedData['slug']                = $this->data['slug'];
                 $updatedData['event_category_id']   = $this->data['event_category_id'];
                 $updatedData['package_id']          = $this->data['package_id'];
+                $updatedData['theme_id']            = $this->data['theme_id'];
                 $updatedData['layouts']             = $this->data['layouts'];
                 $updatedData['user_id']             = $this->data['user_id'];
                 $updatedData['is_paid']             = $this->data['is_paid'];
@@ -479,6 +489,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                     'slug'                  => $this->data['slug'],
                     'event_category_id'     => $this->data['event_category_id'],
                     'package_id'            => $this->data['package_id'],
+                    'theme_id'              => $this->data['theme_id'],
                     'layouts'               => $this->data['layouts'],
                     'user_id'               => auth()->user()->id,
                     'is_paid'               => $this->data['is_paid'],
