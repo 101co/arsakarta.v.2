@@ -485,6 +485,9 @@ class CreateInvitationCustom extends Page implements HasForms {
                 $updatedData['updated_by']          = auth()->user()->username;
                 $updatedData['order_id'] = $this->data['order_id'];
                 $updatedData->save();
+
+                if (!$this->isBackToList)
+                    $this->redirect($this->getResource()::getUrl('edit', ['record' => $updatedData['id']]));
             }
             else {
                 $savedData = new Invitation();
@@ -503,6 +506,9 @@ class CreateInvitationCustom extends Page implements HasForms {
                     'order_id'              => $this->data['order_id']
                 ]);
                 $savedData->saveOrFail();
+                
+                if (!$this->isBackToList)
+                    $this->redirect($this->getResource()::getUrl('edit', ['record' => $savedData['id']]));
             }
 
             Notification::make()
@@ -513,6 +519,7 @@ class CreateInvitationCustom extends Page implements HasForms {
             if ($this->isBackToList)
                 redirect($this->getResource()::getUrl('index'));
         } catch (\Throwable $th) {
+            dd($th);
             $this->validate();
             Log::error('Error Create Data', $th);
             Notification::make()
