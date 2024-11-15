@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        ini_set('memory_limit', '256M');
         Model::unguard();
         // Vite::prefetch();
     }

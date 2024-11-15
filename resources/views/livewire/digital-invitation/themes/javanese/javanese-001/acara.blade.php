@@ -1,4 +1,4 @@
-<h2 id="acara-title" class="text-3xl font-medium tracking-widest text-center font-carattere text-slate-100 animation-title">Acara</h2>
+<h2 id="acara-title" class="text-3xl font-medium tracking-widest text-center font-carattere text-slate-100 animation-title">{{ $acaraTitle }}</h2>
 <div id="acara-card1" class="flex flex-col justify-center w-full px-8 py-4 text-center bg-white text-slate-100 rounded-2xl bg-opacity-20">
     <h1 class="mb-4 text-xl font-medium tracking-widest font-oranienbaum">Pemberkatan</h1>
     <span class="flex items-center justify-center mb-2 gap-x-1">

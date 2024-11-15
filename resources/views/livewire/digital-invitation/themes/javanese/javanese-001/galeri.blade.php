@@ -1,4 +1,4 @@
-<h2 id="galeri-title" class="text-3xl font-medium tracking-widest text-center font-carattere text-slate-100 animation-title">Our Galery</h2>
+<h2 id="galeri-title" class="text-3xl font-medium tracking-widest text-center font-carattere text-slate-100 animation-title">{{ $galeriTitle }}</h2>
 <div id="galeri-foto" class="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
     <!-- Foto 1 -->
     <div class="relative overflow-hidden rounded-lg shadow-lg group">

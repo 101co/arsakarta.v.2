@@ -19,12 +19,13 @@ use Filament\Forms\Components\Split;
 use Filament\Support\Enums\IconSize;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use function PHPUnit\Framework\isNull;
-use Filament\Forms\Components\Tabs\Tab;
 
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
@@ -32,12 +33,12 @@ use Filament\Notifications\Notification;
 use Illuminate\Contracts\Support\Htmlable;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Actions\Action;
+use App\Models\DigitalInvitation\Master\Theme;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Models\DigitalInvitation\Master\Package;
 use App\Models\DigitalInvitation\Master\EventCategory;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
-use App\Models\DigitalInvitation\Master\Theme;
 
 class CreateInvitationCustom extends Page implements HasForms {
     use InteractsWithForms;
@@ -172,17 +173,18 @@ class CreateInvitationCustom extends Page implements HasForms {
                                         ->label('URL (Slug)')
                                         ->disabled(fn (Get $get): bool => !filled($get('name')) || $this->isMoreThanEditingDay)
                                         ->helperText(fn (Get $get) => 'https://arsakarta.com/'.$get('slug'))
-                                        ->rule(function (Get $get, Component $component) {
-                                            return static function (string $attr, $value, Closure $fail) use ($get, $component) {
-                                                $existingSlug = Invitation::where('slug', $value)
-                                                                ->where('id', '<>', $get('id'))
-                                                                ->first();
+                                        ->unique(ignoreRecord: true)
+                                        // ->rule(function (Get $get, Component $component) {
+                                        //     return static function (string $attr, $value, Closure $fail) use ($get, $component) {
+                                        //         $existingSlug = Invitation::where('slug', $value)
+                                        //                         ->where('id', '<>', $get('id'))
+                                        //                         ->first();
 
-                                                if ($existingSlug) {
-                                                    $fail("URL (Slug) already taken.");
-                                                }
-                                            };
-                                        })
+                                        //         if ($existingSlug) {
+                                        //             $fail("URL (Slug) already taken.");
+                                        //         }
+                                        //     };
+                                        // })
                                         ->afterStateUpdated(function ($livewire) {
                                             $livewire->validateOnly('data.slug');
                                         }),
@@ -295,7 +297,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                             Split::make([
                                 Section::make([
                                     Select::make('theme_id')
-                                        ->required()
+                                        // ->required()
                                         ->searchable()
                                         ->preload()
                                         ->reactive()
@@ -323,15 +325,16 @@ class CreateInvitationCustom extends Page implements HasForms {
                                 ]),
                                 Section::make([
                                     Builder::make('layouts')
+                                        ->blocks(fn() => $this->getBlocks())
                                         ->hiddenLabel(true)
-                                        ->reorderable(true)
+                                        ->collapsed()
                                         ->collapsible()
                                         ->blockNumbers(false)
                                         ->blockIcons()
-                                        ->blocks(fn() => $this->getBlocks())
                                         ->deleteAction(
                                             fn (Action $action) => $action->requiresConfirmation(),
                                         )
+                                        ->addActionLabel('Add Invitation Layout')
                                 ])
                                 ->iconSize(IconSize::Small)
                                 ->heading('Invitation Design')
@@ -435,6 +438,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                 ->success()
                 ->send();
         } catch (\Throwable $th) {
+            dd($th);
             Log::error('Error Payment Success', $th);
             Notification::make()
                 ->title('Payment failed.')
@@ -490,7 +494,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                     'event_category_id'     => $this->data['event_category_id'],
                     'package_id'            => $this->data['package_id'],
                     'theme_id'              => $this->data['theme_id'],
-                    'layouts'               => $this->data['layouts'],
+                    'layouts'               => $this->data['layouts'] ? $this->data['layouts'] : null,
                     'user_id'               => auth()->user()->id,
                     'is_paid'               => $this->data['is_paid'],
                     'is_active'             => true,
