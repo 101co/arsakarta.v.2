@@ -26,6 +26,10 @@ class Invitation extends Model
         return $this->belongsTo(EventCategory::class);
     }
 
+    function invitationPayment() {
+        return $this->hasMany(InvitationPayment::class);
+    }
+
     function package() {
         return $this->belongsTo(Package::class);
     }

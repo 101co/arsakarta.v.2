@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource\Pages;
 
-use Closure;
 use Carbon\Carbon;
 use Midtrans\Snap;
 use App\Enums\Icons;
@@ -11,6 +10,7 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Illuminate\Support\Js;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Filament\Resources\Pages\Page;
 use Filament\Forms\Components\Tabs;
 use Illuminate\Support\Facades\Log;
@@ -19,15 +19,13 @@ use Filament\Forms\Components\Split;
 use Filament\Support\Enums\IconSize;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use Filament\Support\Enums\Alignment;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
-use function PHPUnit\Framework\isNull;
 
+use function PHPUnit\Framework\isNull;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Support\Htmlable;
@@ -39,12 +37,14 @@ use App\Models\DigitalInvitation\Master\Package;
 use App\Models\DigitalInvitation\Master\EventCategory;
 use App\Models\DigitalInvitation\Transaction\Invitation;
 use App\Filament\Resources\DigitalInvitation\Transaction\InvitationResource;
+use App\Models\DigitalInvitation\Transaction\InvitationPayment;
 
 class CreateInvitationCustom extends Page implements HasForms {
     use InteractsWithForms;
 
     public $layouts = [];
     public $theme = null;
+    public $currentInvitationId = null;
  
     public ?array $data = [];
     public $newPaymentId = null;
@@ -52,10 +52,10 @@ class CreateInvitationCustom extends Page implements HasForms {
     public $isBackToList = true;
     protected static string $resource = InvitationResource::class;
     protected static string $view = 'filament.resources.digital-invitation.transaction.invitation-resource.pages.create-invitation-custom';
-    protected $listeners = [
-        'payment-success'   => 'paymentSuccess',
-        'payment-closed'    => 'paymentClosed'
-    ];
+    // protected $listeners = [
+    //     'payment-success'   => 'paymentSuccess',
+    //     'payment-closed'    => 'paymentClosed'
+    // ];
 
     public function getTitle(): string | Htmlable {
         return __('Undanganmu');
@@ -72,6 +72,7 @@ class CreateInvitationCustom extends Page implements HasForms {
 
         $this->form->fill($record->toArray());
         $this->checkDataIsMoreThanEditingDay();
+        $this->isBackToList;
     }
 
     public function getFormActions(): array {
@@ -343,7 +344,7 @@ class CreateInvitationCustom extends Page implements HasForms {
                                     Action::make('choose-theme')
                                         ->label('Pilih Tema')
                                         ->link()
-                                        ->action('dummy')
+                                        ->action('bwoTest')
                                         ->icon(Icons::GENERAL->value)
                                 ]),
                             ])
@@ -365,6 +366,8 @@ class CreateInvitationCustom extends Page implements HasForms {
 
     function choosePackage() {
         try {
+            $this->isBackToList = false;
+
             $isTrialPackage = Package::where('is_trial', true)
                         ->where('is_active', true)
                         ->where('id', '=', $this->data['package_id'])
@@ -372,6 +375,8 @@ class CreateInvitationCustom extends Page implements HasForms {
             
             if ($isTrialPackage) {
                 $this->data['is_paid'] = true;
+                $this->create();
+                redirect($this->getResource()::getUrl('edit', ['record' => $this->currentInvitationId]));
             }
             else {
                 $package = Package::where('is_active', true)
@@ -424,32 +429,29 @@ class CreateInvitationCustom extends Page implements HasForms {
                 ->send();
         }
     }    
-    
+
+    #[On('payment-success')]
     public function paymentSuccess($order_id) {
-        try {
-            $this->newPaymentId = $order_id;
-            $this->data['order_id'] = $this->newPaymentId;
-            $this->data['is_paid'] = true;
-            $this->isBackToList = false;
-            $this->create();
-    
-            Notification::make()
-                ->title('Paymen success.')
-                ->success()
-                ->send();
-        } catch (\Throwable $th) {
-            dd($th);
-            Log::error('Error Payment Success', $th);
-            Notification::make()
-                ->title('Payment failed.')
-                ->danger()
-                ->send();
-        }
+        $this->newPaymentId = $order_id;
+        $this->data['order_id'] = $this->newPaymentId;
+        $this->data['is_paid'] = true;
+        $this->create();
+        redirect($this->getResource()::getUrl('edit', ['record' => $this->currentInvitationId]));
+
+        Notification::make()
+            ->title('Payment success.')
+            ->success()
+            ->send();
     }
 
+    #[On('payment-closed')]
     public function paymentClosed() {
         $this->newPaymentId = null;
-        // $this->data['order_id'] = null;
+
+        Notification::make()
+            ->title('Payment has been canceled.')
+            ->warning()
+            ->send();
     }
 
     function checkDataIsMoreThanEditingDay() {
@@ -472,26 +474,27 @@ class CreateInvitationCustom extends Page implements HasForms {
     public function create() {
         try {
             $this->validate();
-            if (!empty($this->data['id']) && $this->data['id']) {
-                $updatedData = Invitation::find($this->data['id']);
-                $updatedData['name']                = $this->data['name'];
-                $updatedData['slug']                = $this->data['slug'];
-                $updatedData['event_category_id']   = $this->data['event_category_id'];
-                $updatedData['package_id']          = $this->data['package_id'];
-                $updatedData['theme_id']            = $this->data['theme_id'];
-                $updatedData['layouts']             = $this->data['layouts'];
-                $updatedData['user_id']             = $this->data['user_id'];
-                $updatedData['is_paid']             = $this->data['is_paid'];
-                $updatedData['updated_by']          = auth()->user()->username;
-                $updatedData['order_id'] = $this->data['order_id'];
-                $updatedData->save();
 
-                if (!$this->isBackToList)
-                    $this->redirect($this->getResource()::getUrl('edit', ['record' => $updatedData['id']]));
+            // create / update data invitation
+            $invitation = new Invitation();
+            if (!empty($this->data['id']) && $this->data['id']) {
+                $invitation = Invitation::find($this->data['id']);
+                $invitation['name']                = $this->data['name'];
+                $invitation['slug']                = $this->data['slug'];
+                $invitation['event_category_id']   = $this->data['event_category_id'];
+                $invitation['package_id']          = $this->data['package_id'];
+                $invitation['theme_id']            = $this->data['theme_id'];
+                $invitation['layouts']             = $this->data['layouts'];
+                $invitation['user_id']             = $this->data['user_id'];
+                $invitation['is_paid']             = $this->data['is_paid'];
+                $invitation['updated_by']          = auth()->user()->username;
+                $invitation['order_id'] = $this->data['order_id'];
+                $invitation->save();
+                $this->currentInvitationId = $invitation['id'];
             }
             else {
-                $savedData = new Invitation();
-                $savedData->fill([
+                $invitation = new Invitation();
+                $invitation->fill([
                     'name'                  => $this->data['name'],
                     'slug'                  => $this->data['slug'],
                     'event_category_id'     => $this->data['event_category_id'],
@@ -505,19 +508,38 @@ class CreateInvitationCustom extends Page implements HasForms {
                     'updated_by'            => auth()->user()->username,
                     'order_id'              => $this->data['order_id']
                 ]);
-                $savedData->saveOrFail();
-                
-                if (!$this->isBackToList)
-                    $this->redirect($this->getResource()::getUrl('edit', ['record' => $savedData['id']]));
+                $invitation->saveOrFail();
+                $this->currentInvitationId = $invitation['id'];
             }
 
-            Notification::make()
-                ->title('Saved successfully')
-                ->success()
-                ->send();
+            // cmencatat invitation payment
+            if ($invitation) {
+                $invitationPayment = InvitationPayment::where('invitation_id', '=', $invitation['id'])
+                                        ->where('order_id', '=', $invitation['order_id'])
+                                        ->first();
+                
+                if (!$invitationPayment) {
+                    $invitationPayment = new InvitationPayment();
+                    $invitationPayment->fill([
+                        'invitation_id'         => $invitation['id'],
+                        'package_id'            => $invitation['package_id'],
+                        'order_id'              => $invitation['order_id'],
+                        'is_paid'               => $invitation['is_paid'],
+                        'is_active'             => true,
+                        'created_by'            => auth()->user()->username,
+                        'updated_by'            => auth()->user()->username
+                    ]);
+                    $invitationPayment->saveOrFail();
+                }
+            }
 
-            if ($this->isBackToList)
+            if ($this->isBackToList) {
                 redirect($this->getResource()::getUrl('index'));
+                Notification::make()
+                    ->title('Saved successfully')
+                    ->success()
+                    ->send();
+            }
         } catch (\Throwable $th) {
             dd($th);
             $this->validate();
