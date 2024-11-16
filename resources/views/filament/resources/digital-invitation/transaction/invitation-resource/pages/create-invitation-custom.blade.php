@@ -165,125 +165,108 @@
       </div>
     </div>
   </x-filament::modal>
-
-  <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-s9t2Tqf5BY_zW7qZ"></script>
-  <script>
-    function playMusic(id) {
-        // get current audio, play button, dan stop button
-        var currentAudio = document.getElementById("file-audio-"+id);
-        var currentPlayButton = document.getElementById('play-audio-button-'+id);
-        var currentStopButton = document.getElementById('stop-audio-button-'+id);
-
-        // cek apakah ada audio lain yang sedang diplay
-        var othersAudio = document.querySelectorAll('[id*="file-audio-"]');
-        for (var i=0; i<othersAudio.length; i++)
-        {
-          if(othersAudio[i].id != "file-audio-"+id && !othersAudio[i].paused) 
-          {
-            var otherAudion = document.getElementById(othersAudio[i].id);
-            otherAudion.currentTime = 0;
-            otherAudion.pause();
-          }
-        }
-
-        // reset other play button
-        var othersPlayButton = document.querySelectorAll('[id*="play-audio-button"]');
-        for(var i=0;i<othersPlayButton.length;i++)
-        {
-          var otherPlayButton = document.getElementById(othersPlayButton[i].id);
-          if(othersPlayButton[i].id != "play-audio-button-"+id)
-          {
-            otherPlayButton.classList.remove('hidden');
-          }
-        }
-
-        // reset other stop button
-        var othersStopButton = document.querySelectorAll('[id*="stop-audio-button"]');  
-        for(var i=0;i<othersStopButton.length;i++)
-        {
-            var otherStopButton = document.getElementById(othersStopButton[i].id);
-            if(othersStopButton[i].id != "stop-audio-button-"+id)
-            {
-              otherStopButton.classList.add('hidden');
-            }
-        }
-
-        // play atau stop current audio
-        // set icon untuk play / stop current button
-        if (currentAudio.paused) 
-        {
-          currentPlayButton.classList.add('hidden');
-          currentStopButton.classList.remove('hidden');
-          return currentAudio.play();
-        }
-        else
-        {
-          currentPlayButton.classList.remove('hidden');
-          currentStopButton.classList.add('hidden');
-          currentAudio.currentTime = 0;
-          return currentAudio.pause();
-        }
-      }
-
-    function snapPay() {
-      console.log('snapPay');
-    }
-    
-    window.addEventListener("snap-pay", (event) => {
-      console.log('snapPay');
-      let data = event.detail;
-      console.log(data);
-
-      window.snap.pay(data.token, {
-          onSuccess: function(result) {
-              /* You may add your own implementation here */
-              // alert("payment success!"); console.log(result);
-              // $('#all-package-modal').modal('hide');
-              // Swal.fire({
-              //     title: 'Payment',
-              //     text: 'Pembayaran berhasil.',
-              //     icon: 'success',
-              //     timer: 4000,
-              //     toast: true
-              // });
-              Livewire.dispatch('payment-success', {order_id: result.order_id});
-          },
-          onPending: function(result) {
-              /* You may add your own implementation here */
-              // alert("wating your payment!"); console.log(result);
-              // Swal.fire({
-              //     title: 'Payment',
-              //     text: 'Pembayaran dipending.',
-              //     icon: 'warning',
-              //     timer: 3000,
-              //     toast: true
-              // });
-              Livewire.dispatch('payment-close');
-          },
-          onError: function(result) {
-              /* You may add your own implementation here */
-              // alert("payment failed!"); console.log(result);
-              // Swal.fire({
-              //     title: 'Payment',
-              //     text: 'Pembayaran gagal.',
-              //     icon: 'error',
-              //     timer: 3000,
-              //     toast: true
-              // });
-              Livewire.dispatch('payment-close');
-          },
-          onClose: function() {
-              /* You may add your own implementation here */
-              // Swal.fire({
-              //     title: 'Payment',
-              //     text: 'Pembayaran dibatalkan.',
-              //     icon: 'warning',
-              //     timer: 3000,
-              //     toast: true
-              // });
-              Livewire.dispatch('payment-closed');
-          }
-      });
-    });
-  </script>
 </x-filament-panels::page>
+
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-s9t2Tqf5BY_zW7qZ"></script>
+<script>
+  // function playMusic(id) {
+  //     // get current audio, play button, dan stop button
+  //     var currentAudio = document.getElementById("file-audio-"+id);
+  //     var currentPlayButton = document.getElementById('play-audio-button-'+id);
+  //     var currentStopButton = document.getElementById('stop-audio-button-'+id);
+
+  //     // cek apakah ada audio lain yang sedang diplay
+  //     var othersAudio = document.querySelectorAll('[id*="file-audio-"]');
+  //     for (var i=0; i<othersAudio.length; i++)
+  //     {
+  //       if(othersAudio[i].id != "file-audio-"+id && !othersAudio[i].paused) 
+  //       {
+  //         var otherAudion = document.getElementById(othersAudio[i].id);
+  //         otherAudion.currentTime = 0;
+  //         otherAudion.pause();
+  //       }
+  //     }
+
+  //     // reset other play button
+  //     var othersPlayButton = document.querySelectorAll('[id*="play-audio-button"]');
+  //     for(var i=0;i<othersPlayButton.length;i++)
+  //     {
+  //       var otherPlayButton = document.getElementById(othersPlayButton[i].id);
+  //       if(othersPlayButton[i].id != "play-audio-button-"+id)
+  //       {
+  //         otherPlayButton.classList.remove('hidden');
+  //       }
+  //     }
+
+  //     // reset other stop button
+  //     var othersStopButton = document.querySelectorAll('[id*="stop-audio-button"]');  
+  //     for(var i=0;i<othersStopButton.length;i++)
+  //     {
+  //         var otherStopButton = document.getElementById(othersStopButton[i].id);
+  //         if(othersStopButton[i].id != "stop-audio-button-"+id)
+  //         {
+  //           otherStopButton.classList.add('hidden');
+  //         }
+  //     }
+
+  //     // play atau stop current audio
+  //     // set icon untuk play / stop current button
+  //     if (currentAudio.paused) 
+  //     {
+  //       currentPlayButton.classList.add('hidden');
+  //       currentStopButton.classList.remove('hidden');
+  //       return currentAudio.play();
+  //     }
+  //     else
+  //     {
+  //       currentPlayButton.classList.remove('hidden');
+  //       currentStopButton.classList.add('hidden');
+  //       currentAudio.currentTime = 0;
+  //       return currentAudio.pause();
+  //     }
+  //   }
+
+  // midtrans snap pay
+  // $wire.on('snap-pay', (event) => {
+  //   console.log('snapPay');
+  //   let data = event.detail;
+  //   console.log(data);
+
+  //   window.snap.pay(data.token, {
+  //       onSuccess: function(result) {
+  //         $wire.dispatch('payment-success', {order_id: result.order_id});
+  //           // Livewire.dispatch('payment-success', {order_id: result.order_id});
+  //       },
+  //       onPending: function(result) {
+  //           // Livewire.dispatch('payment-close');
+  //       },
+  //       onError: function(result) {
+  //           // Livewire.dispatch('payment-close');
+  //       },
+  //       onClose: function() {
+  //           // Livewire.dispatch('payment-closed');
+  //       }
+  //   });
+  // });
+  
+  window.addEventListener("snap-pay", (event) => {
+    console.log('snapPay');
+    let data = event.detail;
+    console.log(data);
+
+    window.snap.pay(data.token, {
+      onSuccess: function(result) {
+        Livewire.dispatch('payment-success', {order_id: result.order_id});
+      },
+      onPending: function(result) {
+        Livewire.dispatch('payment-close');
+      },
+      onError: function(result) {
+        Livewire.dispatch('payment-close');
+      },
+      onClose: function() {
+        Livewire.dispatch('payment-closed');
+      }
+    });
+  });
+</script>
